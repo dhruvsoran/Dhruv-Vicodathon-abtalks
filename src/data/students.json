@@ -1,0 +1,141 @@
+{
+  "personas": [
+    {
+      "id": "streak",
+      "label": "Day 12 · on a streak",
+      "hint": "The everyday case. Eleven days shipped, today still open.",
+      "student": {
+        "name": "Ananya Iyer",
+        "handle": "ananya-iyer",
+        "initials": "AI",
+        "college": "VJTI, Mumbai",
+        "year": "3rd year, IT",
+        "track": "Full-Stack Web",
+        "joinedOn": "2026-07-27",
+        "bio": "Learning in public. Building small things every day until they add up.",
+        "github": "ananya-builds",
+        "linkedin": "ananya-iyer",
+        "profileFields": { "bio": true, "github": true, "linkedin": true, "college": true, "avatar": true }
+      },
+      "currentDay": 12,
+      "completedDays": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      "missedDays": [],
+      "repairedDays": [],
+      "shields": { "available": 1, "earnedEvery": 15, "used": 0 },
+      "todaySubmission": null,
+      "rank": { "position": 214, "of": 2847, "percentile": 8, "movement": 31 },
+      "badges": [
+        { "id": "first-commit", "name": "First Commit", "earnedOnDay": 1, "note": "Pushed your first public commit" },
+        { "id": "week-one", "name": "Week One Done", "earnedOnDay": 7, "note": "Seven days without breaking" },
+        { "id": "ten-in-a-row", "name": "Ten in a Row", "earnedOnDay": 10, "note": "A double-digit streak" },
+        { "id": "night-owl", "name": "Night Owl", "earnedOnDay": 6, "note": "Five submissions after 11 PM" }
+      ],
+      "nextBadge": { "name": "Halfway Hero", "onDay": 30, "note": "Reach Day 30 with a live streak" },
+      "recentSubmissions": [
+        { "day": 11, "at": "2026-08-06T23:41:00+05:30", "repo": "ananya-builds/form-patterns", "post": "linkedin.com/posts/ananya-iyer-forms" },
+        { "day": 10, "at": "2026-08-05T22:12:00+05:30", "repo": "ananya-builds/list-states", "post": "linkedin.com/posts/ananya-iyer-lists" },
+        { "day": 9, "at": "2026-08-04T21:03:00+05:30", "repo": "ananya-builds/react-state", "post": "linkedin.com/posts/ananya-iyer-state" }
+      ]
+    },
+    {
+      "id": "fresh",
+      "label": "Day 1 · brand new",
+      "hint": "No streak, no submissions, an empty profile.",
+      "student": {
+        "name": "Rohan Das",
+        "handle": "rohan-das",
+        "initials": "RD",
+        "college": "",
+        "year": "",
+        "track": "Full-Stack Web",
+        "joinedOn": "2026-08-07",
+        "bio": "",
+        "github": "",
+        "linkedin": "",
+        "profileFields": { "bio": false, "github": false, "linkedin": false, "college": false, "avatar": false }
+      },
+      "currentDay": 1,
+      "completedDays": [],
+      "missedDays": [],
+      "repairedDays": [],
+      "shields": { "available": 0, "earnedEvery": 15, "used": 0 },
+      "todaySubmission": null,
+      "rank": null,
+      "badges": [],
+      "nextBadge": { "name": "First Commit", "onDay": 1, "note": "Push one public commit today" },
+      "recentSubmissions": []
+    },
+    {
+      "id": "missed",
+      "label": "Day 12 · broke the streak",
+      "hint": "Missed Day 10. Streak reset. One shield left.",
+      "student": {
+        "name": "Meera Nair",
+        "handle": "meera-nair",
+        "initials": "MN",
+        "college": "CET, Thiruvananthapuram",
+        "year": "2nd year, CSE",
+        "track": "Full-Stack Web",
+        "joinedOn": "2026-07-27",
+        "bio": "",
+        "github": "meeracodes",
+        "linkedin": "",
+        "profileFields": { "bio": false, "github": true, "linkedin": false, "college": true, "avatar": false }
+      },
+      "currentDay": 12,
+      "completedDays": [1, 2, 3, 4, 5, 6, 7, 8, 9, 11],
+      "missedDays": [10],
+      "repairedDays": [],
+      "shields": { "available": 1, "earnedEvery": 15, "used": 0 },
+      "todaySubmission": null,
+      "rank": { "position": 1108, "of": 2847, "percentile": 39, "movement": -142 },
+      "badges": [
+        { "id": "first-commit", "name": "First Commit", "earnedOnDay": 1, "note": "Pushed your first public commit" },
+        { "id": "week-one", "name": "Week One Done", "earnedOnDay": 7, "note": "Seven days without breaking" }
+      ],
+      "nextBadge": { "name": "Back on Track", "onDay": 14, "note": "Three days in a row after a break" },
+      "recentSubmissions": [
+        { "day": 11, "at": "2026-08-06T23:58:00+05:30", "repo": "meeracodes/form-day", "post": "linkedin.com/posts/meera-nair-forms" },
+        { "day": 9, "at": "2026-08-04T20:20:00+05:30", "repo": "meeracodes/state-day", "post": "linkedin.com/posts/meera-nair-state" }
+      ]
+    }
+  ],
+  "leaderboardPeers": [
+    { "name": "Kartik S.", "college": "IIIT Kottayam", "streak": 12, "xp": 2140 },
+    { "name": "Fatima R.", "college": "Jamia Millia", "streak": 12, "xp": 2085 },
+    { "name": "You", "college": "", "streak": 0, "xp": 0, "isYou": true },
+    { "name": "Dev P.", "college": "LNMIIT Jaipur", "streak": 11, "xp": 1902 },
+    { "name": "Sneha M.", "college": "PSG Tech", "streak": 10, "xp": 1855 }
+  ],
+  "testimonials": [
+    {
+      "quote": "I had a GitHub account for two years with four commits. Day 60 was commit number 312. Two internship calls came from a LinkedIn post I nearly didn't write.",
+      "name": "Aditya Kulkarni",
+      "detail": "COEP Pune · now intern at a Series B fintech"
+    },
+    {
+      "quote": "The daily task was small enough that I could not talk myself out of it, even at midnight after labs.",
+      "name": "Priya Raghavan",
+      "detail": "SSN Chennai · Cohort 05"
+    },
+    {
+      "quote": "My placement interviewer had already read my Day 42 post. The whole conversation started from there.",
+      "name": "Harsh Vardhan",
+      "detail": "NIT Bhopal · Cohort 04"
+    }
+  ],
+  "tracks": [
+    { "id": "web", "name": "Full-Stack Web", "blurb": "React, Node, databases, deployment.", "learners": 1204 },
+    { "id": "ai", "name": "AI & Data", "blurb": "Python, notebooks, models, evaluation.", "learners": 831 },
+    { "id": "mobile", "name": "Mobile", "blurb": "React Native or Flutter, shipped to a device.", "learners": 462 },
+    { "id": "systems", "name": "DSA & Systems", "blurb": "Problem solving plus system design writeups.", "learners": 350 }
+  ],
+  "faqs": [
+    { "q": "Does it cost anything?", "a": "No. The 60-day challenge is free for every Indian college student. You need a GitHub account and a LinkedIn profile, both free." },
+    { "q": "How much time does a day take?", "a": "Most days are 45 to 75 minutes. Week-end ship days are longer. Tasks are sized for a student who already had a full day of college." },
+    { "q": "What if I miss a day?", "a": "Your streak resets, but you are not out. Every 15 days you earn a Streak Shield that lets you repair one missed day within 48 hours by shipping the catch-up proof." },
+    { "q": "Do I need to be good already?", "a": "Day 1 is creating a public repository. If you can do that, you can start. Difficulty ramps across nine weeks." },
+    { "q": "Why does LinkedIn matter?", "a": "The commit proves you built it. The post is what a recruiter actually finds. Sixty posts is a visible track record that a resume cannot fake." },
+    { "q": "What do I have at the end?", "a": "Sixty public commits, sixty posts, a deployed capstone project, and a portfolio arranged for recruiters." }
+  ]
+}

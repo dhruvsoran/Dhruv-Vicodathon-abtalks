@@ -1,0 +1,160 @@
+{
+  "cohort": {
+    "id": "c07",
+    "name": "Cohort 07",
+    "track": "Full-Stack Web",
+    "totalDays": 60,
+    "startedOn": "2026-07-27",
+    "timezone": "IST",
+    "cutoffLabel": "11:59 PM IST",
+    "studentsEnrolled": 2847,
+    "collegesRepresented": 41
+  },
+  "weeks": [
+    { "n": 1, "range": "Day 1–7", "theme": "Foundations", "blurb": "Set up your toolchain and ship your first public commit." },
+    { "n": 2, "range": "Day 8–14", "theme": "Components & State", "blurb": "Think in components. Make interfaces that respond." },
+    { "n": 3, "range": "Day 15–21", "theme": "Data & APIs", "blurb": "Fetch, cache, fail gracefully." },
+    { "n": 4, "range": "Day 22–28", "theme": "Auth & Persistence", "blurb": "Real users, real sessions, real databases." },
+    { "n": 5, "range": "Day 29–35", "theme": "Realtime & Advanced UI", "blurb": "Live data, animation, and interfaces that feel alive." },
+    { "n": 6, "range": "Day 36–42", "theme": "Performance & Testing", "blurb": "Make it fast. Prove it doesn't break." },
+    { "n": 7, "range": "Day 43–49", "theme": "Ship a Product", "blurb": "One product, end to end, in public." },
+    { "n": 8, "range": "Day 50–56", "theme": "Scale & Polish", "blurb": "Edge cases, accessibility, deployment." },
+    { "n": 9, "range": "Day 57–60", "theme": "Capstone", "blurb": "Your portfolio piece and recruiter handoff." }
+  ],
+  "days": [
+    { "day": 1, "title": "Your first public commit", "focus": "Set up Git, create a public repo, and push a README that states what you'll build for 60 days.", "difficulty": "Starter", "minutes": 35, "xp": 100, "tag": "Setup" },
+    { "day": 2, "title": "Semantic HTML resume", "focus": "Build a one-page resume using only semantic HTML. No divs allowed.", "difficulty": "Starter", "minutes": 45, "xp": 100, "tag": "HTML" },
+    { "day": 3, "title": "Flexbox layout drills", "focus": "Recreate three real app layouts using Flexbox only.", "difficulty": "Starter", "minutes": 50, "xp": 120, "tag": "CSS" },
+    { "day": 4, "title": "Responsive grid gallery", "focus": "A photo grid that works at 390px, 768px and 1440px without a single media query hack.", "difficulty": "Starter", "minutes": 55, "xp": 120, "tag": "CSS" },
+    { "day": 5, "title": "JavaScript in the DOM", "focus": "Build a todo list with vanilla JS. Add, complete, delete, persist to localStorage.", "difficulty": "Easy", "minutes": 60, "xp": 140, "tag": "JS" },
+    { "day": 6, "title": "Array methods workout", "focus": "Solve 10 data-shaping problems using map, filter, reduce. No for-loops.", "difficulty": "Easy", "minutes": 45, "xp": 140, "tag": "JS" },
+    { "day": 7, "title": "Week 1 ship: personal site", "focus": "Deploy your personal site to a live URL. This is the first thing a recruiter will open.", "difficulty": "Easy", "minutes": 75, "xp": 200, "tag": "Ship" },
+    { "day": 8, "title": "Your first React component", "focus": "Set up a React app and build a reusable Card component with props.", "difficulty": "Easy", "minutes": 50, "xp": 150, "tag": "React" },
+    { "day": 9, "title": "State and events", "focus": "Build a counter, a toggle and a controlled input. Understand re-renders.", "difficulty": "Easy", "minutes": 55, "xp": 150, "tag": "React" },
+    { "day": 10, "title": "Lists, keys and conditional UI", "focus": "Render a list from JSON with empty, loading and error states.", "difficulty": "Medium", "minutes": 60, "xp": 170, "tag": "React" },
+    { "day": 11, "title": "Forms that don't fight users", "focus": "A signup form with inline validation, clear errors and a disabled-until-valid submit.", "difficulty": "Medium", "minutes": 65, "xp": 170, "tag": "React" },
+    { "day": 12, "title": "Build a streak calendar", "focus": "Render 60 days of activity as a heat-map calendar that reads your JSON and stays legible at 390px.", "difficulty": "Medium", "minutes": 70, "xp": 180, "tag": "UI Engineering" },
+    { "day": 13, "title": "Lift state up", "focus": "Two sibling components sharing one source of truth. Filter a list from a search box.", "difficulty": "Medium", "minutes": 60, "xp": 170, "tag": "React" },
+    { "day": 14, "title": "Week 2 ship: component library", "focus": "Package your Button, Card, Input and Badge into a documented mini design system.", "difficulty": "Medium", "minutes": 90, "xp": 220, "tag": "Ship" },
+    { "day": 15, "title": "Fetch and render", "focus": "Call a public API, render results, handle the loading state properly.", "difficulty": "Medium", "minutes": 60, "xp": 170, "tag": "API" },
+    { "day": 16, "title": "Error and empty states", "focus": "Break your own API calls on purpose and design what the user sees.", "difficulty": "Medium", "minutes": 55, "xp": 170, "tag": "API" },
+    { "day": 17, "title": "Search with debounce", "focus": "A search box that doesn't hammer the API on every keystroke.", "difficulty": "Medium", "minutes": 60, "xp": 180, "tag": "API" },
+    { "day": 18, "title": "Pagination and infinite scroll", "focus": "Load 500 records without freezing the browser.", "difficulty": "Medium", "minutes": 70, "xp": 180, "tag": "API" },
+    { "day": 19, "title": "Build your own API", "focus": "Three REST endpoints with a Node server. GET, POST, DELETE.", "difficulty": "Medium", "minutes": 75, "xp": 200, "tag": "Backend" },
+    { "day": 20, "title": "Connect a database", "focus": "Persist your API data. Postgres, SQLite or Mongo, your pick.", "difficulty": "Hard", "minutes": 80, "xp": 210, "tag": "Backend" },
+    { "day": 21, "title": "Week 3 ship: full-stack CRUD", "focus": "Frontend plus your own API plus a real database, deployed and live.", "difficulty": "Hard", "minutes": 100, "xp": 250, "tag": "Ship" },
+    { "day": 22, "title": "Sessions and cookies", "focus": "Understand how a server remembers who you are.", "difficulty": "Medium", "minutes": 60, "xp": 180, "tag": "Auth" },
+    { "day": 23, "title": "Email and password auth", "focus": "Hash passwords properly. Never store plaintext.", "difficulty": "Hard", "minutes": 80, "xp": 210, "tag": "Auth" },
+    { "day": 24, "title": "OAuth with GitHub", "focus": "Log in with GitHub. The flow recruiters see on every real product.", "difficulty": "Hard", "minutes": 75, "xp": 210, "tag": "Auth" },
+    { "day": 25, "title": "Protected routes", "focus": "Server-side route guards, not just hidden buttons.", "difficulty": "Medium", "minutes": 60, "xp": 180, "tag": "Auth" },
+    { "day": 26, "title": "File uploads", "focus": "Let users upload an avatar. Validate type and size.", "difficulty": "Medium", "minutes": 70, "xp": 190, "tag": "Backend" },
+    { "day": 27, "title": "Roles and permissions", "focus": "Admin sees more than a user. Enforce it on the server.", "difficulty": "Hard", "minutes": 70, "xp": 200, "tag": "Backend" },
+    { "day": 28, "title": "Week 4 ship: authed app", "focus": "Your CRUD app, now with real accounts and per-user data.", "difficulty": "Hard", "minutes": 110, "xp": 260, "tag": "Ship" },
+    { "day": 29, "title": "WebSockets 101", "focus": "A live counter that updates across two browser tabs.", "difficulty": "Hard", "minutes": 70, "xp": 200, "tag": "Realtime" },
+    { "day": 30, "title": "Halfway: build a chat room", "focus": "Rooms, messages, presence. You are 30 days in.", "difficulty": "Hard", "minutes": 100, "xp": 300, "tag": "Milestone" },
+    { "day": 31, "title": "Optimistic updates", "focus": "The UI responds before the server does, and rolls back on failure.", "difficulty": "Hard", "minutes": 70, "xp": 200, "tag": "UX" },
+    { "day": 32, "title": "Animation with intent", "focus": "Motion that explains state changes instead of decorating them.", "difficulty": "Medium", "minutes": 60, "xp": 180, "tag": "UI Engineering" },
+    { "day": 33, "title": "Drag and drop", "focus": "A reorderable list that works with touch and keyboard.", "difficulty": "Hard", "minutes": 80, "xp": 210, "tag": "UI Engineering" },
+    { "day": 34, "title": "Dark mode done right", "focus": "Token-based theming, respects system preference, no flash on load.", "difficulty": "Medium", "minutes": 55, "xp": 180, "tag": "UI Engineering" },
+    { "day": 35, "title": "Week 5 ship: realtime feature", "focus": "Add one genuinely live feature to your product and demo it.", "difficulty": "Hard", "minutes": 100, "xp": 250, "tag": "Ship" },
+    { "day": 36, "title": "Measure before you optimise", "focus": "Run Lighthouse. Write down your numbers before touching code.", "difficulty": "Medium", "minutes": 45, "xp": 170, "tag": "Performance" },
+    { "day": 37, "title": "Images and fonts", "focus": "The two things that make student projects slow. Fix both.", "difficulty": "Medium", "minutes": 60, "xp": 180, "tag": "Performance" },
+    { "day": 38, "title": "Code splitting", "focus": "Ship less JavaScript on first load.", "difficulty": "Hard", "minutes": 65, "xp": 200, "tag": "Performance" },
+    { "day": 39, "title": "Your first unit tests", "focus": "Test the logic that would embarrass you if it broke.", "difficulty": "Medium", "minutes": 65, "xp": 190, "tag": "Testing" },
+    { "day": 40, "title": "Integration tests", "focus": "Test a whole user flow, not one function.", "difficulty": "Hard", "minutes": 75, "xp": 200, "tag": "Testing" },
+    { "day": 41, "title": "CI on every push", "focus": "GitHub Actions runs your tests so you don't have to remember.", "difficulty": "Medium", "minutes": 60, "xp": 190, "tag": "DevOps" },
+    { "day": 42, "title": "Week 6 ship: green pipeline", "focus": "A repo with a passing CI badge and a Lighthouse score above 90.", "difficulty": "Hard", "minutes": 90, "xp": 250, "tag": "Ship" },
+    { "day": 43, "title": "Scope your capstone", "focus": "Write a one-page spec. Cut it in half. Then cut it again.", "difficulty": "Medium", "minutes": 50, "xp": 180, "tag": "Product" },
+    { "day": 44, "title": "Design the data model", "focus": "Tables, relationships, and the queries you'll actually run.", "difficulty": "Hard", "minutes": 70, "xp": 200, "tag": "Product" },
+    { "day": 45, "title": "Build the core flow", "focus": "The one path a user must be able to complete. Nothing else.", "difficulty": "Hard", "minutes": 100, "xp": 230, "tag": "Product" },
+    { "day": 46, "title": "Second flow", "focus": "Now the second most important thing your product does.", "difficulty": "Hard", "minutes": 100, "xp": 230, "tag": "Product" },
+    { "day": 47, "title": "Empty, loading, error", "focus": "Every screen gets all three states. This is what separates students from engineers.", "difficulty": "Medium", "minutes": 75, "xp": 210, "tag": "UX" },
+    { "day": 48, "title": "Mobile pass", "focus": "Open your product at 390px and fix everything that hurts.", "difficulty": "Medium", "minutes": 80, "xp": 210, "tag": "UX" },
+    { "day": 49, "title": "Week 7 ship: usable product", "focus": "Give it to one real person. Watch them use it. Take notes.", "difficulty": "Hard", "minutes": 90, "xp": 250, "tag": "Ship" },
+    { "day": 50, "title": "Accessibility audit", "focus": "Keyboard-only navigation and a screen reader pass.", "difficulty": "Hard", "minutes": 75, "xp": 210, "tag": "A11y" },
+    { "day": 51, "title": "Handle the edge cases", "focus": "Long names, no data, slow network, double clicks.", "difficulty": "Medium", "minutes": 70, "xp": 200, "tag": "UX" },
+    { "day": 52, "title": "Logging and monitoring", "focus": "Know when your app breaks before your users tell you.", "difficulty": "Hard", "minutes": 65, "xp": 200, "tag": "DevOps" },
+    { "day": 53, "title": "Deploy properly", "focus": "Custom domain, environment variables, preview deployments.", "difficulty": "Medium", "minutes": 70, "xp": 210, "tag": "DevOps" },
+    { "day": 54, "title": "Write the README", "focus": "Screenshots, setup steps, architecture, and why you built it.", "difficulty": "Easy", "minutes": 60, "xp": 190, "tag": "Docs" },
+    { "day": 55, "title": "Record a 90-second demo", "focus": "Show the product working. No slides.", "difficulty": "Medium", "minutes": 70, "xp": 210, "tag": "Docs" },
+    { "day": 56, "title": "Week 8 ship: launch post", "focus": "Post your product publicly and ask for feedback.", "difficulty": "Medium", "minutes": 60, "xp": 240, "tag": "Ship" },
+    { "day": 57, "title": "Portfolio rebuild", "focus": "Your 60 days of proof, arranged so a recruiter gets it in 15 seconds.", "difficulty": "Medium", "minutes": 90, "xp": 230, "tag": "Career" },
+    { "day": 58, "title": "Interview-ready stories", "focus": "Three projects, three problems, three decisions you can defend.", "difficulty": "Medium", "minutes": 70, "xp": 220, "tag": "Career" },
+    { "day": 59, "title": "Open-source contribution", "focus": "One real pull request to a project you didn't start.", "difficulty": "Hard", "minutes": 90, "xp": 250, "tag": "Career" },
+    { "day": 60, "title": "The final post", "focus": "60 days, 60 proofs. Tell the internet what changed.", "difficulty": "Easy", "minutes": 60, "xp": 400, "tag": "Milestone" }
+  ],
+  "details": {
+    "12": {
+      "why": "Every product you build will eventually need to show data over time. A streak calendar is the smallest honest version of that problem: dense data, tiny screen, must stay readable.",
+      "build": [
+        "Read a JSON array of 60 entries, each with a day number and a status of done, missed or upcoming.",
+        "Render one cell per day in a grid, grouped into weeks with a visible week label.",
+        "Colour each cell by status and add a tooltip or tap target that reveals the day details.",
+        "Make it legible at 390px wide without horizontal scroll."
+      ],
+      "acceptance": [
+        "Grid renders from data, not hard-coded markup.",
+        "Works at 390px and 1440px.",
+        "Each cell has an accessible label such as 'Day 12, completed'.",
+        "No layout shift when data loads."
+      ],
+      "stretch": "Add a hover or long-press card that previews the task title for that day.",
+      "resources": [
+        { "label": "CSS Grid: auto-fit vs auto-fill", "href": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout" },
+        { "label": "Accessible names for interactive cells", "href": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-label" }
+      ]
+    },
+    "1": {
+      "why": "The hardest commit is the first one. Today is about removing every excuse: an account, a repo, one push.",
+      "build": [
+        "Create a public GitHub repository named after your 60-day journey.",
+        "Add a README with your name, college, track and what you intend to build.",
+        "Make your first commit and push it.",
+        "Write a short LinkedIn post announcing that you've started."
+      ],
+      "acceptance": [
+        "Repository is public and the README is visible.",
+        "At least one commit exists with a meaningful message.",
+        "LinkedIn post links to the repository."
+      ],
+      "stretch": "Add a profile README to your GitHub account.",
+      "resources": [
+        { "label": "Writing good commit messages", "href": "https://cbea.ms/git-commit/" }
+      ]
+    },
+    "11": {
+      "why": "Forms are where most student projects lose users. Validation timing and error copy matter more than the framework you pick.",
+      "build": [
+        "Build a signup form with name, email and password fields.",
+        "Validate on blur, not on every keystroke.",
+        "Show one clear error message per field, below the field.",
+        "Disable submit until the form is valid, and show a pending state on submit."
+      ],
+      "acceptance": [
+        "Errors are announced to screen readers.",
+        "The form is fully usable with a keyboard.",
+        "No error appears before the user has touched a field."
+      ],
+      "stretch": "Add a password strength meter that explains what would make it stronger.",
+      "resources": [
+        { "label": "Form design best practices", "href": "https://www.smashingmagazine.com/2020/03/form-design-patterns/" }
+      ]
+    },
+    "13": {
+      "why": "Two components that need the same data is the most common React confusion. Solving it once fixes a hundred future bugs.",
+      "build": [
+        "Render a searchable list where the search input and the list are separate components.",
+        "Hold the query in the closest common parent.",
+        "Show a result count and an empty state when nothing matches."
+      ],
+      "acceptance": [
+        "No duplicated state between the two children.",
+        "Empty state is designed, not blank."
+      ],
+      "stretch": "Persist the last query in the URL so results are shareable.",
+      "resources": [
+        { "label": "Sharing state between components", "href": "https://react.dev/learn/sharing-state-between-components" }
+      ]
+    }
+  }
+}
