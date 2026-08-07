@@ -48,6 +48,16 @@ Switch between them with the **Demo** control at the top of `/dashboard` — sta
 
 Also handled: locked future days, days past the repair window, and a *Recruiter readiness* meter that names exactly which profile fields are missing and why they matter.
 
+## Theme, navigation, identity
+
+**Light and dark, with no flash.** All colour lives in CSS custom properties swapped by `data-theme` on `<html>`. A blocking inline script applies the stored (or system) theme *before first paint*, so there's no white flash at 1 AM. `useSyncExternalStore` reads state from the DOM, so React never disagrees with what's on screen.
+
+**Contrast is measured, not hoped for.** A WCAG auditor was run against every text node on every route, resolving true effective backgrounds through transparent ancestors: **0 AA failures across all three routes in both themes.** The first run found 50 failures — including pre-existing ones in the dark theme — and every token was re-tuned until it was clean.
+
+**SEO built in, not bolted on.** Semantic landmarks and a skip link, one `<h1>` per route, canonical + Open Graph + Twitter metadata, JSON-LD (`Organization`, `WebSite`, `Course`, `FAQPage` generated from the same JSON the UI renders), plus generated `sitemap.xml` and `robots.txt`.
+
+**Logo.** Three ascending bars — a rising streak — with a flame off the tallest, negative space reading as an *A*. Theme-aware, and legible at 24px, which is the only size that matters on a phone.
+
 ## Stack
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4. No UI library — every component is hand-built. Zero runtime dependencies beyond React and Next.

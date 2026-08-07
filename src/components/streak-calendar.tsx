@@ -15,7 +15,7 @@ const legend: { status: DayStatus; label: string; cell: string }[] = [
 
 const cellClass: Record<DayStatus, string> = {
   done: "bg-ember text-white",
-  repaired: "bg-gold/70 text-ink",
+  repaired: "bg-gold/70 text-onbright",
   missed: "bg-rose/20 text-rose ring-1 ring-inset ring-rose/60",
   today: "bg-surface-2 text-gold ring-1 ring-inset ring-gold",
   upcoming: "bg-surface-2 text-faint",

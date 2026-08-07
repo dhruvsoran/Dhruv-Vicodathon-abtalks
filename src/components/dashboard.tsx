@@ -14,9 +14,11 @@ import {
   SparkIcon,
   TrophyIcon,
 } from "@/components/icons";
+import { LogoMark } from "@/components/logo";
 import PersonaSwitch from "@/components/persona-switch";
 import StreakCalendar from "@/components/streak-calendar";
 import TabBar from "@/components/tab-bar";
+import { ThemeToggle } from "@/components/theme";
 import { usePersona } from "@/components/persona-store";
 import {
   cohort,
@@ -148,27 +150,27 @@ export default function Dashboard() {
 
       <header className="shell flex items-center justify-between gap-3 pt-4">
         <div className="flex min-w-0 items-center gap-3">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-line bg-surface-2 text-[14px] font-semibold">
-            {persona.student.initials}
-          </span>
+          <Link href="/" aria-label="ABTalks home" className="tap focusring shrink-0 rounded-lg">
+            <LogoMark size={30} />
+          </Link>
           <div className="min-w-0">
-            <div className="truncate text-[16px] font-semibold leading-tight">
+            <h1 className="truncate text-[16px] font-semibold leading-tight">
               {isNew ? `Welcome, ${persona.student.name.split(" ")[0]}` : `Hey ${persona.student.name.split(" ")[0]}`}
-            </div>
-            <div className="mt-0.5 truncate text-[11.5px] text-faint">
+            </h1>
+            <p className="mt-0.5 truncate text-[11.5px] text-faint">
               {persona.student.college || "Add your college"} · {persona.student.track}
-            </div>
+            </p>
           </div>
         </div>
-        <Link
-          href="/"
-          className="tap focusring shrink-0 rounded-full border border-line bg-surface px-3 py-1.5 text-[11px] text-muted"
-        >
-          Exit
-        </Link>
+        <div className="flex shrink-0 items-center gap-2">
+          <ThemeToggle />
+          <span className="grid h-9 w-9 place-items-center rounded-full border border-line bg-surface-2 text-[12px] font-semibold">
+            {persona.student.initials}
+          </span>
+        </div>
       </header>
 
-      <div className="md:shell md:grid md:grid-cols-[1.15fr_0.85fr] md:items-start md:gap-6">
+      <main id="main" className="md:shell md:grid md:grid-cols-[1.15fr_0.85fr] md:items-start md:gap-6">
         <div className="md:contents">
           <section className="shell mt-4 md:col-start-1 md:mx-0 md:max-w-none md:px-0">
             <div
@@ -255,7 +257,7 @@ export default function Dashboard() {
                       <div className="mt-2.5 flex gap-2">
                         <Link
                           href={`/day/${repairable[0]}`}
-                          className="tap focusring rounded-xl bg-gold px-3.5 py-2 text-[12.5px] font-semibold text-ink"
+                          className="tap focusring rounded-xl bg-gold px-3.5 py-2 text-[12.5px] font-semibold text-onbright"
                         >
                           Repair Day {repairable[0]}
                         </Link>
@@ -311,7 +313,7 @@ export default function Dashboard() {
                   className={`tap focusring mt-4 flex items-center justify-center gap-2 rounded-2xl py-3.5 text-[15px] font-semibold ${
                     doneToday
                       ? "border border-line bg-surface-2 text-fg"
-                      : "ember-fill text-white shadow-[0_10px_26px_-14px_rgba(255,90,31,1)]"
+                      : "ember-fill text-white cta-shadow"
                   }`}
                 >
                   {doneToday ? "Review today's submission" : `Start Day ${persona.currentDay}`}
@@ -521,7 +523,7 @@ export default function Dashboard() {
             </div>
           </section>
         </div>
-      </div>
+      </main>
 
       <TabBar />
     </div>

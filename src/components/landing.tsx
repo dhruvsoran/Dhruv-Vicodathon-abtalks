@@ -12,6 +12,8 @@ import {
   ShieldIcon,
   SparkIcon,
 } from "@/components/icons";
+import { LogoMark } from "@/components/logo";
+import SiteNav from "@/components/site-nav";
 import { cohort, days, faqs, formatCount, testimonials, tracks, weeks } from "@/lib/challenge";
 
 function Stat({ value, label }: { value: string; label: string }) {
@@ -118,27 +120,13 @@ export default function Landing() {
 
   return (
     <div className="pb-28">
-      <header className="sticky top-0 z-40 border-b border-line/80 bg-ink/85 backdrop-blur-xl">
-        <div className="shell flex h-14 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="grid h-7 w-7 place-items-center rounded-lg ember-fill text-[12px] font-bold text-white">
-              AB
-            </span>
-            <span className="text-[15px] font-semibold tracking-tight">ABTalks</span>
-          </div>
-          <Link
-            href="/dashboard"
-            className="tap focusring rounded-full border border-line bg-surface px-3.5 py-1.5 text-[12px] font-medium text-fg"
-          >
-            Sign in
-          </Link>
-        </div>
-      </header>
+      <SiteNav />
 
+      <main id="main">
       <section className="relative overflow-hidden">
         <div
-          className="pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full opacity-45 blur-[90px]"
-          style={{ background: "radial-gradient(circle, #ff5a1f 0%, transparent 68%)" }}
+          className="glow pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full blur-[90px]"
+          style={{ background: "radial-gradient(circle, var(--ember) 0%, transparent 68%)", opacity: "calc(var(--glow-opacity) * 0.45)" }}
         />
         <div className="shell relative pt-9 md:pt-16">
           <div className="md:grid md:grid-cols-2 md:items-center md:gap-14">
@@ -168,7 +156,7 @@ export default function Landing() {
               <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
                 <Link
                   href="/dashboard"
-                  className="tap focusring group flex h-13 items-center justify-center gap-2 rounded-2xl ember-fill px-6 py-3.5 text-[15px] font-semibold text-white shadow-[0_10px_30px_-12px_rgba(255,90,31,0.9)]"
+                  className="tap focusring group flex h-13 items-center justify-center gap-2 rounded-2xl ember-fill px-6 py-3.5 text-[15px] font-semibold text-white cta-shadow"
                 >
                   Start Day 1 tonight
                   <ArrowIcon className="h-[18px] w-[18px] transition-transform group-hover:translate-x-0.5" />
@@ -214,7 +202,7 @@ export default function Landing() {
         </p>
       </section>
 
-      <section className="shell mt-12 md:mt-20">
+      <section id="how-it-works" className="shell mt-12 scroll-mt-16 md:mt-20">
         <SectionLabel>How a day works</SectionLabel>
         <div className="space-y-5 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
           <ProofRow
@@ -235,11 +223,11 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="shell mt-12 md:mt-20">
+      <section id="shields" className="shell mt-12 scroll-mt-16 md:mt-20">
         <div className="card relative overflow-hidden p-5 md:p-8">
           <div
-            className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full opacity-30 blur-[70px]"
-            style={{ background: "radial-gradient(circle, #ffb020 0%, transparent 70%)" }}
+            className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full blur-[70px]"
+            style={{ background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)", opacity: "calc(var(--glow-opacity) * 0.3)" }}
           />
           <div className="relative flex items-start gap-3">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold/15 text-gold">
@@ -263,7 +251,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="mt-12 md:mt-20">
+      <section id="curriculum" className="mt-12 scroll-mt-16 md:mt-20">
         <div className="shell">
           <SectionLabel>The 60 days</SectionLabel>
           <h2 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] md:text-[34px]">
@@ -372,7 +360,7 @@ export default function Landing() {
         </ul>
       </section>
 
-      <section className="shell mt-12 md:mt-20">
+      <section id="faq" className="shell mt-12 scroll-mt-16 md:mt-20">
         <SectionLabel>Questions</SectionLabel>
         <div className="card px-4">
           {faqs.map((f) => (
@@ -384,8 +372,8 @@ export default function Landing() {
       <section className="shell mt-12 md:mt-20">
         <div className="card grain relative overflow-hidden p-6 text-center md:p-10">
           <div
-            className="pointer-events-none absolute inset-x-0 -bottom-24 mx-auto h-56 w-56 rounded-full opacity-40 blur-[80px]"
-            style={{ background: "radial-gradient(circle, #ff5a1f 0%, transparent 70%)" }}
+            className="pointer-events-none absolute inset-x-0 -bottom-24 mx-auto h-56 w-56 rounded-full blur-[80px]"
+            style={{ background: "radial-gradient(circle, var(--ember) 0%, transparent 70%)", opacity: "calc(var(--glow-opacity) * 0.4)" }}
           />
           <div className="relative">
             <h2 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] md:text-[34px]">
@@ -397,7 +385,7 @@ export default function Landing() {
             </p>
             <Link
               href="/dashboard"
-              className="tap focusring mt-5 inline-flex items-center justify-center gap-2 rounded-2xl ember-fill px-7 py-3.5 text-[15px] font-semibold text-white shadow-[0_10px_30px_-12px_rgba(255,90,31,0.9)]"
+              className="tap focusring mt-5 inline-flex items-center justify-center gap-2 rounded-2xl ember-fill px-7 py-3.5 text-[15px] font-semibold text-white cta-shadow"
             >
               Join {cohort.name}
               <ArrowIcon className="h-[18px] w-[18px]" />
@@ -406,17 +394,86 @@ export default function Landing() {
         </div>
       </section>
 
-      <footer className="shell mt-12 border-t border-line py-8 text-[11.5px] text-faint">
-        <div className="flex items-center gap-2">
-          <span className="grid h-6 w-6 place-items-center rounded-md ember-fill text-[10px] font-bold text-white">
-            AB
-          </span>
-          <span className="font-medium text-muted">ABTalks</span>
+      </main>
+
+      <footer className="mt-14 border-t border-line">
+        <div className="shell py-9">
+          <div className="md:flex md:items-start md:justify-between md:gap-10">
+            <div className="max-w-[46ch]">
+              <div className="flex items-center gap-2">
+                <LogoMark size={26} />
+                <span className="text-[15px] font-semibold tracking-[-0.02em]">
+                  AB<span className="text-ember">Talks</span>
+                </span>
+              </div>
+              <p className="mt-3 text-[12px] leading-relaxed text-faint">
+                Built for students who are tired of learning invisibly. Submissions run on{" "}
+                {cohort.timezone}, daily cutoff {cohort.cutoffLabel}.
+              </p>
+            </div>
+
+            <nav aria-label="Footer" className="mt-7 grid grid-cols-2 gap-x-8 gap-y-6 md:mt-0">
+              <div>
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.14em] text-faint">
+                  Challenge
+                </h2>
+                <ul className="mt-2.5 space-y-2">
+                  <li>
+                    <Link href="/#how-it-works" className="tap focusring text-[12.5px] text-muted">
+                      How it works
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/#curriculum" className="tap focusring text-[12.5px] text-muted">
+                      Curriculum
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/#shields" className="tap focusring text-[12.5px] text-muted">
+                      Streak Shields
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/#faq" className="tap focusring text-[12.5px] text-muted">
+                      FAQ
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.14em] text-faint">
+                  Product
+                </h2>
+                <ul className="mt-2.5 space-y-2">
+                  <li>
+                    <Link href="/dashboard" className="tap focusring text-[12.5px] text-muted">
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/day/1" className="tap focusring text-[12.5px] text-muted">
+                      Day 1
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/day/12" className="tap focusring text-[12.5px] text-muted">
+                      Day 12
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/day/60" className="tap focusring text-[12.5px] text-muted">
+                      Day 60
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+
+          <p className="mt-8 border-t border-line pt-5 text-[11px] text-faint">
+            © {new Date().getFullYear()} ABTalks · {cohort.name} · Made for Indian college students
+          </p>
         </div>
-        <p className="mt-3 max-w-[46ch] leading-relaxed">
-          Built for students who are tired of learning invisibly. Submissions run on {cohort.timezone},
-          daily cutoff {cohort.cutoffLabel}.
-        </p>
       </footer>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/90 px-5 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl md:hidden">

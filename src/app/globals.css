@@ -1,21 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #08080a;
-  --color-ink-2: #0e0e12;
-  --color-surface: #141419;
-  --color-surface-2: #1b1b22;
-  --color-line: #26262f;
-  --color-line-2: #34343f;
-  --color-fg: #f6f6f7;
-  --color-muted: #9b9ba6;
-  --color-faint: #6c6c78;
-  --color-ember: #ff5a1f;
-  --color-ember-soft: #ff8a4c;
-  --color-gold: #ffb020;
-  --color-mint: #3dd68c;
-  --color-rose: #f8736a;
-  --color-sky: #6aa8ff;
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-ember: var(--ember);
+  --color-ember-soft: var(--ember-soft);
+  --color-gold: var(--gold);
+  --color-mint: var(--mint);
+  --color-rose: var(--rose);
+  --color-sky: var(--sky);
+  --color-onbright: var(--onbright);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -23,24 +24,70 @@
   --radius-card: 18px;
 }
 
-:root {
+:root,
+:root[data-theme="dark"] {
   color-scheme: dark;
+  --ink: #08080a;
+  --ink-2: #0e0e12;
+  --surface: #141419;
+  --surface-2: #1b1b22;
+  --line: #26262f;
+  --line-2: #34343f;
+  --fg: #f6f6f7;
+  --muted: #a8a8b3;
+  --faint: #8b8b96;
+  --ember: #ff5a1f;
+  --ember-soft: #ff8a4c;
+  --gold: #ffb020;
+  --mint: #3dd68c;
+  --rose: #f8736a;
+  --sky: #6aa8ff;
+  --onbright: #0e0e12;
+  --grain-dot: rgba(255, 255, 255, 0.06);
+  --grain-opacity: 0.5;
+  --glow-opacity: 1;
+  --cta-shadow: 0 10px 30px -12px rgba(255, 90, 31, 0.9);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ink: #fbfaf9;
+  --ink-2: #f4f2ef;
+  --surface: #ffffff;
+  --surface-2: #f7f5f2;
+  --line: #e5e1dc;
+  --line-2: #d2ccc4;
+  --fg: #17161a;
+  --muted: #4e4c56;
+  --faint: #605e69;
+  --ember: #c63f06;
+  --ember-soft: #e2661f;
+  --gold: #9a6206;
+  --mint: #12805a;
+  --rose: #c53128;
+  --sky: #1f5fd0;
+  --onbright: #ffffff;
+  --grain-dot: rgba(0, 0, 0, 0.05);
+  --grain-opacity: 0.6;
+  --glow-opacity: 0.42;
+  --cta-shadow: 0 10px 26px -14px rgba(207, 68, 9, 0.55);
 }
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--color-ink);
-  color: var(--color-fg);
+  background-color: var(--ink);
+  color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: var(--color-ember);
+  background: var(--ember);
   color: #fff;
 }
 
@@ -60,24 +107,36 @@ body {
   }
 
   .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-line);
+    background: var(--surface);
+    border: 1px solid var(--line);
     border-radius: var(--radius-card);
   }
 
+  :root[data-theme="light"] .card {
+    box-shadow: 0 1px 2px rgba(23, 22, 26, 0.04);
+  }
+
   .hairline {
-    border-color: var(--color-line);
+    border-color: var(--line);
   }
 
   .ember-text {
-    background: linear-gradient(96deg, var(--color-ember) 0%, var(--color-gold) 100%);
+    background: linear-gradient(96deg, var(--ember) 0%, var(--gold) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
   .ember-fill {
-    background: linear-gradient(96deg, var(--color-ember) 0%, #ff7a2f 60%, var(--color-gold) 100%);
+    background: linear-gradient(96deg, var(--ember) 0%, var(--ember-soft) 60%, var(--gold) 100%);
+  }
+
+  .cta-shadow {
+    box-shadow: var(--cta-shadow);
+  }
+
+  .glow {
+    opacity: var(--glow-opacity);
   }
 
   .grain::before {
@@ -85,8 +144,8 @@ body {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.5;
-    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.06) 1px, transparent 0);
+    opacity: var(--grain-opacity);
+    background-image: radial-gradient(circle at 1px 1px, var(--grain-dot) 1px, transparent 0);
     background-size: 22px 22px;
   }
 
@@ -103,8 +162,25 @@ body {
   }
 
   .focusring:focus-visible {
-    outline: 2px solid var(--color-ember);
+    outline: 2px solid var(--ember);
     outline-offset: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+  }
+  .skip-link:focus {
+    left: 12px;
+    top: 12px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--ember);
+    color: var(--fg);
+    font-size: 14px;
   }
 }
 
@@ -140,6 +216,9 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {

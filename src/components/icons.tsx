@@ -49,7 +49,7 @@ export function ShieldIcon({ className = base }: P) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
       <path d="M12 3 5 6v5.5c0 4.2 2.9 7.9 7 9.5 4.1-1.6 7-5.3 7-9.5V6l-7-3Z" fill="currentColor" opacity=".95" />
-      <path d="m9 12 2.2 2.2L15.5 10" stroke="#141419" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="m9 12 2.2 2.2L15.5 10" stroke="var(--surface)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

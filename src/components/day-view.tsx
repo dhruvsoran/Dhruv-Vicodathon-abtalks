@@ -15,6 +15,7 @@ import {
   SparkIcon,
 } from "@/components/icons";
 import TabBar from "@/components/tab-bar";
+import { ThemeToggle } from "@/components/theme";
 import { usePersona } from "@/components/persona-store";
 import { draftPost, weekOf } from "@/lib/challenge";
 import type { ChallengeDay, DayDetail } from "@/lib/types";
@@ -189,6 +190,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
             Dashboard
           </Link>
           <div className="flex items-center gap-1.5">
+            <ThemeToggle className="mr-0.5 h-8 w-8" />
             {day.day > 1 && (
               <Link
                 href={`/day/${day.day - 1}`}
@@ -216,7 +218,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
         </div>
       </header>
 
-      <div className="md:shell md:grid md:grid-cols-[1fr_400px] md:items-start md:gap-7">
+      <main id="main" className="md:shell md:grid md:grid-cols-[1fr_400px] md:items-start md:gap-7">
         <div className="md:min-w-0">
           <section className="shell pt-5 md:mx-0 md:max-w-none md:px-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -334,7 +336,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                       <span
                         className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border transition-colors ${
                           checks[i]
-                            ? "border-mint bg-mint text-ink"
+                            ? "border-mint bg-mint text-onbright"
                             : "border-line-2 text-transparent"
                         }`}
                       >
@@ -387,7 +389,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
             {done || justSubmitted ? (
               <div className="card border-mint/40 bg-mint/[0.06] p-4">
                 <div className="flex items-center gap-2.5">
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-mint text-ink">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-mint text-onbright">
                     <CheckIcon className="h-5 w-5" />
                   </span>
                   <div>
@@ -426,7 +428,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                   )}
                   <Link
                     href="/dashboard"
-                    className="tap focusring flex-1 rounded-xl bg-mint py-2.5 text-center text-[12.5px] font-semibold text-ink"
+                    className="tap focusring flex-1 rounded-xl bg-mint py-2.5 text-center text-[12.5px] font-semibold text-onbright"
                   >
                     Back to dashboard
                   </Link>
@@ -538,7 +540,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                       disabled={!canSubmit}
                       className={`tap focusring w-full rounded-2xl py-3.5 text-[15px] font-semibold ${
                         canSubmit
-                          ? "ember-fill text-white shadow-[0_10px_26px_-14px_rgba(255,90,31,1)]"
+                          ? "ember-fill text-white cta-shadow"
                           : "cursor-not-allowed border border-line bg-surface-2 text-faint"
                       }`}
                     >
@@ -550,7 +552,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
             )}
           </section>
         </div>
-      </div>
+      </main>
 
       <TabBar />
     </div>
