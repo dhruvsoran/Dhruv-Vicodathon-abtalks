@@ -649,7 +649,35 @@ body > *:not(.aurora):not(.skip-link) {
   animation: shimmer 2.4s linear infinite;
 }
 
-/* ---------- Animated welcome: curtain reveal ---------- */
+/* ---------- Animated welcome: curtain reveal ----------
+
+   The entire sequence is CSS-driven with animation-delay, so it starts on the
+   first paint of the server HTML rather than waiting for React to hydrate.
+   Nothing here depends on a class being toggled from JavaScript.
+
+   Timeline:
+     0.00s  panels closed, logo springs in
+     0.45s  wordmark rises
+     1.40s  seam flashes, panels part, logo lifts away
+     1.95s  overlay is inert (visibility: hidden, held by `forwards`)
+*/
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: hidden;
+  animation: curtaindone 0.01s linear 1.95s forwards;
+}
+
+/* Final safety: even if JS never unmounts the element, it stops covering
+   and stops intercepting input. */
+@keyframes curtaindone {
+  to {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
 
 /* Panels are siblings rather than one fading sheet, so the page is uncovered
    by actual movement. transform-only, so the whole reveal is compositor-side. */
@@ -664,9 +692,11 @@ body > *:not(.aurora):not(.skip-link) {
 
 .curtain-left {
   left: 0;
+  animation: partleft 0.95s cubic-bezier(0.7, 0, 0.2, 1) 1.4s forwards;
 }
 .curtain-right {
   right: 0;
+  animation: partright 0.95s cubic-bezier(0.7, 0, 0.2, 1) 1.4s forwards;
 }
 
 .curtain-panel::after {
@@ -677,17 +707,12 @@ body > *:not(.aurora):not(.skip-link) {
   opacity: 0.5;
 }
 .curtain-left::after {
-  background-position: right center;
   transform: translateX(50%);
 }
 .curtain-right::after {
   transform: translateX(-50%);
 }
 
-/* Keyframes rather than transitions: a transition depends on a style change
-   being observed after paint, which is fragile when the class lands in the
-   same frame as the mount. `forwards` also guarantees the panels stay open
-   even if the element outlives the animation. */
 @keyframes partleft {
   to {
     transform: translate3d(-100%, 0, 0);
@@ -697,13 +722,6 @@ body > *:not(.aurora):not(.skip-link) {
   to {
     transform: translate3d(100%, 0, 0);
   }
-}
-
-.curtain.is-open .curtain-left {
-  animation: partleft 0.95s cubic-bezier(0.7, 0, 0.2, 1) forwards;
-}
-.curtain.is-open .curtain-right {
-  animation: partright 0.95s cubic-bezier(0.7, 0, 0.2, 1) forwards;
 }
 
 /* Vertical seam of light where the panels meet. */
@@ -717,6 +735,7 @@ body > *:not(.aurora):not(.skip-link) {
   background: linear-gradient(180deg, transparent, var(--ember), var(--gold), transparent);
   opacity: 0;
   transform: scaleY(0.2);
+  animation: seamflash 0.85s var(--ease-liquid) 1.32s forwards;
 }
 
 @keyframes seamflash {
@@ -734,11 +753,15 @@ body > *:not(.aurora):not(.skip-link) {
   }
 }
 
-.curtain.is-open .curtain-seam {
-  animation: seamflash 0.8s var(--ease-liquid) forwards;
+/* Logo lockup, centred, lifting away as the curtain parts. */
+.curtain-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  animation: stageout 0.5s var(--ease-liquid) 1.4s forwards;
 }
 
-/* Logo lockup lifts and fades as the curtain parts. */
 @keyframes stageout {
   to {
     opacity: 0;
@@ -746,12 +769,15 @@ body > *:not(.aurora):not(.skip-link) {
   }
 }
 
-.curtain.is-open .curtain-stage {
-  animation: stageout 0.5s var(--ease-liquid) forwards;
+.curtain-lockup {
+  position: relative;
+  display: grid;
+  place-items: center;
 }
 
 .welcome-mark {
   display: block;
+  position: relative;
   animation: markin 0.9s var(--ease-spring) both;
 }
 
@@ -770,9 +796,17 @@ body > *:not(.aurora):not(.skip-link) {
 }
 
 .welcome-ring {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in srgb, var(--ember) 45%, transparent);
   animation: ringout 1.7s var(--ease-liquid) infinite;
 }
 .welcome-ring-2 {
+  width: 150px;
+  height: 150px;
+  border-color: color-mix(in srgb, var(--gold) 40%, transparent);
   animation-delay: 0.4s;
 }
 
@@ -791,6 +825,9 @@ body > *:not(.aurora):not(.skip-link) {
 }
 
 .welcome-word {
+  position: absolute;
+  bottom: 32%;
+  text-align: center;
   animation: wordin 0.7s var(--ease-liquid) 0.45s both;
 }
 
@@ -850,5 +887,10 @@ body > *:not(.aurora):not(.skip-link) {
   .sheen::after,
   .blob {
     animation: none !important;
+  }
+  /* Skip the intro entirely rather than freezing it on screen: the global
+     duration override above would otherwise leave the panels shut. */
+  .curtain {
+    display: none !important;
   }
 }

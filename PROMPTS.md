@@ -485,6 +485,59 @@ Worth stating plainly: *when a user says an effect isn't there, check whether it
 
 ---
 
+## Session 13 — Curtain must paint first, not second *(~02:1x)*
+
+**Prompt (verbatim):**
+
+> on opening the site first homepage is loaded then after second we see welcome of curtains fix it as welcome should be first
+
+### The cause: the intro was a client-only mount
+
+The component initialised as `phase: "idle"` and returned `null`, only rendering the curtain after a `useEffect` fired. That ordering is inherent to the approach:
+
+1. Server HTML arrives **without** the curtain → browser paints the landing page.
+2. React hydrates.
+3. The effect runs, state changes, curtain mounts → it drops in *on top of* an already-visible page.
+
+So the user saw the home page first and the "welcome" second — precisely backwards. No amount of tuning the animation would fix this, because the problem was *when the element entered the DOM*, not how it moved.
+
+### The fix: ship it in the server HTML and drive it entirely from CSS
+
+- The component now renders the curtain **immediately, on the server**. Its initial state is identical on both sides (`done: false`), so there is no hydration mismatch.
+- The whole sequence is driven by **`animation-delay`** rather than JavaScript-toggled classes, so it begins on the very first paint without waiting for hydration:
+
+  ```
+  0.00s  panels closed, logo springs in
+  0.45s  wordmark rises
+  1.40s  seam flashes, panels part, logo lifts away
+  1.95s  overlay inert
+  ```
+
+- JavaScript is now only responsible for **unmounting the finished element**. If hydration fails entirely, a final keyframe sets `visibility: hidden` with `forwards`, so the page still reveals itself and nothing intercepts input.
+- Under `prefers-reduced-motion` the curtain is `display: none`. This mattered: the global reduced-motion rule collapses all animation durations to ~0, which would have frozen the panels *shut* rather than skipping them.
+
+### Verification
+
+Server HTML now contains the curtain markup, positioned before the hero:
+
+```
+curtain-panel / curtain-left / curtain-seam / curtain-stage / welcome-mark  -> all in server HTML
+curtainIndex 7278  <  heroIndex 13555   -> curtain paints first
+```
+
+Timeline confirmed by driving the animation clock directly (headless screenshots were unusable here, since virtual-time fast-forwards `animation-delay`):
+
+```
+   0ms   left spans 0-189, right starts 186   -> viewport fully covered
+1400ms   unchanged                            -> still covered, hold
+1700ms   left 0-166, right at 209             -> parting
+2350ms   left fully off-screen, right at 375  -> cleared
+```
+
+Also confirmed the curtain renders **only** on `/` — `/dashboard` and `/day/12` do not include it.
+
+---
+
 ## Honest notes on AI usage
 
 - The **AI wrote effectively all of the code**: the design token system, all three routes, the persona store, the calendar, the theme engine, the navigation, the logo, and both signature features.
