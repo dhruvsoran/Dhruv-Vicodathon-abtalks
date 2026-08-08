@@ -59,7 +59,7 @@ function NavBar() {
             href="/dashboard"
             className="tap focusring hidden rounded-full border border-line bg-surface px-3.5 py-1.5 text-[12.5px] font-medium text-fg md:inline-flex"
           >
-            Sign in
+            Dashboard
           </Link>
           <Link
             href={`/day/${persona.currentDay}`}
@@ -120,10 +120,10 @@ function NavBar() {
                 href="/dashboard"
                 className="tap focusring rounded-xl border border-line bg-surface py-3 text-center text-[14.5px] font-medium"
               >
-                Sign in
+                Dashboard
               </Link>
               <Link
-                href="/dashboard"
+                href={`/day/${persona.currentDay}`}
                 className="tap focusring rounded-xl ember-fill py-3 text-center text-[14.5px] font-semibold text-white"
               >
                 Start Day 1 free

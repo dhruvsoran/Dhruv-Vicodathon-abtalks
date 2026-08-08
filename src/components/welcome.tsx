@@ -22,14 +22,31 @@ const TOTAL = 1950;
  * which means a hydration failure still leaves a page that reveals itself
  * correctly (the final keyframe sets `visibility: hidden` with `forwards`).
  *
+ * Plays on a genuine document load only — a first visit, a refresh, or an
+ * external link. It must NOT replay on client-side navigation: clicking the
+ * logo on `/dashboard` to return home remounts this component, and a curtain
+ * dropping over a route change reads as a glitch rather than a welcome.
+ *
+ * The guard is a module-scope flag. Module state survives React remounts and
+ * client-side route changes but is discarded on a real page load, which is
+ * exactly the distinction required. `sessionStorage` would be wrong here
+ * because it also outlives reloads, so refreshing would never replay it.
+ *
  * Safety: `aria-hidden`, purely decorative, no scroll lock, and the real page
  * is rendered underneath the entire time.
  */
+let consumed = false;
+
 export default function Welcome() {
-  // Identical on server and client, so there is no hydration mismatch.
-  const [done, setDone] = useState(false);
+  // On the first document load this is `false` on both server and client, so
+  // hydration matches. On a later client-side navigation it is already
+  // `true`, and the component renders nothing.
+  const [done, setDone] = useState(() => consumed);
 
   useEffect(() => {
+    if (consumed) return;
+    consumed = true;
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const skip = window.setTimeout(() => setDone(true), 0);
       return () => clearTimeout(skip);
