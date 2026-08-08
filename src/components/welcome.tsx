@@ -3,46 +3,28 @@
 import { useEffect, useState } from "react";
 import { LogoMark } from "@/components/logo";
 
-const KEY = "abtalks.welcomed";
-const HOLD = 1450;
-const CURTAIN = 900;
+const HOLD = 1400;
+const CURTAIN = 950;
 
 /**
  * Animated logo intro with a curtain reveal.
  *
  * The mark springs in between two panels, then the panels slide apart to
- * reveal the page beneath. Shown once per session so returning visitors are
- * never gated behind an animation.
+ * reveal the page beneath.
+ *
+ * Plays on every load of the home page. An earlier version gated this behind
+ * `sessionStorage` so it only ran once per session — which meant a refresh
+ * never replayed it and it appeared broken. For a portfolio/landing page the
+ * brand moment is the point, and it is short enough not to become friction.
  *
  * Safety: purely decorative and `aria-hidden`. The real page is already
  * rendered underneath the whole time, so an automated screenshot or a JS
  * failure never sees a blank page. No scroll lock — an interrupted sequence
  * must never be able to leave the page unscrollable.
  */
-
-/**
- * Decided once per page load and cached at module scope.
- *
- * Without the cache, React's development double-mount would write the
- * session flag on the first mount and then read it back as "already seen"
- * on the remount, so the intro would never actually play.
- */
-let decision: boolean | null = null;
-
 function shouldPlay() {
-  if (decision !== null) return decision;
   if (typeof window === "undefined") return false;
-
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    decision = false;
-    return decision;
-  }
-  try {
-    decision = sessionStorage.getItem(KEY) !== "1";
-  } catch {
-    decision = false;
-  }
-  return decision;
+  return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 export default function Welcome() {
@@ -53,10 +35,6 @@ export default function Welcome() {
       const skip = window.setTimeout(() => setPhase("done"), 0);
       return () => clearTimeout(skip);
     }
-
-    try {
-      sessionStorage.setItem(KEY, "1");
-    } catch {}
 
     const t0 = window.setTimeout(() => setPhase("playing"), 0);
     const t1 = window.setTimeout(() => setPhase("opening"), HOLD);

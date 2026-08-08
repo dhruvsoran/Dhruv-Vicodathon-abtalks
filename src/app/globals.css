@@ -700,10 +700,10 @@ body > *:not(.aurora):not(.skip-link) {
 }
 
 .curtain.is-open .curtain-left {
-  animation: partleft 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  animation: partleft 0.95s cubic-bezier(0.7, 0, 0.2, 1) forwards;
 }
 .curtain.is-open .curtain-right {
-  animation: partright 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  animation: partright 0.95s cubic-bezier(0.7, 0, 0.2, 1) forwards;
 }
 
 /* Vertical seam of light where the panels meet. */

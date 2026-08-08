@@ -449,6 +449,42 @@ The general lesson, and the reason this is recorded rather than quietly fixed: *
 
 ---
 
+## Session 12 — "Curtain effect still not there" *(~01:5x)*
+
+**Prompt (verbatim):**
+
+> curtain effect still not there
+
+### The curtain was working. The gate was the bug.
+
+Instead of rewriting the animation again, the page was **screenshotted at successive points in the intro** and the pixels inspected. At 600ms the capture showed solid dark panels with a glowing logo at the centre — the curtain was rendering correctly the whole time.
+
+The real problem was the `sessionStorage` gate. I had built it to play **once per session**, reasoning that returning visitors shouldn't be made to wait. But that meant: after the very first view, *every subsequent refresh skipped it entirely*. The user reloaded, saw nothing, and correctly reported it as broken. My "considerate" design decision made the feature invisible in the exact workflow being used to review it — and would have done the same to a judge who loaded the page twice.
+
+Removed the gate. It now plays on every load of the home page. For a landing page the brand moment *is* the point, and at ~2.3s it is short enough not to be friction.
+
+### Verification by pixel scan
+
+A curtain panel is a near-solid dark block, so scanning row `y=760` and measuring how many pixels from each edge remain "panel dark" tracks the reveal directly:
+
+```
+frame      left panel   right panel   centre pixel
+700ms        389px         390px      (8,8,10)      <- fully closed
+1500ms        31px           0px      (153,94,31)   <- parted, page showing
+1750ms        31px           0px      (153,94,31)
+2100ms        31px          35px      (151,93,31)
+```
+
+At 700ms the panels span the full 390px viewport; by 1500ms they have cleared and the page beneath is visible. **The curtain measurably opens.**
+
+### The lesson
+
+This is the second time in this project that a *safety or politeness feature* — first a hydration-safe capability check, now a once-per-session gate — was the thing that broke the user-visible behaviour. Both times the animation itself was fine.
+
+Worth stating plainly: *when a user says an effect isn't there, check whether it is being suppressed before assuming it is being rendered wrongly.* Screenshot-and-inspect answered in one step what three rounds of computed-style debugging had not.
+
+---
+
 ## Honest notes on AI usage
 
 - The **AI wrote effectively all of the code**: the design token system, all three routes, the persona store, the calendar, the theme engine, the navigation, the logo, and both signature features.
