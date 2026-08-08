@@ -120,6 +120,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
   const [touched, setTouched] = useState({ repo: false, post: false });
   const [checks, setChecks] = useState<boolean[]>(() => detail.acceptance.map(() => false));
   const [copied, setCopied] = useState(false);
+  const [showDraft, setShowDraft] = useState(false);
   const [justSubmitted, setJustSubmitted] = useState(false);
 
   const week = weekOf(day.day);
@@ -331,12 +332,12 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                         setChecks((c) => c.map((v, idx) => (idx === i ? !v : v)))
                       }
                       aria-pressed={checks[i]}
-                      className="tap focusring flex w-full items-start gap-3 rounded-xl border border-line bg-surface-2 p-3 text-left"
+                      className="tap focusring press flex w-full items-start gap-3 rounded-xl border border-line bg-surface-2 p-3 text-left"
                     >
                       <span
-                        className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border transition-colors ${
+                        className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border transition-all duration-300 ${
                           checks[i]
-                            ? "border-mint bg-mint text-onbright"
+                            ? "scale-105 border-mint bg-mint text-onbright"
                             : "border-line-2 text-transparent"
                         }`}
                       >
@@ -387,9 +388,9 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
             className="shell mt-4 scroll-mt-16 md:mx-0 md:max-w-none md:px-0"
           >
             {done || justSubmitted ? (
-              <div className="card border-mint/40 bg-mint/[0.06] p-4">
+              <div className="card slidein border-mint/40 bg-mint/[0.06] p-4">
                 <div className="flex items-center gap-2.5">
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-mint text-onbright">
+                  <span className="popin grid h-9 w-9 place-items-center rounded-full bg-mint text-onbright">
                     <CheckIcon className="h-5 w-5" />
                   </span>
                   <div>
@@ -463,8 +464,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                       <span className="text-[12.5px] font-semibold">Post assistant</span>
                     </div>
                     <p className="mt-1.5 text-[11.5px] leading-relaxed text-faint">
-                      Midnight blank-page problem, solved. Type one line about today and we&apos;ll
-                      shape the post.
+                      Blank page at midnight, solved. One line in, a full post out.
                     </p>
                     <label htmlFor="learned" className="sr-only">
                       What did you learn today
@@ -477,17 +477,33 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                       placeholder="One thing that clicked today…"
                       className="focusring mt-2.5 w-full resize-none rounded-lg border border-line bg-ink-2 px-3 py-2.5 text-[13px] text-fg placeholder:text-faint"
                     />
-                    <pre className="mt-2.5 max-h-40 overflow-y-auto whitespace-pre-wrap rounded-lg border border-line bg-ink px-3 py-2.5 font-sans text-[11.5px] leading-relaxed text-muted">
-                      {draft}
-                    </pre>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowDraft((v) => !v)}
+                      aria-expanded={showDraft}
+                      className="tap focusring mt-2.5 flex w-full items-center justify-between gap-2 text-[11.5px] font-medium text-muted"
+                    >
+                      {showDraft ? "Hide draft" : "Preview draft post"}
+                      <ChevronIcon
+                        className={`h-3.5 w-3.5 transition-transform duration-300 ${showDraft ? "rotate-90" : ""}`}
+                      />
+                    </button>
+
+                    {showDraft && (
+                      <pre className="slidein mt-2 max-h-36 overflow-y-auto whitespace-pre-wrap rounded-lg border border-line bg-ink px-3 py-2.5 font-sans text-[11.5px] leading-relaxed text-muted">
+                        {draft}
+                      </pre>
+                    )}
+
                     <button
                       type="button"
                       onClick={copyDraft}
-                      className="tap focusring mt-2.5 flex w-full items-center justify-center gap-2 rounded-lg border border-line bg-surface py-2.5 text-[12.5px] font-medium"
+                      className="tap focusring press mt-2.5 flex w-full items-center justify-center gap-2 rounded-lg border border-line bg-surface py-2.5 text-[12.5px] font-medium"
                     >
                       {copied ? (
                         <>
-                          <CheckIcon className="h-4 w-4 text-mint" /> Copied
+                          <CheckIcon className="popin h-4 w-4 text-mint" /> Copied
                         </>
                       ) : (
                         <>
@@ -538,9 +554,9 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                     <button
                       type="submit"
                       disabled={!canSubmit}
-                      className={`tap focusring w-full rounded-2xl py-3.5 text-[15px] font-semibold ${
+                      className={`tap focusring press w-full rounded-2xl py-3.5 text-[15px] font-semibold ${
                         canSubmit
-                          ? "ember-fill text-white cta-shadow"
+                          ? "ember-fill sheen text-white cta-shadow"
                           : "cursor-not-allowed border border-line bg-surface-2 text-faint"
                       }`}
                     >

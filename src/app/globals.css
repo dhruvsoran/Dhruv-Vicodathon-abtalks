@@ -184,6 +184,201 @@ body {
   }
 }
 
+/* ---------- Liquid motion system ----------
+   Every animation below is restricted to transform / opacity / filter so it
+   runs on the compositor and never triggers layout or paint on scroll. */
+
+@theme {
+  --ease-liquid: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Content-safety guarantee: .reveal starts hidden ONLY once JS has confirmed
+   it can run (html.js). Without JS — or if the script fails — content is
+   always visible, so an entrance animation can never swallow the page. */
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s var(--ease-liquid),
+    transform 0.6s var(--ease-liquid);
+}
+
+html.js .reveal:not([data-shown]) {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0) scale(0.995);
+}
+
+/* Belt and braces: even with js enabled, never stay hidden past 2s. */
+@keyframes revealfailsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+html.js .reveal:not([data-shown]) {
+  animation: revealfailsafe 0.4s var(--ease-liquid) 2s forwards;
+}
+
+/* Liquid blobs: slow, low-frequency drift. transform-only. */
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(6%, -5%, 0) scale(1.1);
+  }
+  66% {
+    transform: translate3d(-5%, 4%, 0) scale(0.94);
+  }
+}
+
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.04);
+  }
+  50% {
+    transform: translate3d(-7%, 6%, 0) scale(0.92);
+  }
+}
+
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(64px);
+  opacity: var(--glow-opacity);
+  will-change: transform;
+  animation: drift-a 19s var(--ease-liquid) infinite;
+}
+
+.blob-b {
+  animation: drift-b 24s var(--ease-liquid) infinite;
+}
+
+/* Liquid press: springy, tactile feedback for thumbs. */
+.press {
+  transition:
+    transform 0.42s var(--ease-spring),
+    box-shadow 0.3s var(--ease-liquid),
+    background-color 0.2s ease;
+}
+.press:active {
+  transform: scale(0.968);
+}
+
+.lift {
+  transition:
+    transform 0.45s var(--ease-liquid),
+    border-color 0.3s ease;
+}
+@media (hover: hover) {
+  .lift:hover {
+    transform: translate3d(0, -3px, 0);
+  }
+}
+
+/* Sheen that sweeps across the primary CTA. */
+@keyframes sheen {
+  0% {
+    transform: translate3d(-140%, 0, 0) skewX(-18deg);
+  }
+  100% {
+    transform: translate3d(320%, 0, 0) skewX(-18deg);
+  }
+}
+
+.sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.sheen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 38%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: sheen 4.2s var(--ease-liquid) infinite;
+  animation-delay: 1.4s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Streak flame: gentle breathing, transform + opacity only. */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.09);
+    opacity: 0.88;
+  }
+}
+.breathe {
+  animation: breathe 2.8s var(--ease-liquid) infinite;
+}
+
+/* Calendar cells pouring in on load. */
+@keyframes pour {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 5px, 0) scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pour {
+  animation: pour 0.42s var(--ease-spring) both;
+}
+
+/* Progress ring + bars draw in. */
+@keyframes draw {
+  from {
+    stroke-dashoffset: var(--dash-from);
+  }
+}
+.draw {
+  animation: draw 1.15s var(--ease-liquid) both;
+}
+
+@keyframes growbar {
+  from {
+    transform: scaleX(0);
+  }
+}
+.growbar {
+  transform-origin: left;
+  animation: growbar 0.9s var(--ease-liquid) both;
+}
+
+@keyframes slidein {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+.slidein {
+  animation: slidein 0.4s var(--ease-liquid) both;
+}
+
+@keyframes popin {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+.popin {
+  animation: popin 0.5s var(--ease-spring) both;
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -225,5 +420,13 @@ body {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .sheen::after,
+  .blob {
+    animation: none !important;
   }
 }

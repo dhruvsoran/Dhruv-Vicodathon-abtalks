@@ -13,6 +13,7 @@ import {
   SparkIcon,
 } from "@/components/icons";
 import { LogoMark } from "@/components/logo";
+import { Reveal } from "@/components/reveal";
 import SiteNav from "@/components/site-nav";
 import { cohort, days, faqs, formatCount, testimonials, tracks, weeks } from "@/lib/challenge";
 
@@ -41,7 +42,7 @@ function PreviewStrip() {
       <div className="relative flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <span className="grid h-9 w-9 place-items-center rounded-full ember-fill text-white">
-            <FlameIcon className="h-[18px] w-[18px]" />
+            <FlameIcon className="breathe h-[18px] w-[18px]" />
           </span>
           <div>
             <div className="text-[15px] font-semibold leading-none">11 day streak</div>
@@ -56,7 +57,8 @@ function PreviewStrip() {
         {cells.map((c) => (
           <span
             key={c}
-            className={`aspect-square rounded-[3px] ${
+            style={{ animationDelay: `${180 + c * 22}ms` }}
+            className={`pour aspect-square rounded-[3px] ${
               c <= 11
                 ? "bg-ember"
                 : c === 12
@@ -124,10 +126,22 @@ export default function Landing() {
 
       <main id="main">
       <section className="relative overflow-hidden">
-        <div
-          className="glow pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full blur-[90px]"
-          style={{ background: "radial-gradient(circle, var(--ember) 0%, transparent 68%)", opacity: "calc(var(--glow-opacity) * 0.45)" }}
-        />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-[420px] overflow-hidden">
+          <div
+            className="blob left-1/2 h-[300px] w-[300px] -translate-x-1/2"
+            style={{
+              background: "radial-gradient(circle, var(--ember) 0%, transparent 68%)",
+              opacity: "calc(var(--glow-opacity) * 0.45)",
+            }}
+          />
+          <div
+            className="blob blob-b left-[8%] top-[90px] h-[210px] w-[210px]"
+            style={{
+              background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)",
+              opacity: "calc(var(--glow-opacity) * 0.26)",
+            }}
+          />
+        </div>
         <div className="shell relative pt-9 md:pt-16">
           <div className="md:grid md:grid-cols-2 md:items-center md:gap-14">
             <div className="rise">
@@ -156,14 +170,14 @@ export default function Landing() {
               <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
                 <Link
                   href="/dashboard"
-                  className="tap focusring group flex h-13 items-center justify-center gap-2 rounded-2xl ember-fill px-6 py-3.5 text-[15px] font-semibold text-white cta-shadow"
+                  className="tap focusring press sheen group flex h-13 items-center justify-center gap-2 rounded-2xl ember-fill px-6 py-3.5 text-[15px] font-semibold text-white cta-shadow"
                 >
                   Start Day 1 tonight
-                  <ArrowIcon className="h-[18px] w-[18px] transition-transform group-hover:translate-x-0.5" />
+                  <ArrowIcon className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
                 <Link
                   href="/day/12"
-                  className="tap focusring flex items-center justify-center rounded-2xl border border-line bg-surface px-6 py-3.5 text-[15px] font-medium text-fg"
+                  className="tap focusring press flex items-center justify-center rounded-2xl border border-line bg-surface px-6 py-3.5 text-[15px] font-medium text-fg"
                 >
                   See a real day
                 </Link>
@@ -189,66 +203,78 @@ export default function Landing() {
 
       <section className="shell mt-14 md:mt-24">
         <SectionLabel>The problem</SectionLabel>
-        <h2 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] md:text-[34px]">
-          You&apos;ve finished four tutorials.
-          <br />
-          <span className="text-faint">Nobody can tell.</span>
-        </h2>
+        <Reveal>
+          <h2 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] md:text-[34px]">
+            You&apos;ve finished four tutorials.
+            <br />
+            <span className="text-faint">Nobody can tell.</span>
+          </h2>
+        </Reveal>
         <p className="mt-3.5 max-w-[52ch] text-[14px] leading-relaxed text-muted md:text-[16px]">
-          Watching, following along and forgetting is the default loop. It leaves no trace. A
-          recruiter opening your GitHub sees an empty grid and a resume that sounds like everyone
-          else&apos;s. ABTalks replaces the loop with a much smaller, harder habit: finish one thing
-          tonight and put it where people can see it.
+          Watch, follow along, forget. It leaves no trace. ABTalks replaces that loop with a
+          smaller, harder habit: finish one thing tonight and put it where people can see it.
         </p>
       </section>
 
       <section id="how-it-works" className="shell mt-12 scroll-mt-16 md:mt-20">
         <SectionLabel>How a day works</SectionLabel>
         <div className="space-y-5 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
-          <ProofRow
-            icon={<SparkIcon />}
-            title="1 · Open tonight's task"
-            body="One focused build, sized for after college. You get the why, the exact steps, and what counts as done."
-          />
-          <ProofRow
-            icon={<GitHubIcon />}
-            title="2 · Push the commit"
-            body="Your code goes into a public repo. That's the part that proves you actually built it."
-          />
-          <ProofRow
-            icon={<LinkedInIcon />}
-            title="3 · Post what you learned"
-            body="One short post. We draft it for you from your own work, so the blank page never stops you at midnight."
-          />
+          {[
+            {
+              icon: <SparkIcon />,
+              title: "1 · Open tonight's task",
+              body: "One focused build, sized for after college. The why, the steps, and what counts as done.",
+            },
+            {
+              icon: <GitHubIcon />,
+              title: "2 · Push the commit",
+              body: "Your code goes into a public repo. That's what proves you built it.",
+            },
+            {
+              icon: <LinkedInIcon />,
+              title: "3 · Post what you learned",
+              body: "One short post, drafted for you from your own work — so the blank page never stops you.",
+            },
+          ].map((s, i) => (
+            <Reveal key={s.title} delay={i * 90}>
+              <ProofRow icon={s.icon} title={s.title} body={s.body} />
+            </Reveal>
+          ))}
         </div>
       </section>
 
       <section id="shields" className="shell mt-12 scroll-mt-16 md:mt-20">
-        <div className="card relative overflow-hidden p-5 md:p-8">
-          <div
-            className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full blur-[70px]"
-            style={{ background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)", opacity: "calc(var(--glow-opacity) * 0.3)" }}
-          />
-          <div className="relative flex items-start gap-3">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold/15 text-gold">
-              <ShieldIcon className="h-6 w-6" />
-            </span>
-            <div>
-              <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-gold">
-                Streak Shields
+        <Reveal>
+          <div className="card relative overflow-hidden p-5 md:p-8">
+            <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 overflow-hidden">
+              <div
+                className="blob blob-b h-52 w-52"
+                style={{
+                  background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)",
+                  opacity: "calc(var(--glow-opacity) * 0.3)",
+                }}
+              />
+            </div>
+            <div className="relative flex items-start gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold/15 text-gold">
+                <ShieldIcon className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-gold">
+                  Streak Shields
+                </div>
+                <h3 className="mt-1.5 text-[20px] font-semibold leading-snug tracking-tight md:text-[24px]">
+                  One bad night shouldn&apos;t end two months of work.
+                </h3>
+                <p className="mt-2.5 max-w-[50ch] text-[14px] leading-relaxed text-muted">
+                  Exams happen. Wi-Fi dies. Every 15 days you earn a Shield that repairs one missed
+                  day within 48 hours — by shipping the catch-up proof. Students quit the day{" "}
+                  <em className="not-italic text-fg">after</em> they slip, not the day they slip.
+                </p>
               </div>
-              <h3 className="mt-1.5 text-[20px] font-semibold leading-snug tracking-tight md:text-[24px]">
-                One bad night shouldn&apos;t end two months of work.
-              </h3>
-              <p className="mt-2.5 max-w-[50ch] text-[14px] leading-relaxed text-muted">
-                Exams happen. Wi-Fi dies. Every 15 days you earn a Shield that lets you repair one
-                missed day within 48 hours by shipping the catch-up proof. You keep the streak, and
-                the day still has to be earned. Most students quit on the day after they slip, not
-                the day they slip.
-              </p>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section id="curriculum" className="mt-12 scroll-mt-16 md:mt-20">
@@ -258,15 +284,15 @@ export default function Landing() {
             Nine weeks, one arc
           </h2>
           <p className="mt-3 max-w-[50ch] text-[14px] leading-relaxed text-muted">
-            You start by making a repository. You finish with a deployed product and a portfolio
-            arranged for recruiters.
+            Start by making a repository. Finish with a deployed product and a portfolio arranged
+            for recruiters.
           </p>
         </div>
         <div className="no-scrollbar mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 md:px-[max(40px,calc(50vw-540px))]">
           {weeks.map((w) => (
             <div
               key={w.n}
-              className="card w-[224px] shrink-0 snap-start p-4"
+              className="card lift w-[224px] shrink-0 snap-start p-4"
             >
               <div className="flex items-baseline justify-between">
                 <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-faint">
@@ -284,42 +310,43 @@ export default function Landing() {
       <section className="shell mt-12 md:mt-20">
         <SectionLabel>Sample tasks</SectionLabel>
         <ul className="card divide-y divide-line overflow-hidden">
-          {sample.map((d) => (
-            <li key={d.day} className="flex items-center gap-3.5 p-4">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-line bg-surface-2 font-mono text-[12px] text-muted">
-                {d.day}
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-[14px] font-medium">{d.title}</div>
-                <div className="mt-0.5 text-[11.5px] text-faint">
-                  {d.difficulty} · ~{d.minutes} min · {d.tag}
+          {sample.map((d, i) => (
+            <Reveal as="li" key={d.day} delay={i * 60}>
+              <div className="flex items-center gap-3.5 p-4">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-line bg-surface-2 font-mono text-[12px] text-muted">
+                  {d.day}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-[14px] font-medium">{d.title}</div>
+                  <div className="mt-0.5 text-[11.5px] text-faint">
+                    {d.difficulty} · ~{d.minutes} min · {d.tag}
+                  </div>
                 </div>
               </div>
-            </li>
+            </Reveal>
           ))}
         </ul>
+
+        <div className="mt-2.5 grid grid-cols-2 gap-2.5">
+          {tracks.map((t, i) => (
+            <Reveal key={t.id} delay={i * 60}>
+              <div className="card lift h-full p-3.5">
+                <div className="text-[13.5px] font-semibold leading-snug">{t.name}</div>
+                <div className="mt-1.5 text-[10.5px] text-faint">
+                  {formatCount(t.learners)} building
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
         <Link
           href="/day/12"
-          className="tap focusring mt-3 flex items-center justify-center gap-1.5 rounded-2xl border border-line bg-surface px-5 py-3 text-[13.5px] font-medium"
+          className="tap focusring press mt-3 flex items-center justify-center gap-1.5 rounded-2xl border border-line bg-surface px-5 py-3 text-[13.5px] font-medium"
         >
           Open Day 12 as a student sees it
           <ArrowIcon className="h-4 w-4" />
         </Link>
-      </section>
-
-      <section className="shell mt-12 md:mt-20">
-        <SectionLabel>Pick a track</SectionLabel>
-        <div className="grid grid-cols-2 gap-2.5">
-          {tracks.map((t) => (
-            <div key={t.id} className="card p-3.5">
-              <div className="text-[13.5px] font-semibold leading-snug">{t.name}</div>
-              <p className="mt-1 text-[11.5px] leading-relaxed text-muted">{t.blurb}</p>
-              <div className="mt-2.5 text-[10.5px] text-faint">
-                {formatCount(t.learners)} building
-              </div>
-            </div>
-          ))}
-        </div>
       </section>
 
       <section className="mt-12 md:mt-20">
@@ -328,7 +355,7 @@ export default function Landing() {
         </div>
         <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 md:px-[max(40px,calc(50vw-540px))]">
           {testimonials.map((t) => (
-            <figure key={t.name} className="card w-[286px] shrink-0 snap-start p-4">
+            <figure key={t.name} className="card lift w-[286px] shrink-0 snap-start p-4">
               <blockquote className="text-[13.5px] leading-relaxed text-fg">
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
@@ -341,25 +368,6 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="shell mt-12 md:mt-20">
-        <SectionLabel>What you walk away with</SectionLabel>
-        <ul className="space-y-2.5">
-          {[
-            "60 public commits on a GitHub graph that is no longer empty",
-            "60 LinkedIn posts that recruiters can actually find",
-            "A deployed capstone project with a real README and a demo video",
-            "A portfolio arranged so a recruiter understands you in 15 seconds",
-          ].map((line) => (
-            <li key={line} className="flex items-start gap-3">
-              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-mint/15 text-mint">
-                <CheckIcon className="h-3 w-3" />
-              </span>
-              <span className="text-[14px] leading-relaxed text-muted">{line}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
       <section id="faq" className="shell mt-12 scroll-mt-16 md:mt-20">
         <SectionLabel>Questions</SectionLabel>
         <div className="card px-4">
@@ -370,28 +378,55 @@ export default function Landing() {
       </section>
 
       <section className="shell mt-12 md:mt-20">
-        <div className="card grain relative overflow-hidden p-6 text-center md:p-10">
-          <div
-            className="pointer-events-none absolute inset-x-0 -bottom-24 mx-auto h-56 w-56 rounded-full blur-[80px]"
-            style={{ background: "radial-gradient(circle, var(--ember) 0%, transparent 70%)", opacity: "calc(var(--glow-opacity) * 0.4)" }}
-          />
-          <div className="relative">
-            <h2 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] md:text-[34px]">
-              Day 1 takes 35 minutes.
-            </h2>
-            <p className="mx-auto mt-2.5 max-w-[38ch] text-[14px] leading-relaxed text-muted">
-              Create a repo, write a README, push one commit. That&apos;s the whole first day. The
-              other 59 only exist because you did that one.
-            </p>
-            <Link
-              href="/dashboard"
-              className="tap focusring mt-5 inline-flex items-center justify-center gap-2 rounded-2xl ember-fill px-7 py-3.5 text-[15px] font-semibold text-white cta-shadow"
-            >
-              Join {cohort.name}
-              <ArrowIcon className="h-[18px] w-[18px]" />
-            </Link>
+        <Reveal>
+          <div className="card grain relative overflow-hidden p-6 md:p-10">
+            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -bottom-24 h-56 overflow-hidden">
+              <div
+                className="blob left-1/2 h-56 w-56 -translate-x-1/2"
+                style={{
+                  background: "radial-gradient(circle, var(--ember) 0%, transparent 70%)",
+                  opacity: "calc(var(--glow-opacity) * 0.4)",
+                }}
+              />
+            </div>
+            <div className="relative text-center">
+              <h2 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] md:text-[34px]">
+                Day 1 takes 35 minutes.
+              </h2>
+              <p className="mx-auto mt-2.5 max-w-[38ch] text-[14px] leading-relaxed text-muted">
+                Create a repo, write a README, push one commit. The other 59 only exist because you
+                did that one.
+              </p>
+            </div>
+
+            <ul className="relative mx-auto mt-5 max-w-[38ch] space-y-2 border-t border-line pt-5">
+              {[
+                "60 public commits on a GitHub graph that isn't empty",
+                "60 posts recruiters can actually find",
+                "A deployed capstone with a real README",
+              ].map((line, i) => (
+                <Reveal as="li" key={line} delay={i * 80}>
+                  <div className="flex items-start gap-2.5">
+                    <span className="mt-0.5 grid h-4.5 w-4.5 shrink-0 place-items-center rounded-full bg-mint/15 text-mint">
+                      <CheckIcon className="h-2.5 w-2.5" />
+                    </span>
+                    <span className="text-[13px] leading-relaxed text-muted">{line}</span>
+                  </div>
+                </Reveal>
+              ))}
+            </ul>
+
+            <div className="relative mt-5 text-center">
+              <Link
+                href="/dashboard"
+                className="tap focusring press sheen inline-flex items-center justify-center gap-2 rounded-2xl ember-fill px-7 py-3.5 text-[15px] font-semibold text-white cta-shadow"
+              >
+                Join {cohort.name}
+                <ArrowIcon className="h-[18px] w-[18px]" />
+              </Link>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       </main>
@@ -479,7 +514,7 @@ export default function Landing() {
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/90 px-5 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl md:hidden">
         <Link
           href="/dashboard"
-          className="tap focusring flex items-center justify-center gap-2 rounded-2xl ember-fill py-3.5 text-[15px] font-semibold text-white"
+          className="tap focusring press flex items-center justify-center gap-2 rounded-2xl ember-fill py-3.5 text-[15px] font-semibold text-white"
         >
           Start Day 1 tonight
           <ArrowIcon className="h-[18px] w-[18px]" />

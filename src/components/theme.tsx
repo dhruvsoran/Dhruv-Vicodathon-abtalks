@@ -6,7 +6,7 @@ export type Theme = "dark" | "light";
 const KEY = "abtalks.theme";
 const listeners = new Set<() => void>();
 
-export const themeScript = `(function(){try{var t=localStorage.getItem("${KEY}");if(t!=="dark"&&t!=="light"){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}document.documentElement.setAttribute("data-theme",t);document.documentElement.style.colorScheme=t}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();`;
+export const themeScript = `(function(){var e=document.documentElement;e.classList.add("js");try{var t=localStorage.getItem("${KEY}");if(t!=="dark"&&t!=="light"){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}e.setAttribute("data-theme",t);e.style.colorScheme=t}catch(n){e.setAttribute("data-theme","dark")}})();`;
 
 function subscribe(fn: () => void) {
   listeners.add(fn);

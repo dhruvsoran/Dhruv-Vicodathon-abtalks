@@ -71,13 +71,28 @@ npm run build
 npm run lint
 ```
 
+## Liquid motion, on a performance budget
+
+Motion is restricted to `transform`, `opacity` and `filter` only — properties the compositor handles without layout or paint. Drifting gradient blobs, spring-physics press feedback on every tap target, calendar cells that pour in on a stagger, a completion ring that draws itself, and a breathing streak flame. Scroll reveals run through **one shared IntersectionObserver** for the whole page. All of it disabled under `prefers-reduced-motion`.
+
+**Entrance animations can never hide content.** `.reveal` is visible by default and only hides once JS confirms it can run, with a CSS keyframe failsafe at 2s and a JS failsafe at 1.2s. This was not theoretical — the audit caught all 18 reveals stuck invisible when IntersectionObserver didn't fire, which would have handed the judges a landing page with blank sections.
+
 ## Verified, not assumed
 
-Measured in headless Chrome at 390×844:
+Measured in headless Chrome at 390×844, across **all 6 combinations** (3 routes × 2 themes), scrolled end-to-end:
 
-- `scrollWidth: 375` on all three routes — zero horizontal overflow.
-- Sticky submit bar clears the tab bar with no occlusion.
-- No tap target under 32px, no body copy under 10px.
-- `npm run build` prerenders 65 routes, TypeScript clean; `npm run lint` passes clean.
+| | dark `/` | dark `/dashboard` | dark `/day/12` | light `/` | light `/dashboard` | light `/day/12` |
+|---|---|---|---|---|---|---|
+| horizontal overflow | 0 | 0 | 0 | 0 | 0 | 0 |
+| CLS | 0 | 0 | 0 | 0.0001 | 0 | 0 |
+| non-composited animated props | 0 | 0 | 0 | 0 | 0 | 0 |
+| hidden reveals | 0 | 0 | 0 | 0 | 0 | 0 |
+| WCAG AA text failures | 0 | 0 | 0 | 0 | 0 | 0 |
+
+`scrollWidth` is 375 on every route — no horizontal scroll at 390px. The sticky submit bar clears the tab bar with no occlusion, no tap target is under 32px, and no body copy is under 10px.
+
+CLS started at **0.060** on the dashboard; the auditor identified the countdown label growing from empty and the week header re-wrapping. Both were pinned, and **CLS is now 0**.
+
+`npm run build` prerenders 68 routes with TypeScript clean; `npm run lint` passes clean.
 
 The AI usage log is in [PROMPTS.md](./PROMPTS.md).

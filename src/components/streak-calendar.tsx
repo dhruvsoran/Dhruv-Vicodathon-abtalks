@@ -65,7 +65,8 @@ export default function StreakCalendar({
               onClick={() => setPicked(picked === d ? null : d)}
               aria-label={`Day ${d}, ${st}`}
               aria-pressed={picked === d}
-              className={`tap focusring grid aspect-square place-items-center rounded-[6px] font-mono text-[9px] transition-transform active:scale-95 ${cellClass[st]} ${
+              style={{ animationDelay: `${Math.min(600, d * 9)}ms` }}
+              className={`tap focusring press pour grid aspect-square place-items-center rounded-[6px] font-mono text-[9px] ${cellClass[st]} ${
                 picked === d ? "outline outline-2 outline-offset-1 outline-fg/70" : ""
               }`}
             >
@@ -85,7 +86,7 @@ export default function StreakCalendar({
       </div>
 
       {pickedDay && (
-        <div className="mt-3.5 rounded-xl border border-line bg-surface-2 p-3.5">
+        <div key={pickedDay.day} className="slidein mt-3.5 rounded-xl border border-line bg-surface-2 p-3.5">
           <div className="flex items-center justify-between gap-3">
             <span className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-faint">
               Day {pickedDay.day} · {pickedStatus}

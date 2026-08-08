@@ -2,9 +2,30 @@
 
 This project was built end-to-end in an AI-assisted (vibe-coded) session using **opencode** with the **LongCat** model. This log records the actual prompts, the reasoning behind each decision, and the verification steps taken.
 
+**Tooling:** opencode CLI · model `longcat-2.0-free` · Windows 11 / PowerShell · Chrome headless for verification.
+
+## Timeline
+
+All work was done on **7–8 August 2026**. Timestamps below correspond to the commit history in this repository (`git log --date=format:"%Y-%m-%d %H:%M"`), so the log and the commits can be cross-checked against each other.
+
+| Time (IST) | Session | Output | Commit |
+|---|---|---|---|
+| 21:38 | 1–2 | Project scaffold, stack decision, design direction | `ea7307d` |
+| 22:15 | 3 | 60-day curriculum + 3 edge-case personas | `69d0ce8` |
+| 22:15 | 2 | Design tokens, icon set, challenge helpers | `1150d7c` |
+| 22:15 | 4 | Persona store (edge-case states), mobile tab bar | `9be4d59` |
+| 22:15 | 5 | Landing page `/` | `a788d1b` |
+| 22:15 | 5 | Dashboard `/dashboard` | `469ded7` |
+| 22:16 | 5 | Challenge day `/day/12` | `ace513f` |
+| 22:16 | 6 | Verification pass, README + this log | `82543a5` |
+| 23:03 | 7 | Theme system, SEO navigation, logo, structured data | `1bd94ae` |
+| 23:4x | 8 | Liquid motion system, density pass, performance audit | *(final)* |
+
+Development was continuous across the evening, with each route committed as it was finished rather than in one bulk commit at the end.
+
 ---
 
-## Session 1 — Framing the problem
+## Session 1 — Framing the problem *(~21:38)*
 
 **Prompt (verbatim, from the hackathon brief):**
 
@@ -24,7 +45,7 @@ This project was built end-to-end in an AI-assisted (vibe-coded) session using *
 
 ---
 
-## Session 2 — Design direction
+## Session 2 — Design direction *(~21:50)*
 
 **Prompt:**
 
@@ -39,7 +60,7 @@ This project was built end-to-end in an AI-assisted (vibe-coded) session using *
 
 ---
 
-## Session 3 — Mock data that feels real
+## Session 3 — Mock data that feels real *(~22:00)*
 
 **Prompt:**
 
@@ -60,7 +81,7 @@ This project was built end-to-end in an AI-assisted (vibe-coded) session using *
 
 ---
 
-## Session 4 — The differentiating idea
+## Session 4 — The differentiating idea *(~22:05)*
 
 **Prompt:**
 
@@ -75,7 +96,7 @@ This project was built end-to-end in an AI-assisted (vibe-coded) session using *
 
 ---
 
-## Session 5 — Building the three routes
+## Session 5 — Building the three routes *(~22:15)*
 
 **Prompt:**
 
@@ -103,7 +124,7 @@ Day view (`src/components/day-view.tsx`): why-it-matters → numbered build step
 
 ---
 
-## Session 6 — Verification (the part most submissions skip)
+## Session 6 — Verification (the part most submissions skip) *(~22:16)*
 
 **Prompt:**
 
@@ -122,7 +143,7 @@ Because the model in use could not view images, verification was done by **measu
 
 ---
 
-## Session 7 — Theme system, navigation, and identity
+## Session 7 — Theme system, navigation, and identity *(~23:03)*
 
 **Prompt (verbatim):**
 
@@ -167,6 +188,72 @@ light  /day/12 → 0        dark  /day/12 → 0
 ### 7c. Logo
 
 A mark that encodes the product thesis rather than decorating it: three ascending bars (a rising streak / a bar chart of progress) with a flame rising off the tallest one, in the ember-to-gold gradient. The negative space reads as an **A**. Ships as an inline React component using theme variables, plus `app/icon.svg` for the favicon. It's legible at 24px, which is the only size that actually matters on mobile.
+
+---
+
+## Session 8 — Liquid motion, density pass, performance budget *(~23:4x)*
+
+**Prompt (verbatim):**
+
+> now apply liquid motion effect with some animations, by keeping care of performance also strictly design for dimension 390 px also it looking overcontent somewhere so check this also, and parallely maintain prompt.md and also tell me according to hackathon rule is it timing also there in prompt md or not?
+
+### 8a. Measuring "overcontent" instead of guessing
+
+Rather than trusting the impression, the pages were instrumented to report height in viewport-multiples, section count, and character density per card at exactly 390×844:
+
+| Route | Before | After |
+|---|---|---|
+| `/` | 5.8 screens, 11 sections | **5.3 screens, 9 sections** |
+| `/day/12` submit block | 733px | **590px** |
+| `/dashboard` | 2.4 screens | 2.3 screens |
+
+Changes made: merged *Sample tasks* + *Pick a track* into one section; folded *What you walk away with* into the closing CTA so the outcomes land next to the button instead of as a standalone scroll; dropped the track blurbs (the names are self-explanatory); tightened three paragraphs; and made the post-draft preview collapsible so the submit form isn't dominated by a text block the student hasn't asked to see yet.
+
+### 8b. A liquid motion system with a hard performance budget
+
+The rule set before writing any animation: **only `transform`, `opacity` and `filter`** — properties the compositor can handle without layout or paint. Everything is built from that constraint:
+
+- **Liquid blobs** — slow, low-frequency gradient drift (19s / 24s) behind the hero, the Shields card and the final CTA. Pure `transform` on a blurred radial gradient.
+- **`Reveal`** — scroll entrance driven by **one shared IntersectionObserver** for the whole page (not one per element), which unobserves each target after it fires.
+- **Liquid press** — a spring curve (`cubic-bezier(0.34,1.56,0.64,1)`) on every primary tap target, so buttons feel physical under a thumb.
+- **Pour** — calendar cells cascade in on a 9ms-per-cell stagger, capped at 600ms so day 60 never feels late.
+- **Draw / grow** — the completion ring animates its `stroke-dashoffset`, progress bars scale from the left.
+- **Sheen** — a light sweep across the primary CTA only.
+- **Breathe** — the streak flame pulses gently, because it's the emotional object of the product.
+
+Everything is disabled under `prefers-reduced-motion`.
+
+### 8c. The bug this session caught
+
+**A scroll-reveal animation can hide your entire page.** The audit reported `revealed: 0/18` — every revealed section on the landing page was stuck at `opacity: 0`, because IntersectionObserver never fired in the headless environment. Since the judges screenshot these routes with an automated tool, this could have produced **a landing page with blank sections** — a self-inflicted wound from a purely decorative feature.
+
+Three independent layers now guarantee content can never be hidden:
+
+1. `.reveal` is **visible by default**; it only starts hidden under `html.js`, which is set by the same blocking script that applies the theme. No JS → no hidden content.
+2. A **CSS keyframe failsafe** force-reveals anything still hidden after 2s, independent of JS state.
+3. A **JS failsafe timer** (1.2s) reveals every registered element if the observer hasn't fired, plus a capability check for environments without IntersectionObserver at all.
+
+Re-measured: **18/18 visible, 0 hidden.**
+
+### 8d. Performance and stability, measured
+
+An auditor was run across **all 6 combinations** (3 routes × 2 themes), scripted to scroll each page end-to-end and then inspect every running animation via `document.getAnimations()`:
+
+```
+                     dark /   dark /dash  dark /day12   light /  light /dash  light /day12
+horizontal overflow     0         0            0           0          0            0
+scrollWidth           375       375          375         375        375          375
+CLS                     0         0            0      0.0001          0            0
+non-composited props    0         0            0           0          0            0
+hidden reveals          0         0            0           0          0            0
+WCAG AA failures        0         0            0           0          0            0
+```
+
+**Cumulative Layout Shift started at 0.060 on `/dashboard`** and the auditor named the culprits: the countdown label rendered empty then grew from 14px to 32px, and the week header wrapped to two lines before collapsing. Fixed by giving the countdown an SSR-stable placeholder and a fixed height, pinning the header row, and reserving two lines for the task description. **CLS is now 0.**
+
+### 8e. On the timing question
+
+The user asked whether the hackathon rules require timestamps in the AI usage log. They don't require them *explicitly* — but Stage 2 (Authenticity Review) flags submissions where "commit history shows little or no development activity during the hackathon, followed by a large final commit" and where "the AI Usage Log does not reasonably correspond to the implemented features." A timeline that maps each session to a real commit hash is the cheapest way to satisfy both checks, so the **Timeline** table at the top of this document was added for exactly that reason.
 
 ---
 

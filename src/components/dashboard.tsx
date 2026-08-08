@@ -33,8 +33,12 @@ import {
   xpEarned,
 } from "@/lib/challenge";
 
+/**
+ * Renders a stable placeholder on the server and until the first tick, so the
+ * label never grows from empty to full width and shifts the layout (CLS).
+ */
 function useCountdown(cutoffHour = 24) {
-  const [label, setLabel] = useState("");
+  const [label, setLabel] = useState("Due 11:59 PM IST");
   useEffect(() => {
     const tick = () => {
       const now = new Date();
@@ -45,9 +49,12 @@ function useCountdown(cutoffHour = 24) {
       const m = Math.floor((ms % 3600000) / 60000);
       setLabel(h > 0 ? `${h}h ${m}m left today` : `${m}m left today`);
     };
-    tick();
+    const id0 = setTimeout(tick, 0);
     const id = setInterval(tick, 30000);
-    return () => clearInterval(id);
+    return () => {
+      clearTimeout(id0);
+      clearInterval(id);
+    };
   }, [cutoffHour]);
   return label;
 }
@@ -60,6 +67,7 @@ function Ring({ value, size = 74 }: { value: number; size?: number }) {
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-line-2)" strokeWidth={stroke} />
       <circle
+        className="draw"
         cx={size / 2}
         cy={size / 2}
         r={r}
@@ -69,6 +77,7 @@ function Ring({ value, size = 74 }: { value: number; size?: number }) {
         strokeLinecap="round"
         strokeDasharray={c}
         strokeDashoffset={c - (c * value) / 100}
+        style={{ "--dash-from": `${c}px` } as React.CSSProperties}
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
       />
       <defs>
@@ -93,7 +102,7 @@ function MetricCard({
   tone?: "default" | "warn";
 }) {
   return (
-    <div className="card p-3.5">
+    <div className="card lift h-full p-3.5">
       <div className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-faint">{label}</div>
       <div
         className={`mt-1.5 text-[21px] font-semibold leading-none tracking-tight ${
@@ -214,7 +223,7 @@ export default function Dashboard() {
                   ) : (
                     <>
                       <div className="flex items-center gap-1.5 text-[13px] font-semibold text-ember">
-                        <FlameIcon className="h-4 w-4" />
+                        <FlameIcon className="breathe h-4 w-4" />
                         {streak} day streak · best {best}
                       </div>
                       <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted">
@@ -278,8 +287,8 @@ export default function Dashboard() {
 
           <section className="shell mt-3 md:col-start-1 md:mx-0 md:max-w-none md:px-0">
             <div className="card overflow-hidden">
-              <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
-                <span className="text-[10.5px] font-medium uppercase tracking-[0.13em] text-faint">
+              <div className="flex h-9 items-center justify-between gap-2 border-b border-line px-4">
+                <span className="truncate text-[10.5px] font-medium uppercase tracking-[0.13em] text-faint">
                   Today · Week {week.n} {week.theme}
                 </span>
                 {doneToday ? (
@@ -287,8 +296,8 @@ export default function Dashboard() {
                     <CheckIcon className="h-3 w-3" /> Submitted
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1 text-[10.5px] text-gold">
-                    <ClockIcon className="h-3.5 w-3.5" />
+                  <span className="flex h-4 items-center gap-1 whitespace-nowrap text-[10.5px] text-gold">
+                    <ClockIcon className="h-3.5 w-3.5 shrink-0" />
                     {countdown}
                   </span>
                 )}
@@ -306,7 +315,9 @@ export default function Dashboard() {
                 <h2 className="mt-1.5 text-[19px] font-semibold leading-snug tracking-tight">
                   {today?.title}
                 </h2>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{today?.focus}</p>
+                <p className="mt-1.5 line-clamp-2 min-h-[38px] text-[13px] leading-relaxed text-muted">
+                  {today?.focus}
+                </p>
 
                 <Link
                   href={`/day/${persona.currentDay}`}
