@@ -148,7 +148,11 @@ body {
     pointer-events: none;
   }
 
-  .card > * {
+  /* Lift content above the ::before specular highlight — but never override
+     an explicitly positioned child. Without the :not(), absolutely positioned
+     decorations get forced back into normal flow and occupy real layout
+     space, which silently inflates card heights. */
+  .card > *:not(.absolute):not(.fixed) {
     position: relative;
   }
 

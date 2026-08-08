@@ -286,7 +286,10 @@ export default function Landing() {
       <section id="shields" className="shell mt-12 scroll-mt-16 md:mt-20">
         <Reveal>
           <div className="card relative overflow-hidden p-5 md:p-8">
-            <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 overflow-hidden">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 overflow-hidden"
+            >
               <div
                 className="blob blob-b h-52 w-52"
                 style={{
@@ -313,6 +316,57 @@ export default function Landing() {
                 </p>
               </div>
             </div>
+
+            {/* Before / after: the whole argument for Shields in one glance. */}
+            <div className="relative mt-5 grid grid-cols-2 gap-2.5 border-t border-line pt-4">
+              <div>
+                <div className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-faint">
+                  Without a shield
+                </div>
+                <div className="mt-2 flex gap-[3px]">
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <span
+                      key={i}
+                      className={`h-6 flex-1 rounded-[3px] ${
+                        i === 7 ? "bg-rose/25 ring-1 ring-inset ring-rose/60" : i < 7 ? "bg-line-2" : "bg-line-2/40"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <div className="mt-2 flex items-baseline gap-1.5">
+                  <span className="tnum text-[17px] font-semibold leading-none text-rose">0</span>
+                  <span className="text-[11px] text-faint">streak, 7 days lost</span>
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-gold">
+                  With a shield
+                </div>
+                <div className="mt-2 flex gap-[3px]">
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <span
+                      key={i}
+                      className={`h-6 flex-1 rounded-[3px] ${
+                        i === 7
+                          ? "bg-gold/70"
+                          : i < 9
+                            ? "ember-fill"
+                            : "bg-line-2/40"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <div className="mt-2 flex items-baseline gap-1.5">
+                  <span className="tnum text-[17px] font-semibold leading-none text-gold">9</span>
+                  <span className="text-[11px] text-faint">streak, record intact</span>
+                </div>
+              </div>
+            </div>
+
+            <p className="relative mt-3 text-[11px] leading-relaxed text-faint">
+              You still have to ship the work. The Shield only protects the record.
+            </p>
           </div>
         </Reveal>
       </section>
