@@ -6,6 +6,7 @@ import {
   ArrowIcon,
   CheckIcon,
   ChevronIcon,
+  CopyIcon,
   FlameIcon,
   GitHubIcon,
   LinkedInIcon,
@@ -18,7 +19,7 @@ import { Reveal } from "@/components/reveal";
 import ScrollProgress from "@/components/scroll-progress";
 import SiteNav from "@/components/site-nav";
 import Welcome from "@/components/welcome";
-import { cohort, days, faqs, formatCount, testimonials, tracks, weeks } from "@/lib/challenge";
+import { cohort, days, draftPost, faqs, formatCount, testimonials, tracks, weeks } from "@/lib/challenge";
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
@@ -125,6 +126,133 @@ function Faq({ q, a }: { q: string; a: string }) {
         />
       </button>
       {open && <p className="-mt-1 pb-4 pr-6 text-[13px] leading-relaxed text-muted">{a}</p>}
+    </div>
+  );
+}
+
+function PostAssistantDemo() {
+  const [learned, setLearned] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const draft = draftPost({
+    day: 12,
+    title: "Build a streak calendar",
+    name: "Ananya Iyer",
+    learned,
+    repo: "github.com/ananya-builds/streak-calendar",
+    track: "Full-Stack Web",
+  });
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(draft);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <section id="post-assistant" className="shell mt-12 scroll-mt-16 md:mt-20">
+      <SectionLabel>The Post Assistant</SectionLabel>
+      <Reveal>
+        <div className="card grain relative overflow-hidden p-5 md:p-8">
+          <div
+            aria-hidden="true"
+            className="morph pointer-events-none absolute -left-12 -top-14 h-40 w-40 opacity-50 blur-[18px]"
+            style={{ background: "linear-gradient(140deg, var(--sky), var(--ember))" }}
+          />
+          <div className="relative grid gap-5 md:grid-cols-2 md:gap-8">
+            <div>
+              <h2 className="text-[22px] font-semibold leading-snug tracking-tight md:text-[26px]">
+                The blank page at midnight, solved.
+              </h2>
+              <p className="mt-2.5 max-w-[42ch] text-[14px] leading-relaxed text-muted">
+                Type one line about what you built. You get a full LinkedIn draft back — your
+                name, the day, what you learned, the repo. The part that usually takes 20 minutes
+                becomes the part you copy and paste.
+              </p>
+              <label htmlFor="demo-learned" className="sr-only">
+                One thing that clicked today
+              </label>
+              <textarea
+                id="demo-learned"
+                rows={3}
+                value={learned}
+                onChange={(e) => setLearned(e.target.value)}
+                placeholder="One thing that clicked today…"
+                className="focusring mt-4 w-full resize-none rounded-xl border border-line bg-ink-2 px-3.5 py-3 text-[13px] text-fg placeholder:text-faint"
+              />
+              <p className="mt-1.5 text-[11px] text-faint">
+                Try it. This is the real draft generator from Day 12.
+              </p>
+            </div>
+
+            <div className="flex min-w-0 flex-col rounded-xl border border-line bg-ink/60 p-4">
+              <div className="flex items-center gap-2">
+                <SparkIcon className="h-4 w-4 text-gold" />
+                <span className="text-[12.5px] font-semibold">Your draft</span>
+              </div>
+              <pre className="mt-3 flex-1 overflow-y-auto whitespace-pre-wrap font-sans text-[12px] leading-relaxed text-muted">
+                {draft}
+              </pre>
+              <button
+                type="button"
+                onClick={copy}
+                className="tap focusring press mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-surface py-2.5 text-[12.5px] font-medium"
+              >
+                {copied ? (
+                  <>
+                    <CheckIcon className="popin h-4 w-4 text-mint" /> Copied
+                  </>
+                ) : (
+                  <>
+                    <CopyIcon className="h-4 w-4" /> Copy draft
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+function JourneyStrip() {
+  const stops = [
+    { d: 1, label: "First commit" },
+    { d: 7, label: "Live site" },
+    { d: 21, label: "Full-stack app" },
+    { d: 30, label: "Halfway" },
+    { d: 45, label: "Product live" },
+    { d: 60, label: "Capstone" },
+  ];
+  return (
+    <div className="card p-4">
+      <div className="relative flex items-start">
+        {stops.map((s, i) => (
+          <div key={s.d} className="flex min-w-0 flex-1 flex-col items-center">
+            <span
+              className={`grid h-8 w-8 place-items-center rounded-full border font-mono text-[11px] font-semibold ${
+                i === stops.length - 1
+                  ? "border-ember/60 bg-ember/15 text-ember"
+                  : "border-line bg-surface-2 text-muted"
+              }`}
+            >
+              {String(s.d).padStart(2, "0")}
+            </span>
+            <span
+              className={`mt-2 text-center text-[10px] leading-tight ${
+                i === stops.length - 1 ? "text-ember" : "text-faint"
+              }`}
+            >
+              {s.label}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -283,6 +411,8 @@ export default function Landing() {
         </div>
       </section>
 
+      <PostAssistantDemo />
+
       <section id="shields" className="shell mt-12 scroll-mt-16 md:mt-20">
         <Reveal>
           <div className="card relative overflow-hidden p-5 md:p-8">
@@ -414,6 +544,16 @@ export default function Landing() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="shell mt-12 md:mt-20">
+        <SectionLabel>Your 60 days, mapped</SectionLabel>
+        <Reveal>
+          <JourneyStrip />
+        </Reveal>
+        <p className="mt-3 text-center text-[11.5px] text-faint">
+          Six checkpoints on the way from an empty repo to a portfolio recruiters open.
+        </p>
       </section>
 
       <section className="shell mt-12 md:mt-20">
