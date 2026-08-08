@@ -12,9 +12,11 @@ import {
   ShieldIcon,
   SparkIcon,
 } from "@/components/icons";
+import { GrowthArt, ProofArt } from "@/components/art";
 import { LogoMark } from "@/components/logo";
 import { Reveal } from "@/components/reveal";
 import SiteNav from "@/components/site-nav";
+import Welcome from "@/components/welcome";
 import { cohort, days, faqs, formatCount, testimonials, tracks, weeks } from "@/lib/challenge";
 
 function Stat({ value, label }: { value: string; label: string }) {
@@ -131,6 +133,7 @@ export default function Landing() {
 
   return (
     <div className="pb-28">
+      <Welcome />
       <SiteNav />
 
       <main id="main">
@@ -233,10 +236,26 @@ export default function Landing() {
           Watch, follow along, forget. It leaves no trace. ABTalks replaces that loop with a
           smaller, harder habit: finish one thing tonight and put it where people can see it.
         </p>
+        <Reveal>
+          <div className="card mt-5 overflow-hidden p-3.5">
+            <GrowthArt className="h-auto w-full" />
+            <p className="mt-1.5 text-center text-[11.5px] text-faint">
+              What 60 consistent nights look like on your profile
+            </p>
+          </div>
+        </Reveal>
       </section>
 
       <section id="how-it-works" className="shell mt-12 scroll-mt-16 md:mt-20">
         <SectionLabel>How a day works</SectionLabel>
+        <Reveal>
+          <div className="card mb-5 overflow-hidden p-3.5">
+            <ProofArt className="h-auto w-full" />
+            <p className="mt-2.5 text-center text-[11.5px] text-faint">
+              One commit + one post = one day of proof
+            </p>
+          </div>
+        </Reveal>
         <div className="space-y-5 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
           {[
             {

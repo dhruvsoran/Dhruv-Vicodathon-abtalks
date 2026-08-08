@@ -334,6 +334,74 @@ light /day/12            0      0         0            0       0          0
 
 ---
 
+## Session 10 — Artwork, animated welcome, and a stuck-animation bug *(~01:0x)*
+
+**Prompt (verbatim):**
+
+> use some image according to site also use animated logo when some open some he see this animated logo as a welcome on site home page also morph effect still not there on scrolling
+
+### 10a. Why the morph still wasn't visible — measuring perception, not declaration
+
+Previous sessions confirmed the shapes were *animating* (6/6 distinct frames). But the user still couldn't see them, which meant the right question was not "is it animating" but **"is it perceivable"**. So the auditor was changed to composite each shape's colour over the page background at its real opacity and compute the resulting colour distance:
+
+```
+before:  opacity 0.22–0.32, 1px borders  ->  delta vs background ≈ 40   (invisible)
+after:   opacity 0.50–0.75, 3px borders  ->  delta vs background 131–196 (clearly visible)
+```
+
+Shapes were also enlarged (150→210px, 130→200px, 108→180px) and sped up. The lesson worth recording: *"the CSS is applied" and "a human can see it" are different assertions, and only the second one matters.*
+
+### 10b. Artwork: SVG over stock photography
+
+Two illustrations were added — `ProofArt` (an editor window and a LinkedIn post joined by a dotted connector, visualising "one commit + one post = one day of proof") and `GrowthArt` (twelve bars that animate upward, showing consistency compounding).
+
+Both are hand-built SVG rather than images, deliberately:
+
+- **Zero network requests** and no layout shift while loading — which protects the CLS of 0 measured earlier.
+- **Theme-aware**: they reference `var(--ember)`, `var(--surface-2)`, `var(--line)` and so adapt to light and dark automatically. A raster image would need two versions and would still be wrong at the edges.
+- **Crisp at any density**, which matters on the phones this product is designed for.
+- They show **the actual product story** instead of a generic stock photo of a student at a laptop.
+
+### 10c. Animated welcome
+
+A logo intro plays on the home page: the mark springs in with a rotate-and-scale, two rings pulse outward, and the wordmark rises beneath it, then the whole overlay scales up and fades away after ~1.5s.
+
+Constraints it was built to respect:
+
+- **Once per session** (`sessionStorage`), so returning visitors are never made to wait.
+- **Skipped entirely** under `prefers-reduced-motion`.
+- **`aria-hidden`** and purely decorative — the real page is already rendered underneath, verified by confirming the `h1` is present and visible at every stage of the intro.
+- **No scroll lock.** An earlier version set `body.overflow = "hidden"`; that was removed because if anything interrupts the sequence the page would be left permanently unscrollable. A short-lived overlay that removes itself is the safer design.
+
+**Bug found:** the intro never played. React's development double-mount meant the first mount wrote the "seen" flag and the immediate remount read it back as already-seen. Fixed by caching the decision once at module scope, so the flag is evaluated a single time per page load.
+
+### 10d. The bug that mattered most: `animation-fill-mode: both` outranks transitions
+
+Across several audit runs, `light /` intermittently reported **18 hidden reveals** while an isolated re-test showed 0. It was tempting to dismiss this as harness timing — and I nearly did.
+
+It was real. The failsafe used `animation: revealin ... both`. An animation with `fill: both` **keeps applying its computed values after finishing, and animations outrank transitions in the CSS cascade**. So when a section was revealed *before* the failsafe animation completed, the animation's held `opacity: 0` continued to win over the transition trying to show it — leaving content permanently invisible, non-deterministically.
+
+Fixed by explicitly cancelling the animation on the revealed state:
+
+```css
+html.js .reveal[data-shown] {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+```
+
+After the fix, all six route/theme combinations report **0 hidden** consistently. This is the third distinct way an entrance animation has tried to hide this page's content, which is why the codebase now defends against it at four independent layers (visible-by-default CSS, `html.js` gating, a self-terminating keyframe, and this explicit cancel).
+
+**Final verification** (3 routes × 2 themes, scrolled end-to-end):
+
+```
+overflow 0 · CLS 0 · non-composited props 0 · headers 1 · morph on screen 3/3
+welcome stuck false · body overflow untouched · hidden reveals 0 · WCAG AA fails 0
+```
+
+---
+
 ## Honest notes on AI usage
 
 - The **AI wrote effectively all of the code**: the design token system, all three routes, the persona store, the calendar, the theme engine, the navigation, the logo, and both signature features.
