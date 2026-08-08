@@ -649,37 +649,105 @@ body > *:not(.aurora):not(.skip-link) {
   animation: shimmer 2.4s linear infinite;
 }
 
-/* ---------- Animated welcome ---------- */
-.welcome {
+/* ---------- Animated welcome: curtain reveal ---------- */
+
+/* Panels are siblings rather than one fading sheet, so the page is uncovered
+   by actual movement. transform-only, so the whole reveal is compositor-side. */
+.curtain-panel {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 50.5%;
   background: var(--ink);
-  animation: welcomefade 0.35s ease both;
+  will-change: transform;
 }
 
-.welcome::before {
+.curtain-left {
+  left: 0;
+}
+.curtain-right {
+  right: 0;
+}
+
+.curtain-panel::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 42%, var(--aurora-1) 0%, transparent 62%);
-  opacity: 0.55;
-  animation: morph 6s var(--ease-liquid) infinite;
+  background: radial-gradient(circle at 50% 40%, var(--aurora-1) 0%, transparent 64%);
+  opacity: 0.5;
+}
+.curtain-left::after {
+  background-position: right center;
+  transform: translateX(50%);
+}
+.curtain-right::after {
+  transform: translateX(-50%);
 }
 
-@keyframes welcomefade {
-  from {
-    opacity: 0;
+/* Keyframes rather than transitions: a transition depends on a style change
+   being observed after paint, which is fragile when the class lands in the
+   same frame as the mount. `forwards` also guarantees the panels stay open
+   even if the element outlives the animation. */
+@keyframes partleft {
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+@keyframes partright {
+  to {
+    transform: translate3d(100%, 0, 0);
   }
 }
 
-.welcome-out {
-  animation: welcomeout 0.6s var(--ease-liquid) both;
+.curtain.is-open .curtain-left {
+  animation: partleft 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+.curtain.is-open .curtain-right {
+  animation: partright 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
 }
 
-@keyframes welcomeout {
+/* Vertical seam of light where the panels meet. */
+.curtain-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(180deg, transparent, var(--ember), var(--gold), transparent);
+  opacity: 0;
+  transform: scaleY(0.2);
+}
+
+@keyframes seamflash {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.2);
+  }
+  35% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(1);
+  }
+}
+
+.curtain.is-open .curtain-seam {
+  animation: seamflash 0.8s var(--ease-liquid) forwards;
+}
+
+/* Logo lockup lifts and fades as the curtain parts. */
+@keyframes stageout {
   to {
     opacity: 0;
-    transform: scale(1.08);
-    visibility: hidden;
+    transform: translate3d(0, -18px, 0) scale(0.94);
   }
+}
+
+.curtain.is-open .curtain-stage {
+  animation: stageout 0.5s var(--ease-liquid) forwards;
 }
 
 .welcome-mark {

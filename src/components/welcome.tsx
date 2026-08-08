@@ -4,16 +4,22 @@ import { useEffect, useState } from "react";
 import { LogoMark } from "@/components/logo";
 
 const KEY = "abtalks.welcomed";
-const HOLD = 1500;
+const HOLD = 1450;
+const CURTAIN = 900;
 
 /**
- * Animated logo intro.
+ * Animated logo intro with a curtain reveal.
  *
- * Shown once per session so returning visitors are never gated behind an
- * animation. Purely decorative and `aria-hidden`, sitting above the page
- * while it plays — the underlying content is already rendered beneath, so
- * an automated screenshot or a JS failure never sees a blank page.
+ * The mark springs in between two panels, then the panels slide apart to
+ * reveal the page beneath. Shown once per session so returning visitors are
+ * never gated behind an animation.
+ *
+ * Safety: purely decorative and `aria-hidden`. The real page is already
+ * rendered underneath the whole time, so an automated screenshot or a JS
+ * failure never sees a blank page. No scroll lock — an interrupted sequence
+ * must never be able to leave the page unscrollable.
  */
+
 /**
  * Decided once per page load and cached at module scope.
  *
@@ -40,7 +46,7 @@ function shouldPlay() {
 }
 
 export default function Welcome() {
-  const [phase, setPhase] = useState<"idle" | "playing" | "leaving" | "done">("idle");
+  const [phase, setPhase] = useState<"idle" | "playing" | "opening" | "done">("idle");
 
   useEffect(() => {
     if (!shouldPlay()) {
@@ -52,12 +58,9 @@ export default function Welcome() {
       sessionStorage.setItem(KEY, "1");
     } catch {}
 
-    // Deliberately no scroll lock: mutating body overflow can shift layout
-    // and risks leaving the page unscrollable if anything interrupts the
-    // sequence. The overlay is short-lived and removes itself.
     const t0 = window.setTimeout(() => setPhase("playing"), 0);
-    const t1 = window.setTimeout(() => setPhase("leaving"), HOLD);
-    const t2 = window.setTimeout(() => setPhase("done"), HOLD + 650);
+    const t1 = window.setTimeout(() => setPhase("opening"), HOLD);
+    const t2 = window.setTimeout(() => setPhase("done"), HOLD + CURTAIN);
 
     return () => {
       clearTimeout(t0);
@@ -68,26 +71,35 @@ export default function Welcome() {
 
   if (phase === "done" || phase === "idle") return null;
 
+  const opening = phase === "opening";
+
   return (
     <div
       aria-hidden="true"
-      className={`welcome fixed inset-0 z-[90] grid place-items-center ${
-        phase === "leaving" ? "welcome-out" : ""
-      }`}
+      className={`curtain fixed inset-0 z-[90] overflow-hidden ${opening ? "is-open" : ""}`}
     >
-      <div className="relative grid place-items-center">
-        <span className="welcome-ring absolute h-[190px] w-[190px] rounded-full border-2 border-ember/45" />
-        <span className="welcome-ring welcome-ring-2 absolute h-[150px] w-[150px] rounded-full border-2 border-gold/40" />
-        <span className="welcome-mark relative">
-          <LogoMark size={84} />
-        </span>
-      </div>
+      {/* Two panels that split apart to reveal the page. */}
+      <div className="curtain-panel curtain-left" />
+      <div className="curtain-panel curtain-right" />
 
-      <div className="welcome-word absolute bottom-[32%] text-center">
-        <div className="text-[22px] font-semibold tracking-[-0.02em]">
-          AB<span className="text-ember">Talks</span>
+      {/* Seam of light down the middle, widening as the curtain parts. */}
+      <span className="curtain-seam" />
+
+      <div className="curtain-stage absolute inset-0 grid place-items-center">
+        <div className="relative grid place-items-center">
+          <span className="welcome-ring absolute h-[190px] w-[190px] rounded-full border-2 border-ember/45" />
+          <span className="welcome-ring welcome-ring-2 absolute h-[150px] w-[150px] rounded-full border-2 border-gold/40" />
+          <span className="welcome-mark relative">
+            <LogoMark size={84} />
+          </span>
         </div>
-        <div className="mt-1.5 text-[12px] text-faint">60 days of proof</div>
+
+        <div className="welcome-word absolute bottom-[32%] text-center">
+          <div className="text-[22px] font-semibold tracking-[-0.02em]">
+            AB<span className="text-ember">Talks</span>
+          </div>
+          <div className="mt-1.5 text-[12px] text-faint">60 days of proof</div>
+        </div>
       </div>
     </div>
   );

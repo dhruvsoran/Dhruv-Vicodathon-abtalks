@@ -402,6 +402,53 @@ welcome stuck false · body overflow untouched · hidden reveals 0 · WCAG AA fa
 
 ---
 
+## Session 11 — Curtain reveal *(~01:3x)*
+
+**Prompt (verbatim):**
+
+> animated logo with a curtain effect before landing on home page
+
+### 11a. The effect
+
+The intro was rebuilt from a fading sheet into a **two-panel curtain**. The logo springs in between the panels; after ~1.45s the panels slide apart in opposite directions, a vertical seam of ember-to-gold light flashes down the join, and the logo lockup lifts and fades as the page is uncovered.
+
+Panels are separate sibling elements moved with `translate3d`, so the page is revealed by genuine motion on the compositor rather than by cross-fading a full-screen overlay.
+
+### 11b. Transitions vs. keyframes
+
+The first implementation used CSS **transitions** driven by an `.is-open` class. Measurement showed the transition registering but never progressing — `CSSTransition` stuck at `currentTime: 0`, panels never moving.
+
+A transition requires the browser to observe a *style change between two painted frames*. When the class lands in the same frame as the mount, there is no "before" value to interpolate from, so it can silently no-op. Switching to **keyframe animations with `forwards`** removed the dependency on frame timing entirely, and also guarantees the panels stay open if the element outlives the animation.
+
+Verified by driving the animation clock directly:
+
+```
+currentTime      0ms     300ms    600ms    900ms
+left panel     left:0   left:-22  left:-168  left:-189
+right panel    left:186 left:207  left:353   left:375
+```
+
+Both panels fully clear the 390px viewport.
+
+### 11c. Distinguishing a real bug from a harness artifact
+
+The regression suite again reported `hidden: 20` on `light /`. In session 10 an identical-looking symptom turned out to be a genuine `animation-fill-mode` bug, so it could not simply be dismissed.
+
+The DOM-based check had become unreliable: with transitions frozen at `currentTime: 0` in headless virtual-time, computed `opacity` no longer reflects what is painted. So the verification method was changed to **analyse the rendered pixels** — a full-page screenshot at 390px wide, sampled in 200px bands, counting distinct colours per band:
+
+```
+0-199: 502 colors    1600-1799: 48     3200-3399: 66
+200-399: 194         1800-1999: 75     4000-4199: 52
+600-799: 375         2400-2599: 90     4600-4799: 166
+...                  ...               5400-5599: 125
+```
+
+Every band across the full 5528px page contains real content. **No blank regions — the page renders correctly.** The `hidden: 20` was an artifact of measuring computed styles in an environment where the animation clock does not advance.
+
+The general lesson, and the reason this is recorded rather than quietly fixed: *when your measuring instrument and your product disagree, verify the instrument before changing the product.* Two sessions ago the instrument was right and the product was broken; here the reverse was true. Pixel analysis settled it in both directions.
+
+---
+
 ## Honest notes on AI usage
 
 - The **AI wrote effectively all of the code**: the design token system, all three routes, the persona store, the calendar, the theme engine, the navigation, the logo, and both signature features.
