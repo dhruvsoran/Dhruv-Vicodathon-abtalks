@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/logo";
-import SoundToggle from "@/components/sound-toggle";
 import { ThemeToggle } from "@/components/theme";
 import { usePersona } from "@/components/persona-store";
 
@@ -55,7 +54,6 @@ function NavBar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <SoundToggle />
           <ThemeToggle />
           <Link
             href="/dashboard"

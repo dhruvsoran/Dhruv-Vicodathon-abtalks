@@ -1,21 +1,21 @@
 /**
  * Brand sound for the curtain intro.
  *
- * Two layers, both generated at runtime so there is no audio asset to
- * download and nothing to block the first paint:
- *   1. a synthesised whoosh + chime as the curtain parts (Web Audio)
- *   2. the spoken word "ABTalks" (Web Speech API)
+ * Synthesised at runtime rather than shipped as an audio file: no extra
+ * network request competing with first paint, and nothing to license.
  *
- * Autoplay reality: every major browser blocks audio until the user has
- * interacted with the page. We therefore attempt playback, and if the audio
- * context is still suspended we arm a one-shot listener so the sound plays on
- * the first tap, click, key press or scroll instead of being lost.
+ * Scope is deliberately narrow — this plays exactly once, during the curtain
+ * reveal, and never again. There is no toggle and no persisted setting,
+ * because the sound is part of the opening moment rather than an ambient
+ * feature of the site.
+ *
+ * Autoplay policy: browsers block audio until the user has interacted with
+ * the page. If the context is blocked at curtain time we simply stay silent
+ * rather than deferring the sound to a later gesture — a brand chime firing
+ * seconds later, detached from the animation, would be worse than none.
  */
 
-const KEY = "abtalks.sound";
-
 let ctx: AudioContext | null = null;
-let armed = false;
 let played = false;
 
 type WebkitWindow = Window & { webkitAudioContext?: typeof AudioContext };
@@ -29,24 +29,6 @@ function getCtx(): AudioContext | null {
   return ctx;
 }
 
-export function isMuted(): boolean {
-  if (typeof window === "undefined") return true;
-  try {
-    return localStorage.getItem(KEY) === "off";
-  } catch {
-    return false;
-  }
-}
-
-export function setMuted(muted: boolean) {
-  try {
-    localStorage.setItem(KEY, muted ? "off" : "on");
-  } catch {}
-  if (muted && typeof window !== "undefined") {
-    window.speechSynthesis?.cancel();
-  }
-}
-
 /** Airy rising whoosh: filtered noise with a sweeping band-pass. */
 function whoosh(ac: AudioContext, at: number) {
   const dur = 0.9;
@@ -54,7 +36,7 @@ function whoosh(ac: AudioContext, at: number) {
   const buffer = ac.createBuffer(1, frames, ac.sampleRate);
   const data = buffer.getChannelData(0);
   for (let i = 0; i < frames; i++) {
-    // Soften the noise so it reads as air rather than static.
+    // Amplitude-shaped so it reads as air rather than static.
     data[i] = (Math.random() * 2 - 1) * (1 - i / frames) * 0.6;
   }
 
@@ -112,8 +94,9 @@ function speak() {
     u.volume = 0.95;
     const voices = synth.getVoices();
     const preferred =
-      voices.find((v) => /en-(GB|US|IN)/i.test(v.lang) && /female|samantha|aria|zira/i.test(v.name)) ??
-      voices.find((v) => /^en/i.test(v.lang));
+      voices.find(
+        (v) => /en-(GB|US|IN)/i.test(v.lang) && /female|samantha|aria|zira/i.test(v.name),
+      ) ?? voices.find((v) => /^en/i.test(v.lang));
     if (preferred) u.voice = preferred;
     synth.speak(u);
   };
@@ -123,9 +106,9 @@ function speak() {
 }
 
 function emit() {
-  if (played || isMuted()) return;
+  if (played) return;
   const ac = getCtx();
-  if (!ac) return;
+  if (!ac || ac.state !== "running") return;
   played = true;
   const now = ac.currentTime + 0.02;
   whoosh(ac, now);
@@ -133,12 +116,9 @@ function emit() {
   speak();
 }
 
-/**
- * Play the brand sound, falling back to the first user gesture if the
- * browser's autoplay policy has suspended the audio context.
- */
+/** Play the brand sound once, on the beat the curtain parts. */
 export function playBrandSound() {
-  if (played || isMuted()) return;
+  if (played) return;
   const ac = getCtx();
   if (!ac) return;
 
@@ -147,39 +127,6 @@ export function playBrandSound() {
     return;
   }
 
-  ac.resume().then(
-    () => emit(),
-    () => armGesture(),
-  );
-
-  // resume() can also stay pending indefinitely while blocked.
-  window.setTimeout(() => {
-    if (!played) armGesture();
-  }, 260);
-}
-
-function armGesture() {
-  if (armed || played) return;
-  armed = true;
-
-  const fire = () => {
-    const ac = getCtx();
-    ac?.resume().finally(emit);
-    off();
-  };
-  const off = () => {
-    ["pointerdown", "keydown", "touchstart", "wheel", "scroll"].forEach((e) =>
-      window.removeEventListener(e, fire),
-    );
-  };
-
-  ["pointerdown", "keydown", "touchstart", "wheel", "scroll"].forEach((e) =>
-    window.addEventListener(e, fire, { once: true, passive: true }),
-  );
-}
-
-/** Lets the toggle replay the sound as confirmation when unmuting. */
-export function replayBrandSound() {
-  played = false;
-  playBrandSound();
+  // One attempt to unlock. If the browser refuses, stay silent.
+  ac.resume().then(emit, () => {});
 }
