@@ -38,14 +38,19 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function PreviewStrip() {
   const cells = Array.from({ length: 28 }, (_, i) => i + 1);
   return (
-    <div className="card grain relative overflow-hidden p-4">
+    <div className="card shine grain relative overflow-hidden p-4">
+      <div
+        aria-hidden="true"
+        className="morph pointer-events-none absolute -right-8 -top-10 h-32 w-32 opacity-40 blur-2xl"
+        style={{ background: "linear-gradient(140deg, var(--ember), var(--gold))" }}
+      />
       <div className="relative flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <span className="grid h-9 w-9 place-items-center rounded-full ember-fill text-white">
             <FlameIcon className="breathe h-[18px] w-[18px]" />
           </span>
           <div>
-            <div className="text-[15px] font-semibold leading-none">11 day streak</div>
+            <div className="tickup text-[15px] font-semibold leading-none">11 day streak</div>
             <div className="mt-1 text-[11px] text-faint">Day 12 unlocks tonight</div>
           </div>
         </div>
@@ -292,7 +297,7 @@ export default function Landing() {
           {weeks.map((w) => (
             <div
               key={w.n}
-              className="card lift w-[224px] shrink-0 snap-start p-4"
+              className="card lift shine w-[224px] shrink-0 snap-start p-4"
             >
               <div className="flex items-baseline justify-between">
                 <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-faint">
@@ -330,7 +335,7 @@ export default function Landing() {
         <div className="mt-2.5 grid grid-cols-2 gap-2.5">
           {tracks.map((t, i) => (
             <Reveal key={t.id} delay={i * 60}>
-              <div className="card lift h-full p-3.5">
+              <div className="card lift shine h-full p-3.5">
                 <div className="text-[13.5px] font-semibold leading-snug">{t.name}</div>
                 <div className="mt-1.5 text-[10.5px] text-faint">
                   {formatCount(t.learners)} building
@@ -355,7 +360,7 @@ export default function Landing() {
         </div>
         <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 md:px-[max(40px,calc(50vw-540px))]">
           {testimonials.map((t) => (
-            <figure key={t.name} className="card lift w-[286px] shrink-0 snap-start p-4">
+            <figure key={t.name} className="card lift shine w-[286px] shrink-0 snap-start p-4">
               <blockquote className="text-[13.5px] leading-relaxed text-fg">
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
@@ -379,7 +384,7 @@ export default function Landing() {
 
       <section className="shell mt-12 md:mt-20">
         <Reveal>
-          <div className="card grain relative overflow-hidden p-6 md:p-10">
+          <div className="card shine grain relative overflow-hidden p-6 md:p-10">
             <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -bottom-24 h-56 overflow-hidden">
               <div
                 className="blob left-1/2 h-56 w-56 -translate-x-1/2"
@@ -511,7 +516,7 @@ export default function Landing() {
         </div>
       </footer>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/90 px-5 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line glass-strong px-5 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 md:hidden">
         <Link
           href="/dashboard"
           className="tap focusring press flex items-center justify-center gap-2 rounded-2xl ember-fill py-3.5 text-[15px] font-semibold text-white"

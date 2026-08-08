@@ -71,6 +71,14 @@ npm run build
 npm run lint
 ```
 
+## Glassmorphism, grounded in a real backdrop
+
+Cards are genuine glass: translucent fill, `backdrop-filter` blur with saturation, a hairline border and a specular top-edge highlight. Behind the entire page sits an **aurora field** — three slowly drifting colour orbs — so the blur has something real to refract as you scroll, instead of blurring a flat colour. Headers, the tab bar and sticky CTA bars use a stronger 28px glass so content dissolves beneath them.
+
+A **pointer-tracked shine** follows the cursor across cards, driven by one delegated listener for the whole document, throttled to one frame, and disabled entirely on touch devices.
+
+Adding glass makes contrast auditing harder — text sits on a stack of semi-transparent layers rather than a solid colour. The auditor was upgraded to alpha-composite the full ancestor chain before measuring, and still reports **0 WCAG AA failures in both themes**.
+
 ## Liquid motion, on a performance budget
 
 Motion is restricted to `transform`, `opacity` and `filter` only — properties the compositor handles without layout or paint. Drifting gradient blobs, spring-physics press feedback on every tap target, calendar cells that pour in on a stagger, a completion ring that draws itself, and a breathing streak flame. Scroll reveals run through **one shared IntersectionObserver** for the whole page. All of it disabled under `prefers-reduced-motion`.

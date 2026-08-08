@@ -274,6 +274,66 @@ The user asked whether the hackathon rules require timestamps in the AI usage lo
 
 ---
 
+## Session 9 — Glassmorphism and making the motion actually visible *(~00:2x)*
+
+**Prompt (verbatim):**
+
+> liquid motion effect and animation are not looking on site also add some other effects like morphic glassmorphism etc make ui ux more best so that i can win hackathon
+
+### 9a. Why the motion was invisible — two real bugs
+
+The instinct would be to just add more animation. Instead the page was instrumented to *sample the same element's computed `transform` six times over 1.8s* and count distinct values. That produced a precise diagnosis rather than a guess:
+
+```
+auroraDistinctFrames: 1     <- not moving at all
+morphDistinctFrames:  1     <- not moving at all
+activeAnimations:     42    <- but 42 animations "running"
+```
+
+Forty-two animations were declared and running, yet nothing moved. Two causes:
+
+1. **A stacking-context bug.** The aurora layer was `position: fixed; z-index: -1`, but `body` had an **opaque background colour**. A negative z-index child paints *behind* its parent's background, so the entire animated layer was rendered and then covered up. Fixed by moving the page background from `body` to `html` and giving the aurora `z-index: 0` with siblings at `z-index: 1`.
+2. **Durations tuned for subtlety, not perception.** Blobs drifted over 19–24s with ±6% translation — technically animating, imperceptibly so. Retimed to 11–15s with ±22% translation, scale 0.8→1.3, and rotation.
+
+Re-measured after the fix: **6/6 distinct frames** for both the aurora and the morph.
+
+### 9b. A second bug: the blur that never cleared
+
+The regression suite then reported `hiddenReveals: 18` on the landing page. Inspection showed `opacity: 1` but **`filter: blur(6px)` stuck permanently on**.
+
+Cause: I had written *two separate* `.reveal` blocks, and the one resetting `filter` appeared **before** the `html.js .reveal:not([data-shown])` rule that sets it. With equal specificity the later rule wins, so the blur was never removed — every revealed section stayed permanently out of focus. This is exactly the class of bug that screenshots would show and a developer skimming code would not. Consolidated into a single `.reveal` definition with the hidden state after it.
+
+Verified: **0 blurred, 0 hidden** across all six route/theme combinations.
+
+### 9c. The glass system
+
+- **Real glass cards** — translucent fill, `backdrop-filter: blur(16px) saturate(1.35)`, a hairline border, and a **specular top-edge highlight** via `::before` (the detail that separates convincing glass from a grey box). Themed through `--glass`, `--glass-line`, `--glass-spec`.
+- **Aurora field** — three slowly drifting colour orbs fixed behind the entire page, so glass surfaces have something real to refract as you scroll. This is what makes the blur meaningful rather than decorative.
+- **Morphing blob** — animated `border-radius` for the signature liquid read. Deliberately scoped to one small childless element: `border-radius` is not compositor-accelerated, so it is used exactly where the paint cost is negligible and the visual payoff is highest.
+- **Pointer-tracked shine** — a radial highlight follows the cursor across cards. Implemented as **one delegated `pointermove` listener for the whole document**, throttled to one `requestAnimationFrame` per frame, writing two CSS custom properties. No per-card listeners, no React state, and it exits immediately on touch devices where there is no hover.
+- **Glass chrome** — headers, tab bar and sticky CTA bars now use `.glass-strong` (28px blur), so content dissolves under them while scrolling.
+- **Stronger reveals** — 28px travel with a 6px blur-in, up from a barely-visible 14px fade.
+
+### 9d. Contrast re-verified against translucent backgrounds
+
+Glass makes contrast auditing harder: text no longer sits on a solid colour but on a **stack of semi-transparent layers**. The auditor was upgraded to walk the full ancestor chain, collect every background with alpha, and **alpha-composite them bottom-up** against the root background before computing the ratio.
+
+Final measurement across all 6 combinations (3 routes × 2 themes), scrolled end-to-end:
+
+```
+                     overflow  CLS  non-composited  hidden  blurred  WCAG AA fails
+dark  /                  0      0         0            0       0          0
+dark  /dashboard         0      0         0            0       0          0
+dark  /day/12            0      0         0            0       0          0
+light /                  0      0         0            0       0          0
+light /dashboard         0      0         0            0       0          0
+light /day/12            0      0         0            0       0          0
+```
+
+**Glassmorphism was added without losing a single point of accessibility or a single frame of stability.** That is the part worth defending to a judge: the effects are not sitting on top of the product, they are integrated into a design system that is still measurably correct.
+
+---
+
 ## Honest notes on AI usage
 
 - The **AI wrote effectively all of the code**: the design token system, all three routes, the persona store, the calendar, the theme engine, the navigation, the logo, and both signature features.

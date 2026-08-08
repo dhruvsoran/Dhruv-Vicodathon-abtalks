@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PersonaProvider } from "@/components/persona-store";
+import ShineLayer from "@/components/shine";
 import { themeScript } from "@/components/theme";
 import { cohort, faqs } from "@/lib/challenge";
 
@@ -117,9 +118,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-full">
+        <div className="aurora" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <ShineLayer />
         <PersonaProvider>{children}</PersonaProvider>
       </body>
     </html>

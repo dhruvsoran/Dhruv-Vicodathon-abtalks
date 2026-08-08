@@ -181,7 +181,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
 
   return (
     <div className="pb-28 md:pb-12">
-      <header className="sticky top-0 z-40 border-b border-line bg-ink/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-line glass-strong">
         <div className="shell flex h-14 items-center justify-between gap-3">
           <Link
             href="/dashboard"
@@ -540,7 +540,7 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                   </button>
                 </div>
 
-                <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/92 px-5 pb-[max(64px,calc(env(safe-area-inset-bottom)+60px))] pt-3 backdrop-blur-xl md:hidden">
+                <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line glass-strong px-5 pb-[max(64px,calc(env(safe-area-inset-bottom)+60px))] pt-3 md:hidden">
                   <div className="mx-auto max-w-[440px]">
                     {!canSubmit && (touched.repo || touched.post) && (
                       <p className="mb-2 text-center text-[11px] text-faint">

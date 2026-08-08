@@ -47,6 +47,14 @@
   --grain-opacity: 0.5;
   --glow-opacity: 1;
   --cta-shadow: 0 10px 30px -12px rgba(255, 90, 31, 0.9);
+  --glass: rgba(24, 24, 30, 0.62);
+  --glass-strong: rgba(14, 14, 18, 0.74);
+  --glass-line: rgba(255, 255, 255, 0.09);
+  --glass-spec: rgba(255, 255, 255, 0.22);
+  --glass-shadow: 0 8px 32px -18px rgba(0, 0, 0, 0.9);
+  --aurora-1: rgba(255, 90, 31, 0.5);
+  --aurora-2: rgba(255, 176, 32, 0.34);
+  --aurora-3: rgba(106, 168, 255, 0.26);
 }
 
 :root[data-theme="light"] {
@@ -71,15 +79,26 @@
   --grain-opacity: 0.6;
   --glow-opacity: 0.42;
   --cta-shadow: 0 10px 26px -14px rgba(207, 68, 9, 0.55);
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-strong: rgba(255, 255, 255, 0.85);
+  --glass-line: rgba(23, 22, 26, 0.09);
+  --glass-spec: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 8px 28px -20px rgba(23, 22, 26, 0.4);
+  --aurora-1: rgba(207, 68, 9, 0.24);
+  --aurora-2: rgba(154, 98, 6, 0.18);
+  --aurora-3: rgba(31, 95, 208, 0.14);
 }
 
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* The page background lives on <html>, not <body>. A body background is
+     opaque and would paint over the fixed z-index:-1 aurora layer. */
+  background-color: var(--ink);
 }
 
 body {
-  background-color: var(--ink);
+  background-color: transparent;
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -106,14 +125,44 @@ body {
     }
   }
 
+  /* Glass surface: translucent fill + blur + a top highlight edge, so the
+     drifting colour behind the page reads through every card. */
   .card {
-    background: var(--surface);
-    border: 1px solid var(--line);
+    position: relative;
+    background: var(--glass);
+    border: 1px solid var(--glass-line);
     border-radius: var(--radius-card);
+    backdrop-filter: blur(16px) saturate(1.35);
+    -webkit-backdrop-filter: blur(16px) saturate(1.35);
+    box-shadow: var(--glass-shadow);
   }
 
-  :root[data-theme="light"] .card {
-    box-shadow: 0 1px 2px rgba(23, 22, 26, 0.04);
+  /* Specular highlight along the top edge — the detail that sells glass. */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, transparent, var(--glass-spec), transparent);
+    pointer-events: none;
+  }
+
+  .card > * {
+    position: relative;
+  }
+
+  /* Opt out where a solid surface reads better. */
+  .solid {
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .glass-strong {
+    background: var(--glass-strong);
+    backdrop-filter: blur(28px) saturate(1.5);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
   }
 
   .hairline {
@@ -199,14 +248,11 @@ body {
 .reveal {
   opacity: 1;
   transform: none;
+  filter: none;
   transition:
-    opacity 0.6s var(--ease-liquid),
-    transform 0.6s var(--ease-liquid);
-}
-
-html.js .reveal:not([data-shown]) {
-  opacity: 0;
-  transform: translate3d(0, 14px, 0) scale(0.995);
+    opacity 0.7s var(--ease-liquid),
+    transform 0.7s var(--ease-liquid),
+    filter 0.7s var(--ease-liquid);
 }
 
 /* Belt and braces: even with js enabled, never stay hidden past 2s. */
@@ -214,33 +260,44 @@ html.js .reveal:not([data-shown]) {
   to {
     opacity: 1;
     transform: none;
+    filter: none;
   }
 }
+
 html.js .reveal:not([data-shown]) {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(0.97);
+  filter: blur(6px);
   animation: revealfailsafe 0.4s var(--ease-liquid) 2s forwards;
 }
 
-/* Liquid blobs: slow, low-frequency drift. transform-only. */
+/* Liquid blobs: visible, organic drift. transform-only. */
 @keyframes drift-a {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
   }
-  33% {
-    transform: translate3d(6%, -5%, 0) scale(1.1);
+  25% {
+    transform: translate3d(22%, -14%, 0) scale(1.28) rotate(40deg);
   }
-  66% {
-    transform: translate3d(-5%, 4%, 0) scale(0.94);
+  50% {
+    transform: translate3d(-14%, 16%, 0) scale(0.86) rotate(-25deg);
+  }
+  75% {
+    transform: translate3d(16%, 12%, 0) scale(1.16) rotate(18deg);
   }
 }
 
 @keyframes drift-b {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(1.04);
+    transform: translate3d(0, 0, 0) scale(1.06) rotate(0deg);
   }
-  50% {
-    transform: translate3d(-7%, 6%, 0) scale(0.92);
+  33% {
+    transform: translate3d(-24%, 18%, 0) scale(0.8) rotate(-35deg);
+  }
+  66% {
+    transform: translate3d(18%, -16%, 0) scale(1.3) rotate(28deg);
   }
 }
 
@@ -248,14 +305,71 @@ html.js .reveal:not([data-shown]) {
   position: absolute;
   border-radius: 9999px;
   pointer-events: none;
-  filter: blur(64px);
+  filter: blur(56px);
   opacity: var(--glow-opacity);
   will-change: transform;
-  animation: drift-a 19s var(--ease-liquid) infinite;
+  animation: drift-a 11s var(--ease-liquid) infinite;
 }
 
 .blob-b {
-  animation: drift-b 24s var(--ease-liquid) infinite;
+  animation: drift-b 14s var(--ease-liquid) infinite;
+}
+
+/* Fixed aurora field behind the whole page. Gives glass something to
+   refract and makes the interface feel alive without touching layout. */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Everything after the aurora sits above it. */
+body > *:not(.aurora) {
+  position: relative;
+  z-index: 1;
+}
+
+.aurora span {
+  position: absolute;
+  display: block;
+  border-radius: 9999px;
+  filter: blur(72px);
+  will-change: transform;
+}
+
+.aurora span:nth-child(1) {
+  top: -14%;
+  left: -18%;
+  width: 74vw;
+  height: 74vw;
+  max-width: 460px;
+  max-height: 460px;
+  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 68%);
+  animation: drift-a 15s var(--ease-liquid) infinite;
+}
+
+.aurora span:nth-child(2) {
+  top: 22%;
+  right: -24%;
+  width: 66vw;
+  height: 66vw;
+  max-width: 400px;
+  max-height: 400px;
+  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
+  animation: drift-b 19s var(--ease-liquid) infinite;
+}
+
+.aurora span:nth-child(3) {
+  bottom: -12%;
+  left: 12%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 360px;
+  max-height: 360px;
+  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
+  animation: drift-a 23s var(--ease-liquid) infinite reverse;
 }
 
 /* Liquid press: springy, tactile feedback for thumbs. */
@@ -272,11 +386,38 @@ html.js .reveal:not([data-shown]) {
 .lift {
   transition:
     transform 0.45s var(--ease-liquid),
-    border-color 0.3s ease;
+    border-color 0.3s ease,
+    box-shadow 0.4s var(--ease-liquid);
 }
 @media (hover: hover) {
   .lift:hover {
-    transform: translate3d(0, -3px, 0);
+    transform: translate3d(0, -5px, 0) scale(1.012);
+    border-color: var(--glass-spec);
+    box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.85);
+  }
+}
+
+/* Glass shine that tracks the pointer across a card. */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(255, 255, 255, 0.14),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-liquid);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .shine:hover::after {
+    opacity: 1;
   }
 }
 
@@ -300,10 +441,10 @@ html.js .reveal:not([data-shown]) {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 38%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: sheen 4.2s var(--ease-liquid) infinite;
-  animation-delay: 1.4s;
+  width: 42%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  animation: sheen 2.8s var(--ease-liquid) infinite;
+  animation-delay: 0.8s;
   pointer-events: none;
   z-index: 1;
 }
@@ -377,6 +518,51 @@ html.js .reveal:not([data-shown]) {
 }
 .popin {
   animation: popin 0.5s var(--ease-spring) both;
+}
+
+/* Morphing blob: border-radius is not compositor-accelerated, but this runs
+   on a single small element with no children, so the paint cost is trivial
+   and it delivers the signature "liquid" read. */
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 62% 38% 46% 54% / 58% 42% 58% 42%;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  34% {
+    border-radius: 38% 62% 63% 37% / 41% 62% 38% 59%;
+    transform: translate3d(0, -6px, 0) rotate(12deg);
+  }
+  67% {
+    border-radius: 54% 46% 34% 66% / 62% 38% 62% 38%;
+    transform: translate3d(0, 5px, 0) rotate(-9deg);
+  }
+}
+
+.morph {
+  animation: morph 9s var(--ease-liquid) infinite;
+}
+
+/* Number tick-up for streak/XP counters. */
+@keyframes tickup {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+}
+.tickup {
+  animation: tickup 0.5s var(--ease-spring) both;
+}
+
+/* Shimmer for the progress bar fill. */
+@keyframes shimmer {
+  to {
+    background-position: 200% 0;
+  }
+}
+.shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 2.4s linear infinite;
 }
 
 @keyframes rise {

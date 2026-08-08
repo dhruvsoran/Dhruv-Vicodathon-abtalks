@@ -24,7 +24,7 @@ export default function TabBar() {
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/92 pb-[max(6px,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line glass-strong pb-[max(6px,env(safe-area-inset-bottom))] md:hidden"
     >
       <ul className="mx-auto flex max-w-[480px]">
         {items.map((it) => {

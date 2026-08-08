@@ -32,7 +32,7 @@ function NavBar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-ink/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-line glass-strong">
       <div className="shell flex h-14 items-center justify-between gap-3">
         <Link href="/" aria-label="ABTalks home" className="tap focusring rounded-lg">
           <Logo size={28} />

@@ -102,7 +102,7 @@ function MetricCard({
   tone?: "default" | "warn";
 }) {
   return (
-    <div className="card lift h-full p-3.5">
+    <div className="card lift shine h-full p-3.5">
       <div className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-faint">{label}</div>
       <div
         className={`mt-1.5 text-[21px] font-semibold leading-none tracking-tight ${
