@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { LogoMark } from "@/components/logo";
+import { playBrandSound } from "@/lib/sound";
 
-/** Must match the end of the CSS sequence in globals.css. */
+/** Must match the CSS sequence in globals.css. */
+const PART_AT = 1400;
 const TOTAL = 1950;
 
 /**
@@ -28,8 +30,18 @@ export default function Welcome() {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const skip = window.setTimeout(() => setDone(true), 0);
+      return () => clearTimeout(skip);
+    }
+
+    // Fire the brand sound on the beat the panels start to part.
+    const sound = window.setTimeout(playBrandSound, PART_AT);
     const t = window.setTimeout(() => setDone(true), TOTAL);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(sound);
+      clearTimeout(t);
+    };
   }, []);
 
   if (done) return null;

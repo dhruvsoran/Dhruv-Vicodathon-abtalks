@@ -538,6 +538,60 @@ Also confirmed the curtain renders **only** on `/` — `/dashboard` and `/day/12
 
 ---
 
+## Session 14 — Brand sound on the curtain reveal *(~02:3x)*
+
+**Prompt (verbatim):**
+
+> i want that with opening curtain there should be a sound who sounds abtalks
+
+### Generated, not downloaded
+
+The sound is **synthesised at runtime** rather than shipped as an audio file. Three reasons: no extra network request competing with first paint, nothing to cache-bust, and no licensing question about a stock asset in a judged submission.
+
+Three layers, fired on the exact beat the panels part (1.4s):
+
+1. **Whoosh** — a noise buffer through a band-pass filter sweeping 320Hz → 2600Hz → 900Hz, matching the physical motion of the curtain opening. The noise is amplitude-shaped so it reads as air rather than static.
+2. **Chime** — two sine oscillators a fifth apart (D5 → A5), staggered 140ms, with exponential decay. A rising interval to match the rising logo.
+3. **Voice** — the Web Speech API speaking the brand name. Written as `"A B Talks"` with spaces, because passing `"ABTalks"` makes most voices attempt it as a single word and it comes out as "abtalks" rather than the brand.
+
+### The constraint that actually matters: autoplay policy
+
+Every modern browser blocks audio until the user has interacted with the page. A naive implementation "works" for the developer — who has usually clicked something already — and is silent for a first-time visitor, which is precisely the person the welcome exists for.
+
+Handled explicitly:
+
+- Attempt `AudioContext.resume()` immediately.
+- If the context is suspended or `resume()` stays pending past 260ms, **arm a one-shot listener** on `pointerdown` / `keydown` / `touchstart` / `wheel` / `scroll`, so the brand sound plays on the visitor's very first interaction instead of being lost.
+- A `played` guard ensures it can only ever fire once.
+
+Verified under both browser policies:
+
+```
+--autoplay-policy=no-user-gesture-required
+  contexts 1 (running) · 1 buffer source · 2 oscillators · 3 sources started
+  spoken text: "A B Talks"
+
+--autoplay-policy=document-user-activation-required   (the real-world default)
+  contexts 1 (suspended) · 0 sources started · no errors
+  -> correctly silent, waiting for the gesture
+```
+
+### Sound must be refusable
+
+Autoplaying audio without an obvious off switch is hostile, so a **sound toggle sits in the header** next to the theme toggle: a real `role="switch"` with `aria-checked`, persisted to `localStorage`. Unmuting replays the sound as confirmation that audio is working. Verified the toggle flips `true → false` and stores `off`.
+
+Also skipped entirely under `prefers-reduced-motion`, alongside the curtain.
+
+### Regression check
+
+```
+console errors 0 · hydration warnings 0 · audio warnings 0
+curtain removes itself · h1 visible · page scrollable · toggle present
+all three routes 200
+```
+
+---
+
 ## Honest notes on AI usage
 
 - The **AI wrote effectively all of the code**: the design token system, all three routes, the persona store, the calendar, the theme engine, the navigation, the logo, and both signature features.
