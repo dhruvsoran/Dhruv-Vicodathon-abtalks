@@ -15,6 +15,7 @@ import {
 import { AvatarArt, GrowthArt, ProofArt, TrackGlyph } from "@/components/art";
 import { LogoMark } from "@/components/logo";
 import { Reveal } from "@/components/reveal";
+import ScrollProgress from "@/components/scroll-progress";
 import SiteNav from "@/components/site-nav";
 import Welcome from "@/components/welcome";
 import { cohort, days, faqs, formatCount, testimonials, tracks, weeks } from "@/lib/challenge";
@@ -22,7 +23,7 @@ import { cohort, days, faqs, formatCount, testimonials, tracks, weeks } from "@/
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex-1 min-w-0">
-      <div className="text-[22px] font-semibold leading-none tracking-tight">{value}</div>
+      <div className="tnum text-[22px] font-semibold leading-none tracking-tight">{value}</div>
       <div className="mt-1.5 text-[11px] leading-tight text-faint">{label}</div>
     </div>
   );
@@ -132,8 +133,9 @@ export default function Landing() {
   const sample = [days[0], days[6], days[11], days[29], days[59]];
 
   return (
-    <div className="pb-28">
+    <div className="pb-8">
       <Welcome />
+      <ScrollProgress />
       <SiteNav />
 
       <main id="main">
@@ -527,22 +529,22 @@ export default function Landing() {
                 </h2>
                 <ul className="mt-2.5 space-y-2">
                   <li>
-                    <Link href="/#how-it-works" className="tap focusring text-[12.5px] text-muted">
+                    <Link href="/#how-it-works" className="tap focusring inline-flex min-h-[28px] items-center text-[12.5px] text-muted transition-colors hover:text-fg">
                       How it works
                     </Link>
                   </li>
                   <li>
-                    <Link href="/#curriculum" className="tap focusring text-[12.5px] text-muted">
+                    <Link href="/#curriculum" className="tap focusring inline-flex min-h-[28px] items-center text-[12.5px] text-muted transition-colors hover:text-fg">
                       Curriculum
                     </Link>
                   </li>
                   <li>
-                    <Link href="/#shields" className="tap focusring text-[12.5px] text-muted">
+                    <Link href="/#shields" className="tap focusring inline-flex min-h-[28px] items-center text-[12.5px] text-muted transition-colors hover:text-fg">
                       Streak Shields
                     </Link>
                   </li>
                   <li>
-                    <Link href="/#faq" className="tap focusring text-[12.5px] text-muted">
+                    <Link href="/#faq" className="tap focusring inline-flex min-h-[28px] items-center text-[12.5px] text-muted transition-colors hover:text-fg">
                       FAQ
                     </Link>
                   </li>
@@ -554,22 +556,22 @@ export default function Landing() {
                 </h2>
                 <ul className="mt-2.5 space-y-2">
                   <li>
-                    <Link href="/dashboard" className="tap focusring text-[12.5px] text-muted">
+                    <Link href="/dashboard" className="tap focusring inline-flex min-h-[28px] items-center text-[12.5px] text-muted transition-colors hover:text-fg">
                       Dashboard
                     </Link>
                   </li>
                   <li>
-                    <Link href="/day/1" className="tap focusring text-[12.5px] text-muted">
+                    <Link href="/day/1" className="tap focusring inline-flex min-h-[28px] items-center text-[12.5px] text-muted transition-colors hover:text-fg">
                       Day 1
                     </Link>
                   </li>
                   <li>
-                    <Link href="/day/12" className="tap focusring text-[12.5px] text-muted">
+                    <Link href="/day/12" className="tap focusring inline-flex min-h-[28px] items-center text-[12.5px] text-muted transition-colors hover:text-fg">
                       Day 12
                     </Link>
                   </li>
                   <li>
-                    <Link href="/day/60" className="tap focusring text-[12.5px] text-muted">
+                    <Link href="/day/60" className="tap focusring inline-flex min-h-[28px] items-center text-[12.5px] text-muted transition-colors hover:text-fg">
                       Day 60
                     </Link>
                   </li>
@@ -584,15 +586,6 @@ export default function Landing() {
         </div>
       </footer>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line glass-strong px-5 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 md:hidden">
-        <Link
-          href="/dashboard"
-          className="tap focusring press flex items-center justify-center gap-2 rounded-2xl ember-fill py-3.5 text-[15px] font-semibold text-white"
-        >
-          Start Day 1 tonight
-          <ArrowIcon className="h-[18px] w-[18px]" />
-        </Link>
-      </div>
     </div>
   );
 }

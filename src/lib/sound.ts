@@ -116,8 +116,36 @@ function emit() {
   speak();
 }
 
-/** Play the brand sound once, on the beat the curtain parts. */
-export function playBrandSound() {
+const GESTURES = ["pointerdown", "keydown", "touchstart", "wheel", "scroll"] as const;
+
+/**
+ * Warm the audio context as early as possible.
+ *
+ * Browsers block audio until the page has been interacted with. Calling this
+ * on mount means that by the time the curtain parts, any interaction the
+ * visitor has already made (a tap, a scroll, a key press) has unlocked
+ * playback — so the brand sound is far more likely to be audible.
+ */
+export function primeAudio() {
+  const ac = getCtx();
+  if (!ac || ac.state === "running") return;
+
+  const unlock = () => {
+    ac.resume().catch(() => {});
+    GESTURES.forEach((e) => window.removeEventListener(e, unlock));
+  };
+  GESTURES.forEach((e) => window.addEventListener(e, unlock, { passive: true }));
+}
+
+/**
+ * Play the brand sound once, on the beat the curtain parts.
+ *
+ * If the browser has blocked audio, we allow a **short grace window** during
+ * which the visitor's first interaction still triggers it. The window is
+ * deliberately bounded: a brand chime firing minutes later, detached from the
+ * animation, would be worse than silence.
+ */
+export function playBrandSound(graceMs = 2500) {
   if (played) return;
   const ac = getCtx();
   if (!ac) return;
@@ -127,6 +155,14 @@ export function playBrandSound() {
     return;
   }
 
-  // One attempt to unlock. If the browser refuses, stay silent.
   ac.resume().then(emit, () => {});
+
+  const fire = () => {
+    ac.resume().then(emit, () => {});
+    stop();
+  };
+  const stop = () => GESTURES.forEach((e) => window.removeEventListener(e, fire));
+
+  GESTURES.forEach((e) => window.addEventListener(e, fire, { passive: true }));
+  window.setTimeout(stop, graceMs);
 }

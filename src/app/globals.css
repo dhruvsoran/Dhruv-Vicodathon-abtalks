@@ -838,6 +838,67 @@ body > *:not(.aurora):not(.skip-link) {
   }
 }
 
+/* ---------- Premium details ---------- */
+
+/* Typographic refinement: tighter tracking on large text, tabular figures for
+   any number that updates so digits never jitter. */
+h1,
+h2 {
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Scroll progress bar for the landing page. */
+.scrollbar-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  z-index: 60;
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--ember), var(--gold));
+  pointer-events: none;
+}
+
+/* Refined focus ring that follows the brand rather than the browser default. */
+:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Custom scrollbar on desktop — small detail, reads as considered. */
+@media (min-width: 900px) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-2) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--line-2);
+    border-radius: 9999px;
+    border: 3px solid var(--ink);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--faint);
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
 @keyframes rise {
   from {
     opacity: 0;

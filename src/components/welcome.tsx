@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { LogoMark } from "@/components/logo";
-import { playBrandSound } from "@/lib/sound";
+import { playBrandSound, primeAudio } from "@/lib/sound";
 
 /** Must match the CSS sequence in globals.css. */
 const PART_AT = 1400;
@@ -52,8 +52,12 @@ export default function Welcome() {
       return () => clearTimeout(skip);
     }
 
+    // Warm the audio context now so any interaction before the reveal has
+    // already satisfied the browser's autoplay policy.
+    primeAudio();
+
     // Fire the brand sound on the beat the panels start to part.
-    const sound = window.setTimeout(playBrandSound, PART_AT);
+    const sound = window.setTimeout(() => playBrandSound(), PART_AT);
     const t = window.setTimeout(() => setDone(true), TOTAL);
     return () => {
       clearTimeout(sound);

@@ -111,7 +111,7 @@ function MetricCard({
     <div className="card lift shine relative h-full overflow-hidden p-3.5">
       <div className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-faint">{label}</div>
       <div
-        className={`mt-1.5 text-[21px] font-semibold leading-none tracking-tight ${
+        className={`tnum mt-1.5 text-[21px] font-semibold leading-none tracking-tight ${
           tone === "warn" ? "text-rose" : ""
         }`}
       >
@@ -224,7 +224,7 @@ export default function Dashboard() {
                 <div className="relative grid place-items-center">
                   <Ring value={completion} />
                   <span className="absolute grid place-items-center text-center">
-                    <span className="text-[17px] font-semibold leading-none">{streak}</span>
+                    <span className="tnum text-[17px] font-semibold leading-none">{streak}</span>
                     <span className="mt-0.5 text-[8.5px] uppercase tracking-[0.1em] text-faint">
                       day{streak === 1 ? "" : "s"}
                     </span>
@@ -443,7 +443,7 @@ export default function Dashboard() {
               {persona.rank ? (
                 <>
                   <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-[26px] font-semibold leading-none tracking-tight">
+                    <span className="tnum text-[26px] font-semibold leading-none tracking-tight">
                       {ordinal(persona.rank.position)}
                     </span>
                     <span className="text-[12px] text-faint">
