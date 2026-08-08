@@ -518,29 +518,66 @@ export default function Dashboard() {
             </div>
           </section>
 
-          {profileMissing.length > 0 && (
-            <section id="profile" className="shell mt-3 scroll-mt-4 md:mx-0 md:max-w-none md:px-0">
-              <div className="card p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-[15px] font-semibold">Recruiter readiness</h2>
-                  <span className="text-[12px] font-medium text-gold">{profileScore}%</span>
-                </div>
-                <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-line-2">
-                  <div className="h-full rounded-full ember-fill" style={{ width: `${profileScore}%` }} />
-                </div>
-                <p className="mt-2.5 text-[12px] leading-relaxed text-muted">
-                  Your work is only findable if your profile is. Missing:{" "}
-                  {profileMissing.join(", ")}.
-                </p>
-                <button
-                  type="button"
-                  className="tap focusring mt-3 w-full rounded-xl border border-line bg-surface-2 py-2.5 text-[12.5px] font-medium"
+          {/* Always rendered: the Profile tab anchors here, so hiding the
+              section when a profile is complete would leave a dead link. */}
+          <section id="profile" className="shell mt-3 scroll-mt-4 md:mx-0 md:max-w-none md:px-0">
+            <div className="card p-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-[15px] font-semibold">Recruiter readiness</h2>
+                <span
+                  className={`tnum text-[12px] font-medium ${
+                    profileMissing.length > 0 ? "text-gold" : "text-mint"
+                  }`}
                 >
-                  Complete profile ({profileMissing.length} left)
-                </button>
+                  {profileScore}%
+                </span>
               </div>
-            </section>
-          )}
+              <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-line-2">
+                <div
+                  className={`h-full rounded-full ${
+                    profileMissing.length > 0 ? "ember-fill" : "bg-mint"
+                  }`}
+                  style={{ width: `${profileScore}%` }}
+                />
+              </div>
+
+              {profileMissing.length > 0 ? (
+                <>
+                  <p className="mt-2.5 text-[12px] leading-relaxed text-muted">
+                    Your work is only findable if your profile is. Missing:{" "}
+                    {profileMissing.join(", ")}.
+                  </p>
+                  <button
+                    type="button"
+                    className="tap focusring press mt-3 w-full rounded-xl border border-line bg-surface-2 py-2.5 text-[12.5px] font-medium"
+                  >
+                    Complete profile ({profileMissing.length} left)
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="mt-2.5 flex items-center gap-1.5 text-[12px] leading-relaxed text-muted">
+                    <CheckIcon className="h-3.5 w-3.5 shrink-0 text-mint" />
+                    Profile complete. Recruiters can find your work.
+                  </p>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <div className="flex items-center gap-2 rounded-xl border border-line bg-surface-2 px-3 py-2">
+                      <GitHubIcon className="h-4 w-4 shrink-0 text-muted" />
+                      <span className="truncate font-mono text-[11px] text-muted">
+                        {persona.student.github}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl border border-line bg-surface-2 px-3 py-2">
+                      <LinkedInIcon className="h-4 w-4 shrink-0 text-muted" />
+                      <span className="truncate font-mono text-[11px] text-muted">
+                        {persona.student.linkedin}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </section>
 
           <section className="shell mt-3 md:mx-0 md:max-w-none md:px-0">
             <div className="card p-4">
