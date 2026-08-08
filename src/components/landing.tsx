@@ -41,8 +41,12 @@ function PreviewStrip() {
     <div className="card shine grain relative overflow-hidden p-4">
       <div
         aria-hidden="true"
-        className="morph pointer-events-none absolute -right-8 -top-10 h-32 w-32 opacity-40 blur-2xl"
+        className="morph pointer-events-none absolute -right-10 -top-12 h-36 w-36 opacity-60 blur-[18px]"
         style={{ background: "linear-gradient(140deg, var(--ember), var(--gold))" }}
+      />
+      <div
+        aria-hidden="true"
+        className="morph-ring pointer-events-none absolute -right-6 -top-8 h-28 w-28"
       />
       <div className="relative flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -131,7 +135,7 @@ export default function Landing() {
 
       <main id="main">
       <section className="relative overflow-hidden">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-[420px] overflow-hidden">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-[460px] overflow-hidden">
           <div
             className="blob left-1/2 h-[300px] w-[300px] -translate-x-1/2"
             style={{
@@ -145,6 +149,16 @@ export default function Landing() {
               background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)",
               opacity: "calc(var(--glow-opacity) * 0.26)",
             }}
+          />
+          {/* Crisp morphing shapes: these carry the liquid read. */}
+          <div
+            className="morph absolute right-[6%] top-[188px] h-[130px] w-[130px] opacity-30 blur-[10px]"
+            style={{ background: "linear-gradient(140deg, var(--ember), var(--gold))" }}
+          />
+          <div className="morph-ring absolute right-[10%] top-[196px] h-[112px] w-[112px]" />
+          <div
+            className="morph-slow absolute left-[4%] top-[236px] h-[74px] w-[74px] opacity-25 blur-[6px]"
+            style={{ background: "linear-gradient(200deg, var(--sky), var(--ember))" }}
           />
         </div>
         <div className="shell relative pt-9 md:pt-16">

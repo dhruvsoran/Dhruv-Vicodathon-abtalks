@@ -523,23 +523,42 @@ body > *:not(.aurora) {
 /* Morphing blob: border-radius is not compositor-accelerated, but this runs
    on a single small element with no children, so the paint cost is trivial
    and it delivers the signature "liquid" read. */
+/* Morphing blob. Needs a VISIBLE EDGE to read — a heavy blur destroys the
+   silhouette and the border-radius animation becomes imperceptible. Use on
+   crisp or lightly-blurred shapes only. */
 @keyframes morph {
   0%,
   100% {
-    border-radius: 62% 38% 46% 54% / 58% 42% 58% 42%;
-    transform: translate3d(0, 0, 0) rotate(0deg);
+    border-radius: 66% 34% 42% 58% / 62% 38% 62% 38%;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
   }
-  34% {
-    border-radius: 38% 62% 63% 37% / 41% 62% 38% 59%;
-    transform: translate3d(0, -6px, 0) rotate(12deg);
+  25% {
+    border-radius: 34% 66% 68% 32% / 38% 66% 34% 62%;
+    transform: translate3d(0, -8px, 0) rotate(22deg) scale(1.06);
   }
-  67% {
-    border-radius: 54% 46% 34% 66% / 62% 38% 62% 38%;
-    transform: translate3d(0, 5px, 0) rotate(-9deg);
+  50% {
+    border-radius: 58% 42% 30% 70% / 70% 30% 70% 30%;
+    transform: translate3d(0, 6px, 0) rotate(-16deg) scale(0.95);
+  }
+  75% {
+    border-radius: 40% 60% 55% 45% / 34% 64% 36% 66%;
+    transform: translate3d(0, -4px, 0) rotate(10deg) scale(1.03);
   }
 }
 
 .morph {
+  animation: morph 7s var(--ease-liquid) infinite;
+}
+
+/* Slow counter-rotating variant for layered blobs. */
+.morph-slow {
+  animation: morph 11s var(--ease-liquid) infinite reverse;
+}
+
+/* Liquid morphing ring — a crisp outlined blob, the clearest read of all. */
+.morph-ring {
+  border: 1.5px solid var(--ember);
+  opacity: 0.5;
   animation: morph 9s var(--ease-liquid) infinite;
 }
 

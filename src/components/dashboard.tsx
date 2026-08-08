@@ -157,7 +157,7 @@ export default function Dashboard() {
     <div className="pb-24 md:pb-12">
       <PersonaSwitch />
 
-      <header className="shell flex items-center justify-between gap-3 pt-4">
+      <header className="shell flex items-center justify-between gap-3 pt-3.5">
         <div className="flex min-w-0 items-center gap-3">
           <Link href="/" aria-label="ABTalks home" className="tap focusring shrink-0 rounded-lg">
             <LogoMark size={30} />
