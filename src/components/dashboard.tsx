@@ -155,27 +155,33 @@ export default function Dashboard() {
 
   return (
     <div className="pb-24 md:pb-12">
-      <PersonaSwitch />
-
-      <header className="shell flex items-center justify-between gap-3 pt-3.5">
-        <div className="flex min-w-0 items-center gap-3">
-          <Link href="/" aria-label="ABTalks home" className="tap focusring shrink-0 rounded-lg">
-            <LogoMark size={30} />
-          </Link>
-          <div className="min-w-0">
-            <h1 className="truncate text-[16px] font-semibold leading-tight">
-              {isNew ? `Welcome, ${persona.student.name.split(" ")[0]}` : `Hey ${persona.student.name.split(" ")[0]}`}
-            </h1>
-            <p className="mt-0.5 truncate text-[11.5px] text-faint">
-              {persona.student.college || "Add your college"} · {persona.student.track}
-            </p>
+      <header className="sticky top-0 z-40 border-b border-line glass-strong">
+        <div className="shell">
+          <div className="flex items-center justify-between gap-3 py-2.5">
+            <div className="flex min-w-0 items-center gap-3">
+              <Link href="/" aria-label="ABTalks home" className="tap focusring shrink-0 rounded-lg">
+                <LogoMark size={30} />
+              </Link>
+              <div className="min-w-0">
+                <h1 className="truncate text-[16px] font-semibold leading-tight">
+                  {isNew
+                    ? `Welcome, ${persona.student.name.split(" ")[0]}`
+                    : `Hey ${persona.student.name.split(" ")[0]}`}
+                </h1>
+                <p className="mt-0.5 truncate text-[11.5px] text-faint">
+                  {persona.student.college || "Add your college"} · {persona.student.track}
+                </p>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <ThemeToggle />
+              <span className="grid h-9 w-9 place-items-center rounded-full border border-line bg-surface-2 text-[12px] font-semibold">
+                {persona.student.initials}
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <ThemeToggle />
-          <span className="grid h-9 w-9 place-items-center rounded-full border border-line bg-surface-2 text-[12px] font-semibold">
-            {persona.student.initials}
-          </span>
+
+          <PersonaSwitch />
         </div>
       </header>
 

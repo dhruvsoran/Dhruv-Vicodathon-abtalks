@@ -122,6 +122,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <span />
           <span />
           <span />
+          <i />
+          <i />
+          <i />
         </div>
         <a href="#main" className="skip-link">
           Skip to content
