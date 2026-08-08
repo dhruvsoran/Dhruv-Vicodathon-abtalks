@@ -76,7 +76,28 @@ export default function StreakCalendar({
         })}
       </div>
 
-      <div className="mt-3.5 flex flex-wrap gap-x-3.5 gap-y-1.5">
+      {/* Proportional summary of the whole challenge at a glance. */}
+      <div className="mt-3.5 flex h-2 overflow-hidden rounded-full bg-surface-2">
+        <span
+          className="ember-fill"
+          style={{ width: `${(completed.length / totalDays) * 100}%` }}
+        />
+        <span
+          className="bg-gold/70"
+          style={{ width: `${(repaired.length / totalDays) * 100}%` }}
+        />
+        <span className="bg-rose/40" style={{ width: `${(missed.length / totalDays) * 100}%` }} />
+      </div>
+      <div className="mt-2 flex items-center justify-between text-[10.5px] text-faint">
+        <span>
+          <strong className="text-fg">{completed.length + repaired.length}</strong> shipped
+        </span>
+        <span>
+          <strong className="text-fg">{totalDays - currentDay}</strong> still ahead
+        </span>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-x-3.5 gap-y-1.5">
         {legend.map((l) => (
           <span key={l.status} className="flex items-center gap-1.5 text-[10.5px] text-faint">
             <span className={`h-2.5 w-2.5 rounded-[3px] ${l.cell}`} />

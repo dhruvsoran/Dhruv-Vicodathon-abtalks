@@ -12,7 +12,7 @@ import {
   ShieldIcon,
   SparkIcon,
 } from "@/components/icons";
-import { GrowthArt, ProofArt } from "@/components/art";
+import { AvatarArt, GrowthArt, ProofArt, TrackGlyph } from "@/components/art";
 import { LogoMark } from "@/components/logo";
 import { Reveal } from "@/components/reveal";
 import SiteNav from "@/components/site-nav";
@@ -332,14 +332,29 @@ export default function Landing() {
               key={w.n}
               className="card lift shine w-[224px] shrink-0 snap-start p-4"
             >
-              <div className="flex items-baseline justify-between">
-                <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-faint">
-                  Week {w.n}
+              <div className="flex items-center justify-between">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-ember/12 font-mono text-[13px] font-semibold text-ember">
+                  {w.n}
                 </span>
                 <span className="font-mono text-[10px] text-faint">{w.range}</span>
               </div>
               <h3 className="mt-2.5 text-[15px] font-semibold leading-snug">{w.theme}</h3>
               <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted">{w.blurb}</p>
+              {/* Position of this week within the 60 days. */}
+              <div
+                className="mt-3 flex gap-[3px]"
+                role="img"
+                aria-label={`Week ${w.n} of 9`}
+              >
+                {weeks.map((x) => (
+                  <span
+                    key={x.n}
+                    className={`h-1 flex-1 rounded-full ${
+                      x.n <= w.n ? "ember-fill" : "bg-line-2"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -351,7 +366,7 @@ export default function Landing() {
           {sample.map((d, i) => (
             <Reveal as="li" key={d.day} delay={i * 60}>
               <div className="flex items-center gap-3.5 p-4">
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-line bg-surface-2 font-mono text-[12px] text-muted">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl ember-fill font-mono text-[12px] font-semibold text-white">
                   {d.day}
                 </span>
                 <div className="min-w-0 flex-1">
@@ -360,6 +375,9 @@ export default function Landing() {
                     {d.difficulty} · ~{d.minutes} min · {d.tag}
                   </div>
                 </div>
+                <span className="shrink-0 text-faint">
+                  <ChevronIcon className="h-4 w-4" />
+                </span>
               </div>
             </Reveal>
           ))}
@@ -369,8 +387,12 @@ export default function Landing() {
           {tracks.map((t, i) => (
             <Reveal key={t.id} delay={i * 60}>
               <div className="card lift shine h-full p-3.5">
-                <div className="text-[13.5px] font-semibold leading-snug">{t.name}</div>
-                <div className="mt-1.5 text-[10.5px] text-faint">
+                <span className="grid h-8 w-8 place-items-center rounded-xl bg-ember/12 text-ember">
+                  <TrackGlyph id={t.id} className="h-[17px] w-[17px]" />
+                </span>
+                <div className="mt-2.5 text-[13.5px] font-semibold leading-snug">{t.name}</div>
+                <p className="mt-1 text-[11px] leading-snug text-muted">{t.blurb}</p>
+                <div className="mt-2 text-[10.5px] text-faint">
                   {formatCount(t.learners)} building
                 </div>
               </div>
@@ -394,12 +416,25 @@ export default function Landing() {
         <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 md:px-[max(40px,calc(50vw-540px))]">
           {testimonials.map((t) => (
             <figure key={t.name} className="card lift shine w-[286px] shrink-0 snap-start p-4">
-              <blockquote className="text-[13.5px] leading-relaxed text-fg">
-                &ldquo;{t.quote}&rdquo;
+              <svg viewBox="0 0 24 24" className="h-5 w-5 text-ember/45" aria-hidden="true" fill="currentColor">
+                <path d="M9.4 5.6c-3 1.4-4.9 4-4.9 7.3 0 3.2 1.9 5.5 4.5 5.5 2.1 0 3.7-1.5 3.7-3.5 0-1.9-1.4-3.3-3.2-3.3-.4 0-.8.1-1 .2.3-1.7 1.6-3.3 3.4-4.3l-2.5-1.9Zm9.1 0c-3 1.4-4.9 4-4.9 7.3 0 3.2 1.9 5.5 4.5 5.5 2.1 0 3.7-1.5 3.7-3.5 0-1.9-1.4-3.3-3.2-3.3-.4 0-.8.1-1 .2.3-1.7 1.6-3.3 3.4-4.3l-2.5-1.9Z" />
+              </svg>
+              <blockquote className="mt-2 text-[13.5px] leading-relaxed text-fg">
+                {t.quote}
               </blockquote>
-              <figcaption className="mt-3.5 border-t border-line pt-3">
-                <div className="text-[12.5px] font-medium">{t.name}</div>
-                <div className="mt-0.5 text-[11px] text-faint">{t.detail}</div>
+              <figcaption className="mt-3.5 flex items-center gap-2.5 border-t border-line pt-3">
+                <AvatarArt
+                  initials={t.name
+                    .split(" ")
+                    .map((p) => p[0])
+                    .join("")
+                    .slice(0, 2)}
+                  size={30}
+                />
+                <span className="min-w-0">
+                  <span className="block truncate text-[12.5px] font-medium">{t.name}</span>
+                  <span className="block truncate text-[11px] text-faint">{t.detail}</span>
+                </span>
               </figcaption>
             </figure>
           ))}

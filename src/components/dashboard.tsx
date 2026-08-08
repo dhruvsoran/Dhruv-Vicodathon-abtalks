@@ -14,6 +14,7 @@ import {
   SparkIcon,
   TrophyIcon,
 } from "@/components/icons";
+import { Spark } from "@/components/art";
 import { LogoMark } from "@/components/logo";
 import PersonaSwitch from "@/components/persona-switch";
 import StreakCalendar from "@/components/streak-calendar";
@@ -23,6 +24,7 @@ import { usePersona } from "@/components/persona-store";
 import {
   cohort,
   currentStreak,
+  days,
   formatCount,
   getDay,
   leaderboardPeers,
@@ -94,15 +96,19 @@ function MetricCard({
   label,
   value,
   sub,
+  spark,
+  icons,
   tone = "default",
 }: {
   label: string;
   value: string;
   sub: string;
+  spark?: number[];
+  icons?: React.ReactNode;
   tone?: "default" | "warn";
 }) {
   return (
-    <div className="card lift shine h-full p-3.5">
+    <div className="card lift shine relative h-full overflow-hidden p-3.5">
       <div className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-faint">{label}</div>
       <div
         className={`mt-1.5 text-[21px] font-semibold leading-none tracking-tight ${
@@ -112,6 +118,10 @@ function MetricCard({
         {value}
       </div>
       <div className="mt-1.5 text-[11px] leading-tight text-faint">{sub}</div>
+      {spark && spark.length > 1 && (
+        <Spark points={spark} className="mt-2 h-6 w-full" />
+      )}
+      {icons && <div className="mt-2 flex h-6 items-center gap-1.5">{icons}</div>}
     </div>
   );
 }
@@ -142,6 +152,23 @@ export default function Dashboard() {
     Object.values(persona.student.profileFields).filter(Boolean).length,
     Object.values(persona.student.profileFields).length,
   );
+
+  // Cumulative history up to today, so the sparklines reflect the persona's
+  // real record rather than decorative noise.
+  const doneSet = new Set(allDone);
+  const timeline = Array.from({ length: persona.currentDay }, (_, i) => i + 1);
+
+  const completionTrend = timeline.map(
+    (d) => timeline.filter((x) => x <= d && doneSet.has(x)).length,
+  );
+  const xpTrend = timeline.map((d) =>
+    days.filter((x) => x.day <= d && doneSet.has(x.day)).reduce((s, x) => s + x.xp, 0),
+  );
+  const streakTrend = timeline.reduce<number[]>((acc, d) => {
+    const prev = acc.length ? acc[acc.length - 1] : 0;
+    acc.push(doneSet.has(d) ? prev + 1 : 0);
+    return acc;
+  }, []);
 
   const board = leaderboardPeers.map((p) =>
     p.isYou
@@ -357,17 +384,30 @@ export default function Dashboard() {
               label="Completion"
               value={`${completion}%`}
               sub={`${cohort.totalDays - allDone.length} days remain`}
+              spark={completionTrend}
             />
-            <MetricCard label="XP earned" value={formatCount(xp)} sub={`Week ${week.n} of 9`} />
+            <MetricCard
+              label="XP earned"
+              value={formatCount(xp)}
+              sub={`Week ${week.n} of 9`}
+              spark={xpTrend}
+            />
             <MetricCard
               label="Best streak"
               value={`${best}`}
               sub={best === 0 ? "Set it tonight" : `Current ${streak}`}
+              spark={streakTrend}
             />
             <MetricCard
               label="Shields"
               value={`${shieldsLeft}`}
               sub={shieldsLeft > 0 ? "Repairs one missed day" : `Next at Day 15`}
+              icons={Array.from({ length: Math.max(persona.shields.available, 1) }, (_, i) => (
+                <ShieldIcon
+                  key={i}
+                  className={`h-5 w-5 ${i < shieldsLeft ? "text-gold" : "text-line-2"}`}
+                />
+              ))}
             />
           </section>
 

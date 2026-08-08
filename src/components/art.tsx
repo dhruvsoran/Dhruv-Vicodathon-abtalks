@@ -109,6 +109,68 @@ export function GrowthArt({ className = "" }: { className?: string }) {
   );
 }
 
+/** Small glyphs so track cards read at a glance instead of as bare labels. */
+export function TrackGlyph({ id, className = "" }: { id: string; className?: string }) {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      {id === "web" && (
+        <>
+          <path d="m9 8-4 4 4 4M15 8l4 4-4 4" {...common} />
+        </>
+      )}
+      {id === "ai" && (
+        <>
+          <circle cx="12" cy="12" r="2.4" {...common} />
+          <path d="M12 4.2v5.4M12 14.4v5.4M4.2 12h5.4M14.4 12h5.4M6.6 6.6l3.1 3.1M14.3 14.3l3.1 3.1M17.4 6.6l-3.1 3.1M9.7 14.3l-3.1 3.1" {...common} />
+        </>
+      )}
+      {id === "mobile" && (
+        <>
+          <rect x="7" y="3.2" width="10" height="17.6" rx="2.6" {...common} />
+          <path d="M11 17.6h2" {...common} />
+        </>
+      )}
+      {id === "systems" && (
+        <>
+          <path d="M4 17.5 9 12l3.4 3.4L20 7.2" {...common} />
+          <path d="M15.4 7.2H20v4.6" {...common} />
+        </>
+      )}
+    </svg>
+  );
+}
+
+/** Compact sparkline for dashboard metric cards. */
+export function Spark({
+  points,
+  className = "",
+}: {
+  points: number[];
+  className?: string;
+}) {
+  const id = useId().replace(/:/g, "");
+  const max = Math.max(...points, 1);
+  const w = 100;
+  const h = 28;
+  const step = points.length > 1 ? w / (points.length - 1) : w;
+  const path = points
+    .map((p, i) => `${i === 0 ? "M" : "L"}${(i * step).toFixed(1)} ${(h - (p / max) * (h - 4) - 2).toFixed(1)}`)
+    .join(" ");
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} className={className} preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id={`s${id}`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="var(--ember)" stopOpacity=".45" />
+          <stop offset="100%" stopColor="var(--gold)" />
+        </linearGradient>
+      </defs>
+      <path d={`${path} L${w} ${h} L0 ${h} Z`} fill="var(--ember)" opacity=".08" />
+      <path d={path} fill="none" stroke={`url(#s${id})`} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function AvatarArt({
   initials,
   size = 40,
