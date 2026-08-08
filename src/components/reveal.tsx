@@ -72,18 +72,23 @@ export function Reveal({
   const ref = useRef<HTMLElement | null>(null);
   const [seen, setSeen] = useState(false);
   const reduced = useSyncExternalStore(subscribeMotion, getReduced, () => false);
-  const noIO = typeof IntersectionObserver === "undefined";
-  const shown = seen || reduced || noIO;
+
+  // `shown` must not depend on anything that differs between server and
+  // client during the first render, or hydration mismatches. Capability
+  // checks therefore live inside the effect, never in the render path.
+  const shown = seen || reduced;
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || reduced || noIO) return;
+    if (!el || reduced) return;
 
     const reveal = () => setSeen(true);
-    if (failsafeFired) {
+
+    if (typeof IntersectionObserver === "undefined" || failsafeFired) {
       const t = window.setTimeout(reveal, 0);
       return () => window.clearTimeout(t);
     }
+
     registry.set(el, reveal);
     observer().observe(el);
 
@@ -95,7 +100,7 @@ export function Reveal({
       failsafeSubs.delete(reveal);
       observer().unobserve(el);
     };
-  }, [reduced, noIO]);
+  }, [reduced]);
 
   const Comp = Tag as React.ElementType;
   return (

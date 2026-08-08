@@ -235,6 +235,23 @@ Three independent layers now guarantee content can never be hidden:
 
 Re-measured: **18/18 visible, 0 hidden.**
 
+### 8c-bis. Hydration mismatch caught at runtime
+
+Running the dev server surfaced a React hydration error on `/`:
+
+```
+data-shown={undefined}   (client)
+data-shown=""            (server)
+```
+
+**Cause:** the failsafe from 8c checked `typeof IntersectionObserver === "undefined"` *during render*. On the server that's always true, so the server emitted `data-shown=""` (visible) while the browser — where the API exists — rendered it unset. React can't patch attribute mismatches, so this both logged an error and risked leaving the markup in an inconsistent state.
+
+**Fix:** capability detection was moved out of the render path and into the effect, which only ever runs on the client. `shown` now derives solely from state that is identical on both sides during first render. The failsafe behaviour is unchanged — it just runs a tick later.
+
+Verified by hooking `console.error` / `console.warn` inside each route and reloading: **0 hydration warnings, 0 console errors across all three routes**, with reveals still functioning (18 present, 0 hidden).
+
+The general lesson, and the reason this is worth recording: *anything environment-dependent must be resolved in an effect, never during render, or SSR and the client will disagree.*
+
 ### 8d. Performance and stability, measured
 
 An auditor was run across **all 6 combinations** (3 routes × 2 themes), scripted to scroll each page end-to-end and then inspect every running animation via `document.getAnimations()`:
