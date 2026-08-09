@@ -64,7 +64,7 @@ function Field({
         onBlur={onBlur}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${id}-err` : `${id}-hint`}
-        className={`mt-2 w-full rounded-xl border bg-ink-2 px-3.5 py-3 font-mono text-[13px] text-fg placeholder:text-faint focusring ${
+        className={`focusring mt-2 w-full rounded-xl border bg-ink-2 px-3.5 py-3 font-mono text-[13px] text-fg placeholder:text-faint ${
           error ? "border-rose" : "border-line"
         }`}
       />
@@ -142,7 +142,10 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
 
   const repoValid = repoPattern.test(repo.trim());
   const postValid = postPattern.test(post.trim());
-  const canSubmit = repoValid && postValid;
+  const doneCount = checks.filter(Boolean).length;
+  const checklistComplete = checks.length > 0 && checks.every(Boolean);
+  const checklistPct = checks.length ? Math.round((doneCount / checks.length) * 100) : 0;
+  const canSubmit = repoValid && postValid && checklistComplete;
 
   const draft = useMemo(
     () =>
@@ -216,6 +219,13 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
               </Link>
             )}
           </div>
+        </div>
+        {/* Where this day sits in the 60-day arc. Static width → no CLS. */}
+        <div aria-hidden="true" className="h-1 w-full bg-line-2/40">
+          <div
+            className="h-full ember-fill"
+            style={{ width: `${Math.round((day.day / 60) * 100)}%` }}
+          />
         </div>
       </header>
 
@@ -296,7 +306,8 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
 
           <section className="shell mt-4 space-y-3 md:mx-0 md:max-w-none md:px-0">
             <div className="card p-4">
-              <h2 className="text-[10.5px] font-medium uppercase tracking-[0.13em] text-faint">
+              <h2 className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-[0.13em] text-gold">
+                <SparkIcon className="h-3.5 w-3.5" />
                 Why this matters
               </h2>
               <p className="mt-2 text-[14px] leading-relaxed text-fg/90">{detail.why}</p>
@@ -304,25 +315,54 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
 
             <div className="card p-4">
               <h2 className="text-[15px] font-semibold">What to build</h2>
-              <ol className="mt-3 space-y-3">
+              <p className="mt-1 text-[11.5px] text-faint">
+                Follow in order. Each step is sized to finish tonight.
+              </p>
+              <ol className="mt-4">
                 {detail.build.map((step, i) => (
-                  <li key={step} className="flex gap-3">
-                    <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-line bg-surface-2 font-mono text-[11px] text-muted">
+                  <li key={step} className="relative flex gap-3.5 pb-4 last:pb-0">
+                    {i < detail.build.length - 1 && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-[15px] top-9 bottom-0 w-px bg-line-2"
+                      />
+                    )}
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-ember/12 font-mono text-[12px] font-semibold text-ember">
                       {i + 1}
                     </span>
-                    <span className="text-[13.5px] leading-relaxed text-muted">{step}</span>
+                    <span className="pt-1.5 text-[13.5px] leading-relaxed text-muted">{step}</span>
                   </li>
                 ))}
               </ol>
             </div>
 
-            <div className="card p-4">
+            <div
+              className={`card p-4 transition-colors ${
+                checklistComplete ? "border-mint/40" : ""
+              }`}
+            >
               <div className="flex items-baseline justify-between">
                 <h2 className="text-[15px] font-semibold">Done means</h2>
-                <span className="text-[11px] text-faint">
-                  {checks.filter(Boolean).length}/{checks.length}
+                <span className="tnum text-[11px] text-faint">
+                  {doneCount}/{checks.length}
                 </span>
               </div>
+              <div
+                aria-hidden="true"
+                className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-line-2/40"
+              >
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    checklistComplete ? "bg-mint" : "ember-fill"
+                  }`}
+                  style={{ width: `${checklistPct}%` }}
+                />
+              </div>
+              {checklistComplete && (
+                <p className="slidein mt-2.5 flex items-center gap-1.5 text-[11.5px] font-medium text-mint">
+                  <CheckIcon className="h-3.5 w-3.5" /> All checks passed — ready to submit.
+                </p>
+              )}
               <ul className="mt-3 space-y-2">
                 {detail.acceptance.map((item, i) => (
                   <li key={item}>
@@ -437,13 +477,31 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
               </div>
             ) : (
               <form onSubmit={onSubmit} className="card p-4">
-                <div className="flex items-baseline justify-between">
-                  <h2 className="text-[15px] font-semibold">Submit your proof</h2>
-                  <span className="text-[11px] text-faint">Both required</span>
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-[15px] font-semibold">Submit your proof</h2>
+                    <p className="mt-0.5 text-[11.5px] text-faint">
+                      {checklistComplete
+                        ? "Both links required, then you're done."
+                        : "Finish the checklist first — links unlock below."}
+                    </p>
+                  </div>
+                  <span
+                    className={`flex h-6 items-center gap-1 rounded-full px-2.5 text-[10px] font-semibold ${
+                      checklistComplete
+                        ? "bg-mint/15 text-mint"
+                        : "bg-surface-2 text-faint"
+                    }`}
+                  >
+                    {checklistComplete ? (
+                      <>
+                        <CheckIcon className="h-3 w-3" /> Ready
+                      </>
+                    ) : (
+                      `${doneCount}/${checks.length}`
+                    )}
+                  </span>
                 </div>
-                <p className="mt-1.5 text-[12px] leading-relaxed text-faint">
-                  The commit proves you built it. The post is what a recruiter finds.
-                </p>
 
                 <div className="mt-4 space-y-4">
                   <Field
@@ -532,23 +590,30 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
                     disabled={!canSubmit}
                     className={`tap focusring w-full rounded-2xl py-3.5 text-[15px] font-semibold transition-opacity ${
                       canSubmit
-                        ? "ember-fill text-white"
+                        ? "ember-fill sheen text-white"
                         : "cursor-not-allowed border border-line bg-surface-2 text-faint"
                     }`}
                   >
                     {isRepairMode ? "Repair with shield" : `Complete Day ${day.day}`}
                   </button>
+                  {!checklistComplete && (
+                    <p className="mt-2 text-center text-[11px] text-faint">
+                      Tick every item under &ldquo;Done means&rdquo; to unlock.
+                    </p>
+                  )}
                 </div>
 
                 <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line glass-strong px-5 pb-[max(64px,calc(env(safe-area-inset-bottom)+60px))] pt-3 md:hidden">
                   <div className="mx-auto max-w-[440px]">
-                    {!canSubmit && (touched.repo || touched.post) && (
+                    {!canSubmit && (touched.repo || touched.post || !checklistComplete) && (
                       <p className="mb-2 text-center text-[11px] text-faint">
-                        {!repoValid && !postValid
-                          ? "Add both links to complete the day"
-                          : !repoValid
-                            ? "GitHub link still needed"
-                            : "LinkedIn link still needed"}
+                        {!checklistComplete
+                          ? `Done means: ${doneCount}/${checks.length} — tick the checklist to unlock`
+                          : !repoValid && !postValid
+                            ? "Add both links to complete the day"
+                            : !repoValid
+                              ? "GitHub link still needed"
+                              : "LinkedIn link still needed"}
                       </p>
                     )}
                     <button
