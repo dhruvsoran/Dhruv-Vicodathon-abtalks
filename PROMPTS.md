@@ -1,5 +1,7 @@
 # AI Usage Log — ABTalks Redesign
 
+**Raw conversation (final working session, 23–25):** https://opncd.ai/share/lxxx63W4
+
 This project was built end-to-end in an AI-assisted (vibe-coded) session using **opencode** with the **LongCat** model. This log records the actual prompts, the reasoning behind each decision, and the verification steps taken.
 
 **Tooling:** opencode CLI · model `longcat-2.0-free` · Windows 11 / PowerShell · Chrome headless for verification.
