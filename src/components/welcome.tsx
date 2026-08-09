@@ -44,25 +44,26 @@ export default function Welcome() {
   const [done, setDone] = useState(() => consumed);
 
   useEffect(() => {
+    // Runs once per real page load. `consumed` is module-scope, so a second
+    // invocation (React StrictMode double-mounts effects in dev) is a no-op.
     if (consumed) return;
     consumed = true;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const skip = window.setTimeout(() => setDone(true), 0);
-      return () => clearTimeout(skip);
+      window.setTimeout(() => setDone(true), 0);
+      return;
     }
 
     // Warm the audio context now so any interaction before the reveal has
     // already satisfied the browser's autoplay policy.
     primeAudio();
 
-    // Fire the brand sound on the beat the panels start to part.
-    const sound = window.setTimeout(() => playBrandSound(), PART_AT);
-    const t = window.setTimeout(() => setDone(true), TOTAL);
-    return () => {
-      clearTimeout(sound);
-      clearTimeout(t);
-    };
+    // Fire the brand sound on the beat the panels start to part. These
+    // timers must NOT be cleaned up on unmount: StrictMode runs the effect's
+    // cleanup immediately after the first mount, and clearing the sound here
+    // would silently cancel the intro sound on every dev load.
+    window.setTimeout(() => playBrandSound(), PART_AT);
+    window.setTimeout(() => setDone(true), TOTAL);
   }, []);
 
   if (done) return null;
