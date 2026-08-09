@@ -140,25 +140,31 @@ export function primeAudio() {
 /**
  * Play the brand sound once, on the beat the curtain parts.
  *
- * If the browser has blocked audio, we allow a **short grace window** during
- * which the visitor's first interaction still triggers it. The window is
- * deliberately bounded: a brand chime firing minutes later, detached from the
- * animation, would be worse than silence.
+ * Browsers block audio until the page has been interacted with, so on a
+ * quiet load the sound cannot fire by itself. We therefore keep listening
+ * for the visitor's very first gesture (a tap, a scroll, a key press) for a
+ * long grace window and fire the moment the audio context unlocks. The
+ * window is long so a later interaction still gets the intro sound.
  */
-export function playBrandSound(graceMs = 2500) {
+export function playBrandSound(graceMs = 60000) {
   if (played) return;
   const ac = getCtx();
   if (!ac) return;
+
+  const unlockAndEmit = () => {
+    const r = ac.resume();
+    if (r && typeof r.then === "function") r.then(emit, () => {});
+  };
 
   if (ac.state === "running") {
     emit();
     return;
   }
 
-  ac.resume().then(emit, () => {});
+  unlockAndEmit();
 
   const fire = () => {
-    ac.resume().then(emit, () => {});
+    unlockAndEmit();
     stop();
   };
   const stop = () => GESTURES.forEach((e) => window.removeEventListener(e, fire));

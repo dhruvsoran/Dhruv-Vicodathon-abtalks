@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   ArrowIcon,
   CheckIcon,
@@ -13,18 +13,21 @@ import {
   ShieldIcon,
   SparkIcon,
 } from "@/components/icons";
-import { AvatarArt, GrowthArt, ProofArt, TrackGlyph } from "@/components/art";
+import { AvatarArt, GrowthArt, TrackGlyph } from "@/components/art";
 import { LogoMark } from "@/components/logo";
+import CountUp from "@/components/count-up";
 import { Reveal } from "@/components/reveal";
 import ScrollProgress from "@/components/scroll-progress";
 import SiteNav from "@/components/site-nav";
 import Welcome from "@/components/welcome";
 import { cohort, days, draftPost, faqs, formatCount, testimonials, tracks, weeks } from "@/lib/challenge";
 
-function Stat({ value, label }: { value: string; label: string }) {
+function Stat({ value, label }: { value: string | number; label: string }) {
   return (
     <div className="flex-1 min-w-0">
-      <div className="tnum text-[22px] font-semibold leading-none tracking-tight">{value}</div>
+      <div className="tnum text-[22px] font-semibold leading-none tracking-tight">
+        {typeof value === "number" ? <CountUp to={value} /> : value}
+      </div>
       <div className="mt-1.5 text-[11px] leading-tight text-faint">{label}</div>
     </div>
   );
@@ -220,6 +223,87 @@ function PostAssistantDemo() {
   );
 }
 
+function BackToTop() {
+  const [pop, setPop] = useState(0);
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        setPop((v) => v + 1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
+      className="tap focusring flex items-center gap-2 rounded-lg text-left"
+      aria-label="Back to top"
+    >
+      <span key={pop} className="logo-pop">
+        <LogoMark size={26} />
+      </span>
+      <span className="text-[15px] font-semibold tracking-[-0.02em]">
+        AB<span className="text-ember">Talks</span>
+      </span>
+    </button>
+  );
+}
+
+function DayLoopCard() {
+  const loop = [
+    {
+      icon: <SparkIcon className="h-5 w-5" />,
+      title: "Build",
+      sub: "One small thing, sized to finish tonight",
+    },
+    {
+      icon: <GitHubIcon className="h-5 w-5" />,
+      title: "Commit",
+      sub: "Push it public — proof it's real",
+    },
+    {
+      icon: <LinkedInIcon className="h-5 w-5" />,
+      title: "Post",
+      sub: "Drafted for you. One tap to share",
+    },
+  ];
+  return (
+    <div className="card shine grain relative overflow-hidden p-5 md:p-8">
+      <div
+        aria-hidden="true"
+        className="morph pointer-events-none absolute -right-10 -top-12 h-36 w-36 opacity-50 blur-[18px]"
+        style={{ background: "linear-gradient(140deg, var(--ember), var(--gold))" }}
+      />
+      <div className="relative flex flex-wrap items-center gap-2">
+        <span className="rounded-full bg-ember/15 px-2.5 py-1 font-mono text-[10.5px] font-medium tracking-[0.08em] text-ember">
+          NIGHTLY LOOP
+        </span>
+        <span className="text-[11px] text-faint">≈45–75 min</span>
+      </div>
+      <div className="relative mt-5 grid gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-center">
+        {loop.map((s, i) => (
+          <Fragment key={s.title}>
+            <div className="rounded-2xl border border-line bg-surface-2/60 p-3.5">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-ember/15 text-ember">
+                {s.icon}
+              </span>
+              <div className="mt-2.5 text-[14px] font-semibold">{s.title}</div>
+              <p className="mt-1 text-[11.5px] leading-snug text-muted">{s.sub}</p>
+            </div>
+            {i < loop.length - 1 && (
+              <div
+                aria-hidden="true"
+                className="hidden items-center justify-center text-gold md:flex"
+              >
+                <ArrowIcon className="h-5 w-5" />
+              </div>
+            )}
+          </Fragment>
+        ))}
+      </div>
+      <div className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-mint/10 px-3 py-2.5 text-[12px] font-medium text-mint">
+        <CheckIcon className="h-4 w-4" /> Commit + post = one day of proof
+      </div>
+    </div>
+  );
+}
+
 export default function Landing() {
   const sample = [days[0], days[6], days[11], days[29], days[59]];
 
@@ -314,8 +398,8 @@ export default function Landing() {
               </p>
 
               <div className="mt-7 flex gap-4 border-t border-line pt-5">
-                <Stat value={formatCount(cohort.studentsEnrolled)} label="students in this cohort" />
-                <Stat value={`${cohort.collegesRepresented}`} label="colleges represented" />
+                <Stat value={cohort.studentsEnrolled} label="students in this cohort" />
+                <Stat value={cohort.collegesRepresented} label="colleges represented" />
                 <Stat value="45–75m" label="typical night" />
               </div>
             </div>
@@ -353,12 +437,7 @@ export default function Landing() {
       <section id="how-it-works" className="shell mt-12 scroll-mt-16 md:mt-20">
         <SectionLabel>How a day works</SectionLabel>
         <Reveal>
-          <div className="card mb-5 overflow-hidden p-3.5">
-            <ProofArt className="h-auto w-full" />
-            <p className="mt-2.5 text-center text-[11.5px] text-faint">
-              One commit + one post = one day of proof
-            </p>
-          </div>
+          <DayLoopCard />
         </Reveal>
         <div className="space-y-5 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
           {[
@@ -554,7 +633,7 @@ export default function Landing() {
                 <div className="mt-2.5 text-[13.5px] font-semibold leading-snug">{t.name}</div>
                 <p className="mt-1 text-[11px] leading-snug text-muted">{t.blurb}</p>
                 <div className="mt-2 text-[10.5px] text-faint">
-                  {formatCount(t.learners)} building
+                  <CountUp to={t.learners} /> building
                 </div>
               </div>
             </Reveal>
@@ -670,12 +749,7 @@ export default function Landing() {
         <div className="shell py-9">
           <div className="md:flex md:items-start md:justify-between md:gap-10">
             <div className="max-w-[46ch]">
-              <div className="flex items-center gap-2">
-                <LogoMark size={26} />
-                <span className="text-[15px] font-semibold tracking-[-0.02em]">
-                  AB<span className="text-ember">Talks</span>
-                </span>
-              </div>
+              <BackToTop />
               <p className="mt-3 text-[12px] leading-relaxed text-faint">
                 Built for students who are tired of learning invisibly. Submissions run on{" "}
                 {cohort.timezone}, daily cutoff {cohort.cutoffLabel}.

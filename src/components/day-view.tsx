@@ -232,33 +232,99 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
       <main id="main" className="md:shell md:grid md:grid-cols-[1fr_400px] md:items-start md:gap-7">
         <div className="md:min-w-0">
           <section className="shell pt-5 md:mx-0 md:max-w-none md:px-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-md bg-ember/15 px-2 py-1 font-mono text-[10.5px] font-medium tracking-[0.08em] text-ember">
-                DAY {String(day.day).padStart(2, "0")}
-              </span>
-              <span className="rounded-md border border-line bg-surface px-2 py-1 text-[10.5px] text-muted">
-                Week {week.n} · {week.theme}
-              </span>
-              <span className="rounded-md border border-line bg-surface px-2 py-1 text-[10.5px] text-muted">
-                {day.tag}
-              </span>
+            <div className="card grain relative overflow-hidden p-5 md:p-7">
+              <div
+                aria-hidden="true"
+                className="morph pointer-events-none absolute -right-12 -top-14 h-44 w-44 opacity-40 blur-[22px]"
+                style={{ background: "linear-gradient(140deg, var(--ember), var(--gold))" }}
+              />
+              <div className="relative">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-md bg-ember/15 px-2 py-1 font-mono text-[10.5px] font-medium tracking-[0.08em] text-ember">
+                    DAY {String(day.day).padStart(2, "0")}
+                  </span>
+                  <span className="rounded-md border border-line bg-surface px-2 py-1 text-[10.5px] text-muted">
+                    Week {week.n} · {week.theme}
+                  </span>
+                  <span className="rounded-md border border-line bg-surface px-2 py-1 text-[10.5px] text-muted">
+                    {day.tag}
+                  </span>
+                </div>
+
+                <h1 className="mt-3.5 text-[28px] font-semibold leading-[1.15] tracking-[-0.025em] md:text-[38px]">
+                  {day.title}
+                </h1>
+
+                <div className="mt-3 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-[11.5px] text-faint">
+                  <span className="flex items-center gap-1.5">
+                    <ClockIcon className="h-3.5 w-3.5" /> ~{day.minutes} min
+                  </span>
+                  <span>{day.difficulty}</span>
+                  <span className="text-gold">+{day.xp} XP</span>
+                  {isToday && !done && (
+                    <span className="rounded-full bg-gold/15 px-2 py-0.5 font-medium text-gold">
+                      Due 11:59 PM IST
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
+          </section>
 
-            <h1 className="mt-3.5 text-[28px] font-semibold leading-[1.15] tracking-[-0.025em] md:text-[38px]">
-              {day.title}
-            </h1>
-
-            <div className="mt-3 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-[11.5px] text-faint">
-              <span className="flex items-center gap-1.5">
-                <ClockIcon className="h-3.5 w-3.5" /> ~{day.minutes} min
-              </span>
-              <span>{day.difficulty}</span>
-              <span className="text-gold">+{day.xp} XP</span>
-              {isToday && !done && (
-                <span className="rounded-full bg-gold/15 px-2 py-0.5 font-medium text-gold">
-                  Due 11:59 PM IST
+          <section className="shell mt-4 md:mx-0 md:max-w-none md:px-0">
+            <div className="card shine grain relative overflow-hidden p-5">
+              <div
+                aria-hidden="true"
+                className="morph pointer-events-none absolute -left-10 -top-12 h-32 w-32 opacity-40 blur-[18px]"
+                style={{ background: "linear-gradient(140deg, var(--sky), var(--ember))" }}
+              />
+              <div className="relative flex flex-wrap items-center justify-between gap-2">
+                <span className="rounded-full bg-ember/15 px-2.5 py-1 font-mono text-[10.5px] font-medium tracking-[0.08em] text-ember">
+                  TONIGHT, TIMED
                 </span>
-              )}
+                <span className="tnum text-[11px] text-faint">~{day.minutes} min in one sitting</span>
+              </div>
+              <div className="relative mt-4">
+                <div className="flex h-2.5 overflow-hidden rounded-full bg-surface-2">
+                  <span className="bg-ember/80" style={{ width: "76%" }} />
+                  <span className="bg-gold/80" style={{ width: "9%" }} />
+                  <span className="bg-mint/80" style={{ width: "15%" }} />
+                </div>
+                <div className="mt-3 grid grid-cols-3 gap-3">
+                  {[
+                    {
+                      icon: <SparkIcon className="h-4 w-4" />,
+                      title: "Build",
+                      note: "the main task",
+                      cell: "bg-ember/80",
+                    },
+                    {
+                      icon: <GitHubIcon className="h-4 w-4" />,
+                      title: "Commit",
+                      note: "a few minutes",
+                      cell: "bg-gold/80",
+                    },
+                    {
+                      icon: <LinkedInIcon className="h-4 w-4" />,
+                      title: "Post",
+                      note: "right after",
+                      cell: "bg-mint/80",
+                    },
+                  ].map((s) => (
+                    <div key={s.title} className="rounded-xl border border-line bg-surface-2/60 p-3">
+                      <span className={`block h-1.5 w-6 rounded-full ${s.cell}`} />
+                      <div className="mt-2 flex items-center gap-1.5 text-[12.5px] font-semibold">
+                        <span className="text-muted">{s.icon}</span>
+                        {s.title}
+                      </div>
+                      <p className="mt-0.5 text-[10.5px] leading-snug text-faint">{s.note}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-mint/10 px-3 py-2.5 text-[12px] font-medium text-mint">
+                <CheckIcon className="h-4 w-4" /> Ship it and your streak grows (+{day.xp} XP)
+              </div>
             </div>
           </section>
 
@@ -305,12 +371,19 @@ export default function DayView({ day, detail }: { day: ChallengeDay; detail: Da
           )}
 
           <section className="shell mt-4 space-y-3 md:mx-0 md:max-w-none md:px-0">
-            <div className="card p-4">
-              <h2 className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-[0.13em] text-gold">
-                <SparkIcon className="h-3.5 w-3.5" />
-                Why this matters
-              </h2>
-              <p className="mt-2 text-[14px] leading-relaxed text-fg/90">{detail.why}</p>
+            <div className="card grain relative overflow-hidden p-4">
+              <div
+                aria-hidden="true"
+                className="morph pointer-events-none absolute -right-8 -top-10 h-28 w-28 opacity-40 blur-[18px]"
+                style={{ background: "linear-gradient(140deg, var(--ember), var(--gold))" }}
+              />
+              <div className="relative">
+                <h2 className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-[0.13em] text-gold">
+                  <SparkIcon className="h-3.5 w-3.5" />
+                  Why this matters
+                </h2>
+                <p className="mt-2 text-[14px] leading-relaxed text-fg/90">{detail.why}</p>
+              </div>
             </div>
 
             <div className="card p-4">

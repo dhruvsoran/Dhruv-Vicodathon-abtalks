@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme";
 import { usePersona } from "@/components/persona-store";
@@ -14,8 +15,21 @@ const sections = [
   { href: "/#faq", label: "FAQ" },
 ];
 
+/**
+ * Logo always returns to the top of the app. On the home page the "route"
+ * is already "/", so a plain <Link> would do nothing — we scroll instead.
+ */
+function scrollHome(e: ReactMouseEvent, pathname: string) {
+  if (pathname === "/") {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 function NavBar() {
   const [open, setOpen] = useState(false);
+  const [pop, setPop] = useState(0);
+  const pathname = usePathname();
   const { persona } = usePersona();
 
   useEffect(() => {
@@ -34,8 +48,18 @@ function NavBar() {
   return (
     <header className="sticky top-0 z-50 border-b border-line glass-strong">
       <div className="shell flex h-14 items-center justify-between gap-3">
-        <Link href="/" aria-label="ABTalks home" className="tap focusring rounded-lg">
-          <Logo size={28} />
+        <Link
+          href="/"
+          aria-label="ABTalks home — back to top"
+          onClick={(e) => {
+            setPop((v) => v + 1);
+            scrollHome(e, pathname);
+          }}
+          className="tap focusring rounded-lg"
+        >
+          <span key={pop} className="logo-pop">
+            <Logo size={28} />
+          </span>
         </Link>
 
         <nav aria-label="Main" className="hidden md:block">

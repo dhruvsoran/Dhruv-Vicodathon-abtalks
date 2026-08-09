@@ -24,6 +24,16 @@
   --radius-card: 18px;
 }
 
+/* Smooth anchor navigation, disabled for reduced motion. */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 :root,
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -759,6 +769,27 @@ body > *:not(.aurora):not(.skip-link) {
 }
 .popin {
   animation: popin 0.5s var(--ease-spring) both;
+}
+
+/* Logo click: a quick playful bounce. Re-triggers via a React `key` swap. */
+@keyframes logo-pop {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  35% {
+    transform: scale(1.3) rotate(-8deg);
+  }
+  60% {
+    transform: scale(0.9) rotate(4deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+.logo-pop {
+  display: inline-block;
+  transform-origin: center;
+  animation: logo-pop 0.5s var(--ease-spring);
 }
 
 /* Morphing blob: border-radius is not compositor-accelerated, but this runs
