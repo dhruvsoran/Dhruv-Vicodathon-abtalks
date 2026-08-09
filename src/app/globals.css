@@ -583,33 +583,33 @@ body > *:not(.aurora):not(.skip-link) {
 }
 
 .aurora i:nth-of-type(1) {
-  top: 10%;
-  right: -14%;
-  width: 210px;
-  height: 210px;
+  top: 8%;
+  right: -12%;
+  width: 200px;
+  height: 200px;
   background: linear-gradient(140deg, var(--ember), var(--gold));
-  opacity: calc(var(--glow-opacity) * 0.5);
-  filter: blur(6px);
+  opacity: calc(var(--glow-opacity) * 0.22);
+  filter: blur(16px);
   animation: morph 6s var(--ease-liquid) infinite;
 }
 
 .aurora i:nth-of-type(2) {
-  top: 44%;
-  left: -16%;
-  width: 200px;
-  height: 200px;
-  border: 3px solid var(--ember);
-  opacity: calc(var(--glow-opacity) * 0.75);
+  top: 46%;
+  left: -14%;
+  width: 180px;
+  height: 180px;
+  border: 1.5px solid color-mix(in srgb, var(--ember) 55%, transparent);
+  opacity: calc(var(--glow-opacity) * 0.3);
   animation: morph 8s var(--ease-liquid) infinite reverse;
 }
 
 .aurora i:nth-of-type(3) {
-  bottom: 8%;
-  right: -10%;
-  width: 180px;
-  height: 180px;
-  border: 3px solid var(--gold);
-  opacity: calc(var(--glow-opacity) * 0.62);
+  bottom: 6%;
+  right: -8%;
+  width: 170px;
+  height: 170px;
+  border: 1.5px solid color-mix(in srgb, var(--gold) 50%, transparent);
+  opacity: calc(var(--glow-opacity) * 0.26);
   animation: morph 7.5s var(--ease-liquid) infinite;
 }
 
