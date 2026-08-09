@@ -52,7 +52,7 @@ function whoosh(ac: AudioContext, at: number) {
 
   const gain = ac.createGain();
   gain.gain.setValueAtTime(0.0001, at);
-  gain.gain.exponentialRampToValueAtTime(0.14, at + 0.18);
+  gain.gain.exponentialRampToValueAtTime(0.34, at + 0.18);
   gain.gain.exponentialRampToValueAtTime(0.0001, at + dur);
 
   src.connect(band).connect(gain).connect(ac.destination);
@@ -60,23 +60,24 @@ function whoosh(ac: AudioContext, at: number) {
   src.stop(at + dur);
 }
 
-/** Two-note ember chime, a rising fifth. */
+/** Three-note ember chime, an ascending brand arpeggio: D5 → A5 → D6. */
 function chime(ac: AudioContext, at: number) {
   [
-    { f: 587.33, t: 0, g: 0.09 }, // D5
-    { f: 880.0, t: 0.14, g: 0.075 }, // A5
+    { f: 587.33, t: 0, g: 0.24 }, // D5
+    { f: 880.0, t: 0.13, g: 0.19 }, // A5
+    { f: 1174.66, t: 0.26, g: 0.15 }, // D6
   ].forEach(({ f, t, g }) => {
     const osc = ac.createOscillator();
     const gain = ac.createGain();
-    osc.type = "sine";
+    osc.type = "triangle";
     osc.frequency.value = f;
     const start = at + t;
     gain.gain.setValueAtTime(0.0001, start);
     gain.gain.exponentialRampToValueAtTime(g, start + 0.03);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + 1.1);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + 1.5);
     osc.connect(gain).connect(ac.destination);
     osc.start(start);
-    osc.stop(start + 1.2);
+    osc.stop(start + 1.6);
   });
 }
 
@@ -91,7 +92,7 @@ function speak() {
     const u = new SpeechSynthesisUtterance("A B Talks");
     u.rate = 0.92;
     u.pitch = 1.02;
-    u.volume = 0.95;
+    u.volume = 1;
     const voices = synth.getVoices();
     const preferred =
       voices.find(
