@@ -232,18 +232,29 @@ export default function Landing() {
       <main id="main">
       <section className="relative overflow-hidden">
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-40 h-[460px] overflow-hidden">
+          {/* Flowing light sheets: pan and tilt instead of floating in circles. */}
           <div
-            className="blob left-1/2 h-[300px] w-[300px] -translate-x-1/2"
+            className="hero-sheet"
             style={{
-              background: "radial-gradient(circle, var(--ember) 0%, transparent 68%)",
-              opacity: "calc(var(--glow-opacity) * 0.45)",
+              top: "8%",
+              left: "-18%",
+              width: "90%",
+              height: "80%",
+              background:
+                "linear-gradient(115deg, var(--ember) 0%, transparent 55%, var(--sky) 100%)",
+              opacity: "calc(var(--glow-opacity) * 0.34)",
             }}
           />
           <div
-            className="blob blob-b left-[8%] top-[90px] h-[210px] w-[210px]"
+            className="hero-sheet hero-sheet-b"
             style={{
-              background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)",
-              opacity: "calc(var(--glow-opacity) * 0.26)",
+              top: "-6%",
+              right: "-22%",
+              width: "80%",
+              height: "90%",
+              background:
+                "linear-gradient(300deg, var(--gold) 0%, transparent 52%, var(--ember-soft) 100%)",
+              opacity: "calc(var(--glow-opacity) * 0.3)",
             }}
           />
           {/* Crisp morphing shapes: these carry the liquid read. */}
@@ -384,10 +395,11 @@ export default function Landing() {
               className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 overflow-hidden"
             >
               <div
-                className="blob blob-b h-52 w-52"
+                className="hero-sheet hero-sheet-b h-52 w-52"
                 style={{
-                  background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)",
-                  opacity: "calc(var(--glow-opacity) * 0.3)",
+                  background:
+                    "linear-gradient(130deg, var(--gold) 0%, transparent 60%, var(--ember) 100%)",
+                  opacity: "calc(var(--glow-opacity) * 0.4)",
                 }}
               />
             </div>
@@ -604,10 +616,11 @@ export default function Landing() {
           <div className="card shine grain relative overflow-hidden p-6 md:p-10">
             <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -bottom-24 h-56 overflow-hidden">
               <div
-                className="blob left-1/2 h-56 w-56 -translate-x-1/2"
+                className="hero-sheet left-1/2 -ml-28 h-56 w-56"
                 style={{
-                  background: "radial-gradient(circle, var(--ember) 0%, transparent 70%)",
-                  opacity: "calc(var(--glow-opacity) * 0.4)",
+                  background:
+                    "linear-gradient(120deg, var(--ember) 0%, transparent 55%, var(--gold) 100%)",
+                  opacity: "calc(var(--glow-opacity) * 0.42)",
                 }}
               />
             </div>

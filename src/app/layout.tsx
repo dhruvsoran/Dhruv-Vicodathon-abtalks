@@ -122,6 +122,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <span />
           <span />
           <span />
+          <em />
+          <em />
+          <em />
+          <em />
+          <em />
+          <em />
           <i />
           <i />
           <i />
