@@ -99,20 +99,6 @@ function PreviewStrip() {
   );
 }
 
-function ProofRow({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
-  return (
-    <div className="flex gap-3.5">
-      <span className="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line bg-surface-2 text-fg">
-        {icon}
-      </span>
-      <div className="min-w-0">
-        <h3 className="text-[15px] font-semibold leading-snug">{title}</h3>
-        <p className="mt-1 text-[13px] leading-relaxed text-muted">{body}</p>
-      </div>
-    </div>
-  );
-}
-
 function Faq({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -249,18 +235,21 @@ function DayLoopCard() {
   const loop = [
     {
       icon: <SparkIcon className="h-5 w-5" />,
-      title: "Build",
-      sub: "One small thing, sized to finish tonight",
+      step: "01",
+      title: "Open tonight's task",
+      sub: "One focused build, sized for after college. The why, the steps, and what counts as done.",
     },
     {
       icon: <GitHubIcon className="h-5 w-5" />,
-      title: "Commit",
-      sub: "Push it public — proof it's real",
+      step: "02",
+      title: "Push the commit",
+      sub: "Your code goes into a public repo — that's the proof you built it.",
     },
     {
       icon: <LinkedInIcon className="h-5 w-5" />,
-      title: "Post",
-      sub: "Drafted for you. One tap to share",
+      step: "03",
+      title: "Post what you learned",
+      sub: "One short post, drafted from your own work, so the blank page never stops you.",
     },
   ];
   return (
@@ -276,15 +265,22 @@ function DayLoopCard() {
         </span>
         <span className="text-[11px] text-faint">≈45–75 min</span>
       </div>
-      <div className="relative mt-5 grid gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-center">
+      <div className="relative mt-5 grid gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-stretch">
         {loop.map((s, i) => (
           <Fragment key={s.title}>
-            <div className="rounded-2xl border border-line bg-surface-2/60 p-3.5">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-ember/15 text-ember">
-                {s.icon}
-              </span>
-              <div className="mt-2.5 text-[14px] font-semibold">{s.title}</div>
-              <p className="mt-1 text-[11.5px] leading-snug text-muted">{s.sub}</p>
+            <div className="flex flex-col gap-2.5 rounded-2xl border border-line bg-surface-2/60 p-4">
+              <div className="flex items-center justify-between gap-2">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-ember/15 text-ember">
+                  {s.icon}
+                </span>
+                <span className="font-mono text-[11px] font-medium tracking-[0.12em] text-faint">
+                  {s.step}
+                </span>
+              </div>
+              <div>
+                <div className="text-[14px] font-semibold leading-snug">{s.title}</div>
+                <p className="mt-1 text-[11.5px] leading-relaxed text-muted">{s.sub}</p>
+              </div>
             </div>
             {i < loop.length - 1 && (
               <div
@@ -439,29 +435,6 @@ export default function Landing() {
         <Reveal>
           <DayLoopCard />
         </Reveal>
-        <div className="space-y-5 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
-          {[
-            {
-              icon: <SparkIcon />,
-              title: "1 · Open tonight's task",
-              body: "One focused build, sized for after college. The why, the steps, and what counts as done.",
-            },
-            {
-              icon: <GitHubIcon />,
-              title: "2 · Push the commit",
-              body: "Your code goes into a public repo. That's what proves you built it.",
-            },
-            {
-              icon: <LinkedInIcon />,
-              title: "3 · Post what you learned",
-              body: "One short post, drafted for you from your own work — so the blank page never stops you.",
-            },
-          ].map((s, i) => (
-            <Reveal key={s.title} delay={i * 90}>
-              <ProofRow icon={s.icon} title={s.title} body={s.body} />
-            </Reveal>
-          ))}
-        </div>
       </section>
 
       <PostAssistantDemo />
