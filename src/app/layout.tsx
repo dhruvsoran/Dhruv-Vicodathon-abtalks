@@ -9,7 +9,7 @@ import { cohort, faqs } from "@/lib/challenge";
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 
-const SITE = "https://abtalks.vercel.app";
+const SITE = "https://dhruv-vicodathon-abtalks.vercel.app";
 const TITLE = "ABTalks — 60 days of proof, not promises";
 const DESC =
   "A free 60-day coding challenge for Indian college students. Build one small thing every night, ship a GitHub commit and a LinkedIn post, and turn consistency into a public track record recruiters can find.";

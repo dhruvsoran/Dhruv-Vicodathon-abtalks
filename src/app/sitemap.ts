@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { days } from "@/lib/challenge";
 
-const SITE = "https://abtalks.vercel.app";
+const SITE = "https://dhruv-vicodathon-abtalks.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
