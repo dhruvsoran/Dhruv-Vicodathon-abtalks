@@ -84,8 +84,8 @@ function Ring({ value, size = 74 }: { value: number; size?: number }) {
       />
       <defs>
         <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#ff5a1f" />
-          <stop offset="100%" stopColor="#ffb020" />
+          <stop offset="0%" stopColor="#8b7bff" />
+          <stop offset="100%" stopColor="#ffc24d" />
         </linearGradient>
       </defs>
     </svg>

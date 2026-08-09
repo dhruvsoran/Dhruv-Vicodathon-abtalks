@@ -30,7 +30,7 @@ export function useTheme() {
       localStorage.setItem(KEY, next);
     } catch {}
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", next === "light" ? "#fbfaf9" : "#08080a");
+    if (meta) meta.setAttribute("content", next === "light" ? "#faf8ff" : "#0b0c22");
     listeners.forEach((fn) => fn());
   }, []);
 

@@ -27,68 +27,72 @@
 :root,
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --ink: #08080a;
-  --ink-2: #0e0e12;
-  --surface: #141419;
-  --surface-2: #1b1b22;
-  --line: #26262f;
-  --line-2: #34343f;
-  --fg: #f6f6f7;
-  --muted: #a8a8b3;
-  --faint: #8b8b96;
-  --ember: #ff5a1f;
-  --ember-soft: #ff8a4c;
-  --gold: #ffb020;
+  /* Premium "midnight aurora": a deep indigo-violet canvas instead of a
+     near-black void. The base itself reads as colour, and the violet + gold
+     accent pair keeps the whole system feeling rich rather than dim. */
+  --ink: #0b0c22;
+  --ink-2: #131531;
+  --surface: #1a1c38;
+  --surface-2: #232640;
+  --line: #303256;
+  --line-2: #42467a;
+  --fg: #f5f5fd;
+  --muted: #c0c3df;
+  --faint: #989ec6;
+  --ember: #8b7bff;
+  --ember-soft: #b3a2ff;
+  --gold: #ffc24d;
   --mint: #3dd68c;
-  --rose: #f8736a;
-  --sky: #6aa8ff;
+  --rose: #ff7a70;
+  --sky: #5fa8ff;
   --onbright: #0e0e12;
-  --grain-dot: rgba(255, 255, 255, 0.06);
+  --grain-dot: rgba(150, 140, 255, 0.07);
   --grain-opacity: 0.5;
   --glow-opacity: 1;
-  --cta-shadow: 0 10px 30px -12px rgba(255, 90, 31, 0.9);
-  --glass: rgba(24, 24, 30, 0.62);
-  --glass-strong: rgba(14, 14, 18, 0.74);
+  --cta-shadow: 0 10px 30px -12px rgba(139, 123, 255, 0.85);
+  --glass: rgba(22, 24, 44, 0.6);
+  --glass-strong: rgba(13, 15, 32, 0.72);
   --glass-line: rgba(255, 255, 255, 0.09);
-  --glass-spec: rgba(255, 255, 255, 0.22);
-  --glass-shadow: 0 8px 32px -18px rgba(0, 0, 0, 0.9);
-  --aurora-1: rgba(255, 90, 31, 0.5);
-  --aurora-2: rgba(255, 176, 32, 0.34);
-  --aurora-3: rgba(106, 168, 255, 0.26);
+  --glass-spec: rgba(255, 255, 255, 0.24);
+  --glass-shadow: 0 8px 32px -18px rgba(10, 8, 30, 0.9);
+  --aurora-1: rgba(139, 123, 255, 0.55);
+  --aurora-2: rgba(255, 194, 77, 0.4);
+  --aurora-3: rgba(95, 168, 255, 0.35);
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
-  /* Warm, sunlit canvas rather than clinical white — the light theme is the
-     same product at 4pm instead of midnight. Text tokens stay dark enough to
-     clear WCAG AA against every translucent glass layer stacked above them. */
-  --ink: #fff8f1;
-  --ink-2: #fdefe2;
+  /* Cool, airy daylight to match the midnight theme: a soft violet-tinted
+     canvas instead of clinical white or heavy cream. Text tokens stay dark
+     enough to clear WCAG AA against every translucent glass layer stacked
+     above them. */
+  --ink: #faf8ff;
+  --ink-2: #f2edff;
   --surface: #ffffff;
-  --surface-2: #fff3e8;
-  --line: #f3ddc8;
-  --line-2: #e6c3a4;
-  --fg: #1b1410;
-  --muted: #4a423c;
-  --faint: #5d534b;
-  --ember: #c93c07;
-  --ember-soft: #f26a1b;
-  --gold: #a05c00;
+  --surface-2: #f6f1ff;
+  --line: #e4ddf7;
+  --line-2: #cdc2ea;
+  --fg: #1c1830;
+  --muted: #4c4764;
+  --faint: #5c5774;
+  --ember: #6d2bd1;
+  --ember-soft: #8a4bf0;
+  --gold: #9a5c00;
   --mint: #0d7d55;
   --rose: #cf2f26;
-  --sky: #2358d8;
+  --sky: #2f56c4;
   --onbright: #ffffff;
-  --grain-dot: rgba(120, 60, 20, 0.06);
+  --grain-dot: rgba(90, 40, 180, 0.06);
   --grain-opacity: 0.55;
   --glow-opacity: 0.85;
-  --cta-shadow: 0 12px 30px -12px rgba(209, 64, 10, 0.5);
+  --cta-shadow: 0 12px 30px -12px rgba(109, 43, 209, 0.45);
   --glass: rgba(255, 255, 255, 0.66);
-  --glass-strong: rgba(255, 250, 245, 0.82);
-  --glass-line: rgba(180, 100, 40, 0.16);
+  --glass-strong: rgba(252, 250, 255, 0.82);
+  --glass-line: rgba(109, 43, 209, 0.14);
   --glass-spec: rgba(255, 255, 255, 0.95);
-  --glass-shadow: 0 10px 30px -18px rgba(140, 70, 25, 0.35);
-  --aurora-1: rgba(255, 120, 40, 0.5);
-  --aurora-2: rgba(255, 186, 60, 0.44);
+  --glass-shadow: 0 10px 30px -18px rgba(70, 40, 130, 0.3);
+  --aurora-1: rgba(139, 80, 255, 0.44);
+  --aurora-2: rgba(255, 186, 60, 0.4);
   --aurora-3: rgba(90, 150, 255, 0.34);
 }
 
@@ -141,14 +145,14 @@ body {
   }
 
   /* Light mode: push saturation harder so the aurora reads through the glass
-     as colour rather than grey, and add a warm top-down tint so cards are
-     never flat white against the canvas. */
+     as colour rather than grey, and add a cool violet top-down tint so cards
+     are never flat white against the canvas. */
   :root[data-theme="light"] .card {
     backdrop-filter: blur(18px) saturate(1.9);
     -webkit-backdrop-filter: blur(18px) saturate(1.9);
     background-image: linear-gradient(
       170deg,
-      rgba(255, 232, 208, 0.6) 0%,
+      rgba(237, 227, 255, 0.6) 0%,
       rgba(255, 255, 255, 0) 46%
     );
   }
@@ -198,6 +202,12 @@ body {
 
   .ember-fill {
     background: linear-gradient(96deg, var(--ember) 0%, var(--ember-soft) 60%, var(--gold) 100%);
+  }
+
+  /* Dark mode keeps CTAs deep enough that white label text clears WCAG AA,
+     while the aurora still reads through the lighter glass. */
+  :root[data-theme="dark"] .ember-fill {
+    background: linear-gradient(96deg, #5b3df0 0%, #7c5cff 55%, #c27c1f 100%);
   }
 
   .cta-shadow {
@@ -932,13 +942,13 @@ p {
 
 @keyframes pulsering {
   0% {
-    box-shadow: 0 0 0 0 rgba(255, 90, 31, 0.45);
+    box-shadow: 0 0 0 0 rgba(139, 123, 255, 0.45);
   }
   70% {
-    box-shadow: 0 0 0 14px rgba(255, 90, 31, 0);
+    box-shadow: 0 0 0 14px rgba(139, 123, 255, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(255, 90, 31, 0);
+    box-shadow: 0 0 0 0 rgba(139, 123, 255, 0);
   }
 }
 

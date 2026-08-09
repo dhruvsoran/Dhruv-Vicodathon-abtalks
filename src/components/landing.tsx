@@ -220,43 +220,6 @@ function PostAssistantDemo() {
   );
 }
 
-function JourneyStrip() {
-  const stops = [
-    { d: 1, label: "First commit" },
-    { d: 7, label: "Live site" },
-    { d: 21, label: "Full-stack app" },
-    { d: 30, label: "Halfway" },
-    { d: 45, label: "Product live" },
-    { d: 60, label: "Capstone" },
-  ];
-  return (
-    <div className="card p-4">
-      <div className="relative flex items-start">
-        {stops.map((s, i) => (
-          <div key={s.d} className="flex min-w-0 flex-1 flex-col items-center">
-            <span
-              className={`grid h-8 w-8 place-items-center rounded-full border font-mono text-[11px] font-semibold ${
-                i === stops.length - 1
-                  ? "border-ember/60 bg-ember/15 text-ember"
-                  : "border-line bg-surface-2 text-muted"
-              }`}
-            >
-              {String(s.d).padStart(2, "0")}
-            </span>
-            <span
-              className={`mt-2 text-center text-[10px] leading-tight ${
-                i === stops.length - 1 ? "text-ember" : "text-faint"
-              }`}
-            >
-              {s.label}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function Landing() {
   const sample = [days[0], days[6], days[11], days[29], days[59]];
 
@@ -544,16 +507,6 @@ export default function Landing() {
             </div>
           ))}
         </div>
-      </section>
-
-      <section className="shell mt-12 md:mt-20">
-        <SectionLabel>Your 60 days, mapped</SectionLabel>
-        <Reveal>
-          <JourneyStrip />
-        </Reveal>
-        <p className="mt-3 text-center text-[11.5px] text-faint">
-          Six checkpoints on the way from an empty repo to a portfolio recruiters open.
-        </p>
       </section>
 
       <section className="shell mt-12 md:mt-20">
